@@ -1,0 +1,29 @@
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
+    <title layout:title-pattern="$$CONTENT_TITLE - DECORATOR_TITLE">Web constructor</title>
+</head>
+<body>
+    <div id="wrap">
+        <div th:replace="layout/template :: navbar">
+
+        </div>
+        <div class="container">
+            <div layout:fragment="content">
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="layout/template :: footer">
+
+    </div>
+
+    <script type="text/javascript" src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

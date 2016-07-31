@@ -1,0 +1,65 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+   <div th:fragment="navbar">
+       <!-- Navigation -->
+       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+           <div class="container">
+               <!-- Brand and toggle get grouped for better mobile display -->
+               <div class="navbar-header">
+                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                   </button>
+                   <a class="navbar-brand" th:href="@{~/}" th:text="#{navbar.title}">Web constructor</a>
+               </div>
+               <!-- Collect the nav links, forms, and other content for toggling -->
+               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                   <ul class="nav navbar-nav navbar-right">
+                       <li>
+                           <a href="#" th:text="#{navbar.signin}">Sign in</a>
+                       </li>
+                       <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                               <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Username<b class="caret"></b>
+                           </a>
+                           <ul class="dropdown-menu">
+                               <li>
+                                   <a href="#" th:text="#{navbar.sites}">My web sites</a>
+                               </li>
+                               <li>
+                                   <a href="#" th:text="#{navbar.profile}">My profile</a>
+                               </li>
+                               <li>
+                                   <a href="#" th:text="#{navbar.logout}">Logout</a>
+                               </li>
+                           </ul>
+                       </li>
+                   </ul>
+               </div>
+               <!-- /.navbar-collapse -->
+           </div>
+           <!-- /.container -->
+       </nav>
+   </div>
+
+   <div th:fragment="footer">
+       <footer>
+           <div class="container">
+               <div class="row">
+                   <div class="col-lg-12">
+                       <p>Copyright &copy; Your Website 2014</p>
+                   </div>
+               </div>
+           </div>
+       </footer>
+   </div>
+
+</body>
+</html>
