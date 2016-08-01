@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{registration.registration}">Registration</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <form th:action="@{/register}" method="post">
+                    <div class="form-group">
+                        <label for="firstname" th:text="#{registration.firstname}">First name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname" th:placeholder="#{registration.firstname}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname" th:text="#{registration.lastname}">Last name</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname" th:placeholder="#{registration.lastname}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" th:text="#{registration.email}">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" th:placeholder="#{registration.email}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="username" th:text="#{login.username}">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" th:placeholder="#{login.username}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" th:text="#{login.password}">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" th:placeholder="#{login.password}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password-confirm" th:text="#{registration.passwordRepeat}">Repeat password</label>
+                        <input type="password" class="form-control" id="password-confirm" name="matchingPassword" th:placeholder="#{registration.passwordRepeat}"/>
+                    </div>
+                    <button type="submit" class="btn btn-default center-block" th:text="#{registration.register}">Submit</button>
+                </form>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</body>
+</html>
