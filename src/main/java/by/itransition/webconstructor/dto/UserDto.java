@@ -1,11 +1,14 @@
 package by.itransition.webconstructor.dto;
 
+import by.itransition.webconstructor.validation.PasswordMatches;
+import by.itransition.webconstructor.validation.ValidEmail;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
+@PasswordMatches
 public class UserDto {
 
     @NotNull
@@ -16,8 +19,9 @@ public class UserDto {
     @Size(min = 2, max = 60)
     private String lastname;
 
+    @ValidEmail
     @NotNull
-    @Size(min = 2, max = 60)
+    @Size(min = 6, max = 60)
     private String email;
 
     @NotNull
