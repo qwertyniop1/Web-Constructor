@@ -35,13 +35,17 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") @Valid UserDto user,
-                           HttpServletRequest request, BindingResult result,
+                           BindingResult result, HttpServletRequest request,
                            Errors errors, Model model) {
         model.addAttribute(user);
         if (result.hasErrors()) {
             return "auth/registration";
         }
-        return "auth/registration";
+        if (!userService.registerUser(user)) {
+            result.rejectValue("email", "registration.userExist");
+            return "auth/registration";
+        }
+        return "auth/success";
     }
 
 }

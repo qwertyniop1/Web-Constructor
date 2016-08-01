@@ -5,6 +5,7 @@ import by.itransition.webconstructor.dto.UserDto;
 import by.itransition.webconstructor.error.UserAlreadyExistException;
 import by.itransition.webconstructor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public boolean registerUser(UserDto user) {
@@ -27,7 +31,7 @@ public class UserServiceImpl implements UserService{
         user.setLastname(userDto.getLastname());
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEnabled(true); // TODO qqqq
         return user;
     }
