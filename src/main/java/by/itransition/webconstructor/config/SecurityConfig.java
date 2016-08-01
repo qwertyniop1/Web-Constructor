@@ -22,21 +22,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/profile").access("hasRole('USER')")
+                .antMatchers("/login*").anonymous()
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .failureUrl("/login?error=true");
+                .failureUrl("/login?error=true")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login?logout");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(new UserDetailsService() {
-                    @Override
-                    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                        return userRepository.findByUsername(username);
-                    }
-                });
+                .userDetailsService(username -> userRepository.findByUsername(username));
     }
 }
