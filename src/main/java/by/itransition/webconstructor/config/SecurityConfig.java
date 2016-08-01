@@ -26,17 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login*").anonymous()
                 .antMatchers("/").permitAll()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error=true")
+                .formLogin().loginPage("/login").failureUrl("/login?error=true")
                 .and()
-                .logout()
-                .logoutSuccessUrl("/login?logout");
+                .logout().logoutSuccessUrl("/login?logout");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(username -> userRepository.findByUsername(username)).passwordEncoder(new BCryptPasswordEncoder());
+                .userDetailsService(username -> userRepository.findByUsername(username))
+                .passwordEncoder(new BCryptPasswordEncoder());
     }
 }
