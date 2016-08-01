@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{registration.registration}">Registration</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div th:unless="${authError}" class="alert alert-success" role="alert" th:text="#{registration.complete}">
+        To complete your registration, please verify your email. A letter with a link to activate your account have been sent to your e-mail.
+    </div>
+    <div th:if="${authError}" class="alert alert-danger" role="alert" th:text="#{registration.error}">
+        Error
+    </div>
+</div>
+</body>
+</html>

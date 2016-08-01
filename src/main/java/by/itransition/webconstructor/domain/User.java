@@ -6,10 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Collection;
 
 @Data
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
