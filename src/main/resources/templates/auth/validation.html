@@ -1,0 +1,117 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<th:block th:fragment="styles">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/tooltipster.bundle.min.css}" />
+</th:block>
+
+<th:block th:fragment="scripts">
+    <script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/tooltipster.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/messages_{loc}.min.js(loc=${#locale})}"></script>
+    <script type="text/javascript">
+        //        <![CDATA[
+        $(document).ready(function () {
+
+            $('.form-control').tooltipster({
+                trigger: 'custom',
+                onlyOne: false,
+                position: 'right'
+            });
+
+            $('#login-form').validate({
+                rules: {
+                    username: {
+                        minlength: 5,
+                        maxlength: 60,
+                        required: true
+                    },
+                    password: {
+                        minlength: 8,
+                        maxlength: 60,
+                        required: true
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function (label, element) {
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                    $(element).tooltipster('hide');
+                },
+                errorPlacement: function (error, element) {
+                    var lastError = $(element).data('lastError'),
+                            newError = $(error).text();
+
+                    $(element).data('lastError', newError);
+
+                    if(newError !== '' && newError !== lastError){
+                        $(element).tooltipster('content', newError);
+                        $(element).tooltipster('show');
+                    }
+                }
+            });
+
+            $('#registration-form').validate({
+                rules: {
+                    firstname: {
+                        minlength: 2,
+                        maxlength: 60,
+                        required: true
+                    },
+                    lastname: {
+                        minlength: 2,
+                        maxlength: 60,
+                        required: true
+                    },
+                    email: {
+                        minlength: 6,
+                        maxlength: 60,
+                        email: true,
+                        required: true
+                    },
+                    username: {
+                        minlength: 5,
+                        maxlength: 60,
+                        required: true
+                    },
+                    password: {
+                        minlength: 8,
+                        maxlength: 60,
+                        required: true
+                    },
+                    matchingPassword: {
+                        equalTo : "#password"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function (label, element) {
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                    $(element).tooltipster('hide');
+                },
+                errorPlacement: function (error, element) {
+                    var lastError = $(element).data('lastError'),
+                            newError = $(error).text();
+
+                    $(element).data('lastError', newError);
+
+                    if(newError !== '' && newError !== lastError){
+                        $(element).tooltipster('content', newError);
+                        $(element).tooltipster('show');
+                    }
+                }
+            });
+
+        });
+        //        ]]>
+    </script>
+</th:block>
+
+</body>
+</html>

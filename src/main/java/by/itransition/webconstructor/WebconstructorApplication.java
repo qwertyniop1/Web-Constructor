@@ -11,6 +11,13 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+// TODO todolist
+/*
+	сброс пароля
+	забыл пароль
+	отправка нового письма с подтверждением
+ */
+
 @SpringBootApplication
 public class WebconstructorApplication extends WebMvcConfigurerAdapter{
 

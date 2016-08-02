@@ -4,6 +4,9 @@
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
+    <th:block layout:fragment="styles">
+
+    </th:block>
     <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE">Web constructor</title>
 </head>
 <body>
@@ -24,6 +27,9 @@
 
     <script type="text/javascript" src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
     <script type="text/javascript" src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+    <th:block layout:fragment="scripts">
+
+    </th:block>
 
 </body>
 </html>

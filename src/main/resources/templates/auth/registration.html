@@ -4,6 +4,11 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="#{registration.registration}">Registration</title>
+    <th:block layout:fragment="styles">
+        <th:block th:replace="auth/validation :: styles">
+
+        </th:block>
+    </th:block>
 </head>
 <body>
     <div layout:fragment="content">
@@ -11,7 +16,7 @@
             <label class="control-label" th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</label>
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <form th:action="@{~/register}" th:object="${user}" method="post">
+                <form id="registration-form" th:action="@{~/register}" th:object="${user}" method="post">
                     <div class="form-group" th:classappend="${#fields.hasErrors('firstname')}? has-error">
                         <label th:for="${#ids.next('firstname')}" th:text="#{registration.firstname}">First name</label>
                         <input type="text" class="form-control" th:field="*{firstname}" th:placeholder="#{registration.firstname}"/>
@@ -48,5 +53,10 @@
             <div class="col-md-4"></div>
         </div>
     </div>
+    <th:block layout:fragment="scripts">
+        <th:block th:replace="auth/validation :: scripts">
+
+        </th:block>
+    </th:block>
 </body>
 </html>

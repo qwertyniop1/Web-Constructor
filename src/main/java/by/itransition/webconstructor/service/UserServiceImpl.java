@@ -1,5 +1,6 @@
 package by.itransition.webconstructor.service;
 
+import by.itransition.webconstructor.domain.Role;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.domain.VerificationToken;
 import by.itransition.webconstructor.dto.UserDto;
@@ -86,6 +87,7 @@ public class UserServiceImpl implements UserService{
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEnabled(false);
+        user.setRole(Role.ROLE_USER);
         return user;
     }
 
