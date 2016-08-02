@@ -68,6 +68,11 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
+    @Override
+    public void resendConfirmationMessage(String email) {
+
+    }
+
     private User saveUser(UserDto userDto) {
         User user = createUser(userDto);
         return (!userExist(userDto) && userRepository.save(user) != null) ? user : null;

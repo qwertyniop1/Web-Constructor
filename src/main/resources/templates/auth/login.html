@@ -9,7 +9,7 @@
 <div layout:fragment="content">
     <div class="alert alert-danger alert-dismissible" role="alert" th:if="${param.error}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p th:utext="#{login.badCredentials}"><strong>Error!</strong> Invalid username or password.</p>
+        <p th:utext="${session['SPRING_SECURITY_LAST_EXCEPTION']}"><strong>Error!</strong> Invalid username or password.</p>
     </div>
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.logout}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -43,7 +43,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String token = UUID.randomUUID().toString();
         userService.createVerificationToken(user, token);
         try {
-            mailSender.send(createMessage(user.getEmail(), token,
+            mailSender.send(createMessage(user.getFirstname(), user.getEmail(), token,
                     event.getApplicationUrl(), event.getLocale()));
         } catch (MessagingException ex) {
             ex.printStackTrace();
@@ -51,18 +51,18 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     @Async
-    private MimeMessage createMessage(String email, String token, String url, Locale locale) throws MessagingException {
+    private MimeMessage createMessage(String name, String email, String token, String url, Locale locale) throws MessagingException {
         String subject = messages.getMessage("registration.confirmSubject", null, locale);
         String confirmationUrl = url
-                + "/registration-confirm?confirm_token=" + token;
-        String message = messages.getMessage("registration.confirmMessage", null, locale);
+                + "/confirm?confirm_token=" + token;
+        String message = messages.getMessage("registration.confirmMessage", new Object[] {name, confirmationUrl}, locale);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         helper.setTo(email);
         helper.setSubject(subject);
         helper.setText(message, true);
 //        helper.setFrom(environment.getProperty("support.email"));
-        helper.setFrom("vitas97@tut.by");
+        helper.setFrom("vitas97@tut.by"); // FIXME: 02.08.2016
         return mimeMessage;
     }
 }

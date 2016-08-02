@@ -14,4 +14,6 @@ public interface UserService {
 
     boolean activateUser(String token);
 
+    void resendConfirmationMessage(String email);
+
 }
