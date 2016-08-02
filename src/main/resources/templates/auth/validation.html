@@ -7,6 +7,7 @@
 <body>
 <th:block th:fragment="styles">
     <link rel="stylesheet" type="text/css" th:href="@{/css/tooltipster.bundle.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-punk.min.css}" />
 </th:block>
 
 <th:block th:fragment="scripts">
@@ -20,7 +21,8 @@
             $('.form-control').tooltipster({
                 trigger: 'custom',
                 onlyOne: false,
-                position: 'right'
+                position: 'right',
+                theme: 'tooltipster-punk'
             });
 
             $('#login-form').validate({
