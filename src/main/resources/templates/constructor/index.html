@@ -5,18 +5,138 @@
 <head>
     <title th:text="#{constructor.title}">Constructor</title>
     <th:block layout:fragment="styles">
+        <link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>
 
     </th:block>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="nowrap-content">
 
+    <div class="my-toolbar flex-container">
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-text">
+            <span class="glyphicon glyphicon-font" aria-hidden="true"></span> Text
+        </button>
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-image">
+            <span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Image
+        </button>
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-video">
+            <span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video
+        </button>
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-1">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
+        </button>
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-comment">
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comments
+        </button>
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-rating">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Rating
+        </button>
+    </div>
 
+    <div class="row my-container">
 
+    </div>
 
 </div>
 <th:block layout:fragment="scripts">
+    <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
 
+            // config
+            var layout =  [[12], [4, 4, 4], [6, 6]];
+
+            var toolbar = $('.my-toolbar');
+
+            $('.my-tool', toolbar).draggable({
+                revert: 'invaid',
+                helper: 'clone',
+                containment: 'body',
+                cancel: false
+            });
+
+            function addElement(item, container) {
+                let id = item.attr('id');
+                if (id === 'tool-text') {
+                    container.append(createElement('text'))
+                } else if (id === 'tool-image') {
+                    container.append(createElement('image'))
+                } else if (id === 'tool-video') {
+                    container.append(createElement('video'))
+                } else if (id === 'tool-comment') { // TODO add
+                    container.append(createElement('comments'))
+                } else if (id === 'tool-rating') {
+                    container.append(createElement('rating'))
+                }
+
+            }
+
+            function createElement(text) {
+                let wrapper = $('<div class="my-element"></div>');
+                wrapper.text(text);
+                return wrapper;
+            }
+
+            generateGrid($('.my-container'), layout);
+
+            function generateGrid(container, rows) {
+
+                rows.forEach(function (row) {
+                    let rowTemplate = $('<div class="row"></div>');
+                    row.forEach(function (col) {
+                       rowTemplate.append('<div class="my-content col-md-' + col + '"></div>');
+                    });
+                    container.append(rowTemplate);
+                }) ;
+
+                var editField = $('.my-content');
+
+                editField.droppable({
+                    accept: '.my-toolbar > .my-tool',
+                    drop: function (event, ui) {
+                        addElement(ui.draggable, $(this));
+                    }
+                });
+
+                let shouldDelete = false;
+                editField.sortable({
+                    cursor: 'move',
+                    connectWith: editField,
+                    containment: 'body',
+                    tolerance: 'pointer',
+                    over: function () {
+                        shouldDelete = false;
+                    },
+                    out: function () {
+                        shouldDelete = true;
+                    },
+                    beforeStop: function (event, ui) {
+                        if (shouldDelete == true) {
+                            ui.item.remove();
+                        }
+                    }
+                });
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        });
+    </script>
 </th:block>
 </body>
 </html>
