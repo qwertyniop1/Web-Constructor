@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Connect to Facebook</title>
+    <title>Connect to Twitter</title>
 </head>
 <body>
 <th:block th:fragment="connect">
-    <form id="facebook" th:action="@{/connect/facebook}" method="POST">
-        <input type="hidden" name="scope" value="user_posts" />
+    <form id="twitter" th:action="@{/connect/twitter}" method="POST">
     </form>
 </th:block>
 </body>

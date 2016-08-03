@@ -16,6 +16,7 @@ import java.util.Locale;
 	сброс пароля
 	забыл пароль
 	отправка нового письма с подтверждением
+	async email sending
  */
 
 @SpringBootApplication

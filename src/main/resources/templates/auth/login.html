@@ -37,18 +37,42 @@
                     <input type="password" class="form-control" id="password" name="password" th:placeholder="#{login.password}"/>
                 </div>
                 <a href="#" th:text="#{login.forgot}"></a>
-                <div style="text-align: center">
-                    <button type="submit" class="btn btn-info" th:text="#{navbar.signin}">Submit</button>
+                <br/>
+                <div class="btn-group" style="display: table; margin: 20px auto">
+                    <button type="submit" class="btn btn-default" th:text="#{navbar.signin}">Submit</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" th:onclick="'signInFacebook()'">Facebook</a></li>
+                        <li><a href="#" th:onclick="'signInTwitter()'">Twitter</a></li>
+                        <li><a href="#" th:onclick="'signInVkontakte()'">Vkontakte</a></li>
+                    </ul>
                 </div>
             </form>
         </div>
         <div class="col-md-4"></div>
     </div>
-</div>
-<th:block layout:fragment="scripts">
-    <th:block th:replace="auth/validation :: scripts">
 
-    </th:block>
+    <th:block th:replace="connect/facebookConnect :: connect"/>
+    <th:block th:replace="connect/twitterConnect :: connect"/>
+</div>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="auth/validation :: scripts" />
+
+    <script th:inline="javascript">
+        function signInFacebook() {
+            $('#facebook').submit();
+        }
+        function signInTwitter() {
+            $('#twitter').submit();
+        }
+        function signInVkontakte() {
+            alert('zadr');
+        }
+    </script>
 </th:block>
 </body>
 </html>

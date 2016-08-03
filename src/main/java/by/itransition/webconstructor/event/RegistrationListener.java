@@ -32,12 +32,10 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private Environment environment;
 
     @Override
-    @Async
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
         confirmRegistration(event);
     }
 
-    @Async
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
@@ -50,7 +48,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         }
     }
 
-    @Async
     private MimeMessage createMessage(String name, String email, String token, String url, Locale locale) throws MessagingException {
         String subject = messages.getMessage("registration.confirmSubject", null, locale);
         String confirmationUrl = url

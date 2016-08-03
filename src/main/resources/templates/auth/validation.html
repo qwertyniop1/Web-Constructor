@@ -14,7 +14,7 @@
     <script type="text/javascript" th:src="@{/js/jquery.validate.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/tooltipster.bundle.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/messages_{loc}.min.js(loc=${#locale})}"></script>
-    <script type="text/javascript">
+    <script th:inline="javascript">
         //        <![CDATA[
         $(document).ready(function () {
 
@@ -24,6 +24,11 @@
                 position: 'right',
                 theme: 'tooltipster-punk'
             });
+
+            jQuery.validator.addMethod("alphanumeric", function(value, element) {
+                        return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value);
+                    }
+                    , /*[[#{registration.validUsername}]]*/);
 
             $('#login-form').validate({
                 rules: {
@@ -79,6 +84,7 @@
                     username: {
                         minlength: 5,
                         maxlength: 60,
+                        alphanumeric: true,
                         required: true
                     },
                     password: {

@@ -59,6 +59,7 @@ public class AuthController {
         return "auth/complete";
     }
 
+    // TODO oooo
     @GetMapping("/resend-confirm")
     public String resend(Model model) {
         return null;
