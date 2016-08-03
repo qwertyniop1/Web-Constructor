@@ -1,0 +1,26 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+<div th:fragment="base-element">
+    <div class="my-element">
+        <div class="toolbar">
+            <a href="#" class="btn btn-info" rel="tooltip" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            </a>
+            <a href="#" class="btn btn-danger" rel="tooltip" title="Remove">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="footer">
+
+</div>
+
+</body>
+</html>

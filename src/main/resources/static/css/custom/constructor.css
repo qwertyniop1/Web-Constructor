@@ -33,4 +33,17 @@
     min-height: 75px;
     margin: 10px 0;
     padding: 5px;
+    position: relative;
+}
+
+.toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    display: none;
+}
+
+.my-element:hover .toolbar {
+    display: block;
 }

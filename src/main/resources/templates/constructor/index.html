@@ -41,10 +41,23 @@
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
     <script th:inline="javascript">
+        //        <![CDATA[
         $(document).ready(function () {
 
             // config
             var layout =  [[12], [4, 4, 4], [6, 6]];
+
+            var baseElement = '\
+            <div class="my-element">\
+                <div class="toolbar">\
+                    <a href="#" class="btn btn-info btn-xs" rel="tooltip" title="Settings">\
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>\
+                    </a>\
+                    <a href="#" class="btn btn-danger btn-xs" rel="tooltip" title="Remove">\
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>\
+                    </a>\
+                </div>\
+            </div>';
 
             var toolbar = $('.my-toolbar');
 
@@ -72,8 +85,8 @@
             }
 
             function createElement(text) {
-                let wrapper = $('<div class="my-element"></div>');
-                wrapper.text(text);
+                let wrapper = $(baseElement);
+                //wrapper.text(text);
                 return wrapper;
             }
 
@@ -117,6 +130,10 @@
                     }
                 });
 
+                $(document.body).on('click', '.btn-danger', function () {
+                    $(this).closest('.my-element').remove();
+                })
+
             }
 
 
@@ -134,8 +151,8 @@
 
 
 
-
         });
+        //        ]]>
     </script>
 </th:block>
 </body>
