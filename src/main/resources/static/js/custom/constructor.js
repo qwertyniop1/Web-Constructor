@@ -28,6 +28,26 @@ $(document).ready(function () {
         cancel: false
     });
 
+    Dropzone.options.uploadArea = {
+        url: 'https://api.cloudinary.com/v1_1/cloud9/image/upload',
+        acceptedFiles:'.jpg,.png,.jpeg,.gif',
+        uploadMultiple: false,
+        maxFiles: 1,
+        addRemoveLinks: true,
+        //dictDefaultMessage: '', //TODO dict
+        sending: function (file, xhr, formData) {
+            formData.append('api_key', 891695265656755);
+            formData.append('timestamp', Date.now() / 1000 | 0);
+            formData.append('upload_preset', 'lrwcwlyh ');
+        },
+       /* complete: function (file) {
+            //this.removeAllFiles();
+        },*/
+        success: function (file, response) {
+            $('#photo-url').val('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
+        }
+    };
+
     generateGrid($('.my-container'), layout);
 
     $(document.body).on('click', '.edit-element', function () {
@@ -35,7 +55,19 @@ $(document).ready(function () {
         let id = element.attr('class');
         if (id.indexOf('my-text') !== -1) {
         } else if (id.indexOf('my-image') !== -1) {
-            $('#modal-photo').modal('show');
+            $('#modal-photo').attr('data-element-id', element.attr('id'))
+                .data('elementId', element.attr('id'));
+            let img = element.find('img:not(.my-icon)');
+            if (img.length) {
+                $('#photo-width').val(img.data('mySrc').width);
+                $('#photo-height').val(img.data('mySrc').height);
+                $('#photo-url').val(img.data('mySrc').url);
+            } else {
+                $('#photo-width').val(VIDEO_WIDTH);
+                $('#photo-height').val(VIDEO_HEIGHT);
+                $('#photo-url').val('');
+            }
+            $('#modal-photo').modal('show'); //TODO lol
         } else if (id.indexOf('my-video') !== -1) {
             $('#modal-video').attr('data-element-id', element.attr('id'));
             $('#modal-video').data('elementId', element.attr('id'));
@@ -43,7 +75,7 @@ $(document).ready(function () {
             if (frame.length) {
                 $('#video-width').val(frame.attr('width'));
                 $('#video-height').val(frame.attr('height'));
-                $('#video-url').val(frame.attr('src'));
+                $('#video-url').val(frame.data('mySrc'));
                 $('#video-auto').prop('checked', false); //TODO fix
                 $('#video-loop').prop('checked', false);
             } else {
@@ -74,6 +106,36 @@ $(document).ready(function () {
             autoplay: $('#video-auto').prop('checked')
         };
         createVideo(root.data('elementId'), config);
+        root.modal('hide');
+    });
+
+    $('#modal-photo').on('click', '.btn-primary', function () {
+        let root = $(this).closest('.modal');
+        let url = $('#photo-url').val();
+        if (url.indexOf('res.cloudinary.com/itraphotocloud/image/upload') === -1) {
+            $.post('https://api.cloudinary.com/v1_1/cloud9/image/upload', {
+                api_key: 891695265656755,
+                timestamp: (Date.now() / 1000 | 0),
+                upload_preset: 'lrwcwlyh',
+                file: url
+            }, function (response, status) {
+                _createPhoto('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
+            });
+            return;
+        }
+
+        function _createPhoto(cloudUrl) {
+            let config = {
+                width: $('#photo-width').val(),
+                height: $('#photo-height').val(),
+                url: cloudUrl
+            };
+            createPhoto(root.data('elementId'), config);
+            Dropzone.instances[0].removeAllFiles();
+            root.modal('hide');
+        }
+
+       _createPhoto(url);
     });
 
     function generateGrid(container, rows) {
@@ -143,8 +205,6 @@ $(document).ready(function () {
         return wrapper;
     }
 
-
-
     function createVideo(id, config) {
         let url = config.url + '?';
         if (config.autoplay) {
@@ -156,9 +216,21 @@ $(document).ready(function () {
         let template = $('#' + id);
         template.find('.my-icon').remove();
         template.find('iframe').remove();
-        template.append('<iframe width="' + config.width + '" height="' + config.height + '" ' +
+        template.append($('<iframe width="' + config.width + '" height="' + config.height + '" ' +
                ' src="' + url + '" ' +
-               'frameborder="0" allowfullscreen="true">');
+               'frameborder="0" allowfullscreen="true">').attr('data-my-src', config.url)
+            .data('mySrc', config.url));
+    }
+
+    function createPhoto(id, config) {
+        let url = config.url;
+        let sizeString = '/c_pad,h_' + config.height + ',w_' + config.width;
+        url = insertAfter(url, sizeString, 'upload');
+        let template = $('#' + id);
+        template.find('.my-icon').remove();
+        template.find('img').remove();
+        template.append($('<img src="' + url + '"/>').attr('data-my-src', config)
+            .data('mySrc', config));
     }
 
     function customAlert(message, title = '') {
@@ -171,6 +243,13 @@ $(document).ready(function () {
         });
     }
 
+    function customSplice(str, substr, position) {
+        return [str.slice(0, position), substr, str.slice(position)].join('');
+    }
+
+    function insertAfter(str, substr, targetWord) {
+        return customSplice(str, substr, str.indexOf(targetWord) + targetWord.length);
+    }
 
 
 

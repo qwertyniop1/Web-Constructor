@@ -5,6 +5,7 @@
 <head>
     <title th:text="#{constructor.title}">Constructor</title>
     <th:block layout:fragment="styles">
+        <link rel="stylesheet" href="css/dropzone.css" th:href="@{/css/dropzone.css}"/>
         <link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>
 
     </th:block>
@@ -41,6 +42,7 @@
 </div>
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" src="js/dropzone.js" th:src="@{/js/dropzone.js}"></script>
     <script type="text/javascript" src="js/custom/constructor.js" th:src="@{/js/custom/constructor.js}"></script>
 
     <script th:inline="javascript">
