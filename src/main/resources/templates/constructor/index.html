@@ -11,6 +11,7 @@
 </head>
 <body>
 <div layout:fragment="nowrap-content">
+    <th:block th:replace="constructor/elements :: alert"/>
 
     <div class="my-toolbar flex-container">
         <button type="button" class="my-tool btn btn-default btn-lg" id="tool-text">
@@ -32,7 +33,7 @@
             <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Rating
         </button>
     </div>
-
+    <!--</iframe>-->
     <div class="row my-container">
 
     </div>
@@ -40,120 +41,15 @@
 </div>
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" src="js/custom/constructor.js" th:src="@{/js/custom/constructor.js}"></script>
+
     <script th:inline="javascript">
         //        <![CDATA[
-        $(document).ready(function () {
 
-            // config
-            var layout =  [[12], [4, 4, 4], [6, 6]];
-
-            var baseElement = '\
-            <div class="my-element">\
-                <div class="toolbar">\
-                    <a href="#" class="btn btn-info btn-xs" rel="tooltip" title="Settings">\
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>\
-                    </a>\
-                    <a href="#" class="btn btn-danger btn-xs" rel="tooltip" title="Remove">\
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>\
-                    </a>\
-                </div>\
-            </div>';
-
-            var toolbar = $('.my-toolbar');
-
-            $('.my-tool', toolbar).draggable({
-                revert: 'invaid',
-                helper: 'clone',
-                containment: 'body',
-                cancel: false
-            });
-
-            function addElement(item, container) {
-                let id = item.attr('id');
-                if (id === 'tool-text') {
-                    container.append(createElement('text'))
-                } else if (id === 'tool-image') {
-                    container.append(createElement('image'))
-                } else if (id === 'tool-video') {
-                    container.append(createElement('video'))
-                } else if (id === 'tool-comment') { // TODO add
-                    container.append(createElement('comments'))
-                } else if (id === 'tool-rating') {
-                    container.append(createElement('rating'))
-                }
-
-            }
-
-            function createElement(text) {
-                let wrapper = $(baseElement);
-                //wrapper.text(text);
-                return wrapper;
-            }
-
-            generateGrid($('.my-container'), layout);
-
-            function generateGrid(container, rows) {
-
-                rows.forEach(function (row) {
-                    let rowTemplate = $('<div class="row"></div>');
-                    row.forEach(function (col) {
-                       rowTemplate.append('<div class="my-content col-md-' + col + '"></div>');
-                    });
-                    container.append(rowTemplate);
-                }) ;
-
-                var editField = $('.my-content');
-
-                editField.droppable({
-                    accept: '.my-toolbar > .my-tool',
-                    drop: function (event, ui) {
-                        addElement(ui.draggable, $(this));
-                    }
-                });
-
-                let shouldDelete = false;
-                editField.sortable({
-                    cursor: 'move',
-                    connectWith: editField,
-                    containment: 'body',
-                    tolerance: 'pointer',
-                    over: function () {
-                        shouldDelete = false;
-                    },
-                    out: function () {
-                        shouldDelete = true;
-                    },
-                    beforeStop: function (event, ui) {
-                        if (shouldDelete == true) {
-                            ui.item.remove();
-                        }
-                    }
-                });
-
-                $(document.body).on('click', '.btn-danger', function () {
-                    $(this).closest('.my-element').remove();
-                })
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        });
         //        ]]>
     </script>
+    <th:block th:replace="constructor/elements :: video-modal"/>
+    <th:block th:replace="constructor/elements :: image-modal"/>
 </th:block>
 </body>
 </html>

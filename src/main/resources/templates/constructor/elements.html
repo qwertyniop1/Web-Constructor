@@ -5,22 +5,108 @@
 
 </head>
 <body>
-<div th:fragment="base-element">
-    <div class="my-element">
-        <div class="toolbar">
-            <a href="#" class="btn btn-info" rel="tooltip" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-            </a>
-            <a href="#" class="btn btn-danger" rel="tooltip" title="Remove">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </a>
+
+<th:block th:fragment="alert">
+    <div class="alert alert-danger alert-dismissible my-notification" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Title</strong>
+        <p>Notification text.</p>
+    </div>
+</th:block>
+
+<th:block th:fragment="video-modal">
+    <!-- Modal -->
+    <div class="modal fade" id="modal-video" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Video settings</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="video-url">YouTube URL</label>
+                            <input type="text" class="form-control" id="video-url" placeholder="YouTube URL"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-width">Width</label>
+                            <input type="number" class="form-control" id="video-width" value="560"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-height">Height</label>
+                            <input type="number" class="form-control" id="video-height" value="315"/>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="video-auto"/> Auto play
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="video-loop"/> Loop
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</th:block>
 
-<div th:fragment="footer">
-
-</div>
+<th:block th:fragment="image-modal">
+    <!-- Modal -->
+    <div class="modal fade" id="modal-photo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Image settings</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="video-url">Image URL</label>
+                            <input type="text" class="form-control" id="photo-url" placeholder="Image URL"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo-width">Width</label>
+                            <input type="number" class="form-control" id="photo-width" value="560"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo-height">Height</label>
+                            <input type="number" class="form-control" id="photo-height" value="315"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
 
 </body>
 </html>
+
+
+
+
+<!--<div th:fragment="base-element">-->
+<!--<div class="my-element">-->
+<!--<div class="toolbar">-->
+<!--<a href="#" class="btn btn-info" rel="tooltip" title="Settings">-->
+<!--<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>-->
+<!--</a>-->
+<!--<a href="#" class="btn btn-danger" rel="tooltip" title="Remove">-->
+<!--<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>-->
+<!--</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
