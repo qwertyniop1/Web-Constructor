@@ -48,12 +48,25 @@ $(document).ready(function () {
         }
     };
 
+    tinymce.init({
+        selector: '#text-area'
+    });
+
     generateGrid($('.my-container'), layout);
 
     $(document.body).on('click', '.edit-element', function () {
         let element = $(this).closest('.my-element');
         let id = element.attr('class');
         if (id.indexOf('my-text') !== -1) {
+            $('#modal-text').attr('data-element-id', element.attr('id'))
+                .data('elementId', element.attr('id'));
+            let text = element.find('.my-text-content');
+            if (text.length) {
+                tinyMCE.get('text-area').setContent(text.html());
+            } else {
+                tinyMCE.get('text-area').setContent('Put your text here...');
+            }
+            $('#modal-text').modal('show');
         } else if (id.indexOf('my-image') !== -1) {
             $('#modal-photo').attr('data-element-id', element.attr('id'))
                 .data('elementId', element.attr('id'));
@@ -67,6 +80,8 @@ $(document).ready(function () {
                 $('#photo-height').val(VIDEO_HEIGHT);
                 $('#photo-url').val('');
             }
+            $('#photo-url').closest('.form-group').removeClass('has-error')
+            $('.help-block').addClass('hidden');
             $('#modal-photo').modal('show'); //TODO lol
         } else if (id.indexOf('my-video') !== -1) {
             $('#modal-video').attr('data-element-id', element.attr('id'));
@@ -109,18 +124,34 @@ $(document).ready(function () {
         root.modal('hide');
     });
 
+    $('#modal-text').on('click', '.btn-primary', function () {
+        let root = $(this).closest('.modal');
+        let content = tinyMCE.get('text-area').getContent();
+        createText(root.data('elementId'), content);
+        root.modal('hide');
+    });
+
     $('#modal-photo').on('click', '.btn-primary', function () {
         let root = $(this).closest('.modal');
         let url = $('#photo-url').val();
         if (url.indexOf('res.cloudinary.com/itraphotocloud/image/upload') === -1) {
+            $('.glyphicon-refresh-animate').show();
             $.post('https://api.cloudinary.com/v1_1/cloud9/image/upload', {
                 api_key: 891695265656755,
                 timestamp: (Date.now() / 1000 | 0),
                 upload_preset: 'lrwcwlyh',
                 file: url
-            }, function (response, status) {
-                _createPhoto('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
-            });
+            })
+                .done(function (response) {
+                    _createPhoto('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
+                })
+                .fail(function (xhr, status, error) {
+                    $('#photo-url').closest('.form-group').addClass('has-error')
+                    $('.help-block').removeClass('hidden');
+                })
+                .always(function () {
+                    $('.glyphicon-refresh-animate').hide();
+                });
             return;
         }
 
@@ -177,23 +208,21 @@ $(document).ready(function () {
         });
     }
 
+    var map = {};
+    map['tool-text'] = ['my-text', 'images/text.png'];
+    map['tool-image'] = ['my-image', 'images/camera.png'];
+    map['tool-video'] = ['my-video', 'images/movie.png'];
+    map['tool-table'] = ['my-table', 'images/table.png'];
+    map['tool-comment'] = ['my-comments', ''];
+    map['tool-rating'] = ['my-rating', ''];
+
     function addElement(item, container) {
         if (container.find('.my-element').length >= MAX_ELEMENT_IN_BLOCK) {
             customAlert('You can\'t put more than ' + MAX_ELEMENT_IN_BLOCK + ' elements in block'); //TODO locale
             return;
         }
-        let id = item.attr('id');
-        if (id === 'tool-text') {
-            container.append(createElement('my-text', 'images/text.png'))
-        } else if (id === 'tool-image') {
-            container.append(createElement('my-image', 'images/camera.png'))
-        } else if (id === 'tool-video') {
-            container.append(createElement('my-video', 'images/movie.png'))
-        } else if (id === 'tool-comment') { // TODO add
-            container.append(createElement('my-comments', ''))
-        } else if (id === 'tool-rating') {
-            container.append(createElement('my-rating', ''))
-        }
+        let element = map[item.attr('id')];
+        container.append(createElement(element[0], element[1]));
     }
 
     var idCounter = 1;
@@ -206,7 +235,12 @@ $(document).ready(function () {
     }
 
     function createVideo(id, config) {
-        let url = config.url + '?';
+        let url = parseYoutubeUrl(config.url);
+        if (url.length === 1) {
+            customAlert('Invalid URL'); // TODO locale
+            return;
+        }
+        url = 'https://www.youtube.com/embed/' + url + '?';
         if (config.autoplay) {
             url += 'autoplay=1&'
         }
@@ -233,6 +267,13 @@ $(document).ready(function () {
             .data('mySrc', config));
     }
 
+    function createText(id, content) {
+        let template = $('#' + id);
+        template.find('.my-icon').remove();
+        template.find('.my-text-content').remove();
+        template.append('<div class="my-text-content">' + content + '</div>');
+    }
+
     function customAlert(message, title = '') {
         let alert = $('.my-notification');
         alert.find('strong').text(title);
@@ -251,7 +292,15 @@ $(document).ready(function () {
         return customSplice(str, substr, str.indexOf(targetWord) + targetWord.length);
     }
 
-
+    function parseYoutubeUrl(url) {
+        function check(str) {
+            let pos = url.indexOf(str);
+            return pos !== -1 ? pos + str.length : 0;
+        }
+        let position = check('youtube.com/watch?v=') ||
+                check('youtu.be/');
+        return position !== 0 ? url.slice(position) : ' ';
+    }
 
 
 

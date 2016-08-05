@@ -24,8 +24,8 @@
         <button type="button" class="my-tool btn btn-default btn-lg" id="tool-video">
             <span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video
         </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-1">
-            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-table">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Table
         </button>
         <button type="button" class="my-tool btn btn-default btn-lg" id="tool-comment">
             <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comments
@@ -43,6 +43,7 @@
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
     <script type="text/javascript" src="js/dropzone.js" th:src="@{/js/dropzone.js}"></script>
+    <script type="text/javascript" src="js/tinymce/tinymce.min.js" th:src="@{/js/tinymce/tinymce.min.js}"></script>
     <script type="text/javascript" src="js/custom/constructor.js" th:src="@{/js/custom/constructor.js}"></script>
 
     <script th:inline="javascript">
@@ -52,6 +53,7 @@
     </script>
     <th:block th:replace="constructor/elements :: video-modal"/>
     <th:block th:replace="constructor/elements :: image-modal"/>
+    <th:block th:replace="constructor/elements :: text-modal"/>
 </th:block>
 </body>
 </html>
