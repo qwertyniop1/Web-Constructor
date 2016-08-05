@@ -28,10 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/profile").access("hasRole('USER')")
-//                .antMatchers("/constructor").access("hasRole('USER')")
-                .antMatchers("/login*").anonymous()
+                .antMatchers("/login*", "/register", "/confirm", "/auth-error").anonymous()
                 .antMatchers("/").permitAll()
+                .antMatchers("/*").access("hasRole('USER')")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login?error=true")
                 .failureHandler(authenticationFailureHandler)

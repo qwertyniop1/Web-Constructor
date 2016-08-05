@@ -16,6 +16,8 @@ public class Site implements Serializable{
 
     private String name;
 
-    private String user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", nullable = false)
+    private User user;
 
 }

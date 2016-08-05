@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -28,6 +30,9 @@ public class User implements UserDetails {
     private boolean locked;
 
     private boolean enabled;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Site> sites = new HashSet<>(0);
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)

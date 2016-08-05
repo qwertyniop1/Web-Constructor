@@ -2,8 +2,10 @@ package by.itransition.webconstructor.service;
 
 import by.itransition.webconstructor.domain.Site;
 
+import java.util.List;
+
 public interface SiteService {
 
-    Site getSite(String user);
+    List<Site> getSites(String user);
 
 }
