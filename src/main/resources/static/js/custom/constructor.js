@@ -180,6 +180,13 @@ $(document).ready(function () {
         recreateLayout($('.my-container'), getLayoutFromId($(this).attr('id')));
     });
 
+    $('#save-page').on('click', function () {
+        console.log($('.my-container').html());;
+        // $('.my-element').each(function () {
+        //     console.log($(this).children(':last-child')[0].outerHTML);
+        // });
+    });
+
     function recreateLayout(container, layoutId) {
         container.html('');
         generateGrid(container, layouts[layoutId]);
