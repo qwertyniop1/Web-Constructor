@@ -1,10 +1,17 @@
 $(document).ready(function () {
 
     // config
-    var layout =  [[12], [6, 6]];
     var VIDEO_HEIGHT = 315;
     var VIDEO_WIDTH = 560;
     var MAX_ELEMENT_IN_BLOCK = 3;
+    var layouts = [
+        [[12], [6, 6]],
+        [[12], [12]],
+        [[6, 6], [12]],
+        [[6, 6], [6, 6]]
+    ];
+
+    var currentLayout = 0;
 
     var baseElement = '\
             <div class="my-element">\
@@ -52,7 +59,7 @@ $(document).ready(function () {
         selector: '#text-area'
     });
 
-    generateGrid($('.my-container'), layout);
+    recreateLayout($('.my-container'), currentLayout);
 
     $(document.body).on('click', '.edit-element', function () {
         let element = $(this).closest('.my-element');
@@ -169,6 +176,15 @@ $(document).ready(function () {
        _createPhoto(url);
     });
 
+    $('.my-layout-set').on('click', function () {
+        recreateLayout($('.my-container'), getLayoutFromId($(this).attr('id')));
+    });
+
+    function recreateLayout(container, layoutId) {
+        container.html('');
+        generateGrid(container, layouts[layoutId]);
+    }
+
     function generateGrid(container, rows) {
 
         rows.forEach(function (row) {
@@ -209,10 +225,10 @@ $(document).ready(function () {
     }
 
     var map = {};
-    map['tool-text'] = ['my-text', 'images/text.png'];
-    map['tool-image'] = ['my-image', 'images/camera.png'];
-    map['tool-video'] = ['my-video', 'images/movie.png'];
-    map['tool-table'] = ['my-table', 'images/table.png'];
+    map['tool-text'] = ['my-text', '/images/text.png'];
+    map['tool-image'] = ['my-image', '/images/camera.png'];
+    map['tool-video'] = ['my-video', '/images/movie.png'];
+    map['tool-table'] = ['my-table', '/images/table.png'];
     map['tool-comment'] = ['my-comments', ''];
     map['tool-rating'] = ['my-rating', ''];
 
@@ -301,6 +317,12 @@ $(document).ready(function () {
                 check('youtu.be/');
         return position !== 0 ? url.slice(position) : ' ';
     }
+
+    function getLayoutFromId(id) {
+        let regex = /layout-([0-9]+)/;
+        return id.match(regex)[1] - 1;
+    }
+
 
 
 
