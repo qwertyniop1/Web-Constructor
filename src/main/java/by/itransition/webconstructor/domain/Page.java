@@ -1,12 +1,16 @@
 package by.itransition.webconstructor.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = "elements")
+@ToString(exclude = "elements")
 @Entity
 @Table(name = "pages")
 public class Page {
@@ -21,11 +25,10 @@ public class Page {
     @JoinColumn(name = "site_id", nullable = false)
     private Site site;
 
-//    private int layoutId;
+    @Column(name = "layout")
+    private int layoutId = 0;
 
-//    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Set<Element> elements = new HashSet<>(0);
-
-
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Element> elements = new HashSet<>(0);
 
 }

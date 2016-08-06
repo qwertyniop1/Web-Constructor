@@ -23,8 +23,8 @@ public class SiteServiceImpl implements SiteService{
     @Autowired
     private SiteRepository siteRepository;
 
-    @Autowired
-    private PageRepository pageRepository;
+//    @Autowired
+//    private PageRepository pageRepository;
 
 
     @Override
@@ -41,10 +41,10 @@ public class SiteServiceImpl implements SiteService{
         return siteRepository.findByUser(user);
     }
 
-    @Override
-    public List<Page> getPages(Long siteId) {
-        return pageRepository.findBySite(siteRepository.findOne(siteId));
-    }
+//    @Override
+//    public List<Page> getPages(Long siteId) {
+//        return pageRepository.findBySite(siteRepository.findOne(siteId));
+//    }
 
     @Override
     public long create(User user) {

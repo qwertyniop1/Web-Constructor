@@ -12,7 +12,7 @@ public interface SiteService {
 
     List<Site> getSites(User user);
 
-    List<Page> getPages(Long siteId);
+//    List<Page> getPages(Long siteId);
 
     long create(User user);
 

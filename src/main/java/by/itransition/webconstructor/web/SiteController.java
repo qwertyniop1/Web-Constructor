@@ -23,7 +23,8 @@ public class SiteController {
     }
 
     @PostMapping("/create")
-    public @ResponseBody
+    public
+    @ResponseBody
     String create(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return String.valueOf(siteService.create(user));
@@ -32,7 +33,7 @@ public class SiteController {
     @GetMapping("/{site}")
     public String edit(@PathVariable("site") Long id, Model model) {
         model.addAttribute("site", siteService.getSite(id));
-        model.addAttribute("pages", siteService.getPages(id));
+        //model.addAttribute("pages", siteService.getPages(id));
         return "sites/site";
     }
 
@@ -43,14 +44,11 @@ public class SiteController {
     }
 
     @DeleteMapping("/{site}")
-    public @ResponseBody
+    public
+    @ResponseBody
     String remove(@PathVariable("site") Long id, Model model) {
         siteService.delete(id);
         return "";
     }
 
-//    @GetMapping("/edit/{page}")
-//    public String constructor(@PathVariable("page") Long id, Model model) {
-//        return "constructor/index";
-//    }
 }
