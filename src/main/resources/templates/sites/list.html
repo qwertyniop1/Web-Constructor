@@ -7,11 +7,45 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <button type="button" class="btn btn-default" onclick="create()">Add site</button>
     <ul>
         <li th:each="site : ${sites}">
             <a th:href="@{/sites/{id}(id=${site.id})}" th:text="${site.name}"></a>
+            <button type="button" class="btn btn-default btn-xs" th:onclick="'removeSite(' + ${site.id} + ');'">Delete</button>
         </li>
     </ul>
 </div>
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        //        <![CDATA[
+
+        $(document).ready(function () {
+
+
+
+        });
+
+
+        function create() {
+            $.post('/sites/create', {
+                [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+            }, function (response, status) {
+                window.location.href = '/sites/' + response;
+            });
+        }
+
+        function removeSite(id) {
+            $.ajax({
+                url: '/sites/' + id + '?' + [[${_csrf.parameterName}]] + '=' + [[${_csrf.token}]],
+                type: 'DELETE',
+                success: function(result) {
+                    window.location.href = '/sites/';
+                }
+            });
+        }
+
+        //        ]]>
+    </script>
+</th:block>
 </body>
 </html>

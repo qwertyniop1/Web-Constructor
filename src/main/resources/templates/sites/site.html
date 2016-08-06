@@ -17,10 +17,10 @@
     <div class="row">
         <div class="col-md-6">
             <h3>Settings</h3>
-            <form>
+            <form th:action="@{/sites/{id}/(id=${site.id})}" method="post">
                 <div class="form-group">
                     <label for="name">Site name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Site name"/>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Site name" th:value="${site.name}"/>
                 </div>
                 <div class="form-group">
                     <label>Design theme</label>
@@ -48,16 +48,50 @@
                 </div>
             </div>
             <div class="add-page">
-                <a href="#" class="btn btn-default">Add page</a>
+                <button type="button" class="btn btn-default" onclick="create()">Add page</button>
             </div>
             <ul>
                 <li th:each="page : ${pages}">
-                    <a th:href="@{/sites/edit/{id}(id=${page.id})}" th:text="${page.name}"></a>
+                    <a th:href="@{/pages/{id}(id=${page.id})}" th:text="${page.name}"></a>
+                    <button type="button" class="btn btn-default btn-xs" th:onclick="'removePage(' + ${page.id} + ');'">Delete</button>
                 </li>
             </ul>
         </div>
     </div>
 
 </div>
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        //        <![CDATA[
+
+        $(document).ready(function () {
+
+
+
+        });
+
+
+        function create() {
+            $.post('/pages/create', {
+                site: [[${site.id}]],
+                [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+            }, function (response, status) {
+                window.location.href = '/pages/' + response;
+            });
+        }
+
+        function removePage(id) {
+            $.ajax({
+                url: '/pages/' + id + '?' + [[${_csrf.parameterName}]] + '=' + [[${_csrf.token}]],
+                type: 'DELETE',
+                success: function(result) {
+                    window.location.href = '/sites/[[${site.id}]]';
+                }
+            });
+        }
+
+        //        ]]>
+    </script>
+</th:block>
 </body>
 </html>

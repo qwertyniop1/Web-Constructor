@@ -3,13 +3,16 @@ package by.itransition.webconstructor.service;
 import by.itransition.webconstructor.domain.Page;
 import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.User;
+import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.repository.PageRepository;
 import by.itransition.webconstructor.repository.SiteRepository;
 import by.itransition.webconstructor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 
@@ -25,6 +28,15 @@ public class SiteServiceImpl implements SiteService{
 
 
     @Override
+    public Site getSite(Long id) {
+        Site site = siteRepository.findOne(id);
+        if (site == null) {
+            throw new ResourceNotFoundException();
+        }
+        return site;
+    }
+
+    @Override
     public List<Site> getSites(User user) {
         return siteRepository.findByUser(user);
     }
@@ -32,5 +44,24 @@ public class SiteServiceImpl implements SiteService{
     @Override
     public List<Page> getPages(Long siteId) {
         return pageRepository.findBySite(siteRepository.findOne(siteId));
+    }
+
+    @Override
+    public long create(User user) {
+        Site site = new Site();
+        site.setUser(user);
+        return siteRepository.save(site).getId();
+    }
+
+    @Override
+    public void update(Long id, String name) {
+        Site site = siteRepository.findOne(id);
+        site.setName(name);
+        siteRepository.save(site);
+    }
+
+    @Override
+    public void delete(Long id) {
+        siteRepository.delete(id);
     }
 }

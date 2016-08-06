@@ -181,10 +181,9 @@ $(document).ready(function () {
     });
 
     $('#save-page').on('click', function () {
-        console.log($('.my-container').html());;
-        // $('.my-element').each(function () {
-        //     console.log($(this).children(':last-child')[0].outerHTML);
-        // });
+        $('.my-element').each(function () {
+            console.log($(this).children(':last-child')[0].outerHTML);
+        });
     });
 
     function recreateLayout(container, layoutId) {

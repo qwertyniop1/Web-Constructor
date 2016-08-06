@@ -8,8 +8,15 @@ import java.util.List;
 
 public interface SiteService {
 
+    Site getSite(Long id);
+
     List<Site> getSites(User user);
 
     List<Page> getPages(Long siteId);
 
+    long create(User user);
+
+    void update(Long id, String name);
+
+    void delete(Long id);
 }
