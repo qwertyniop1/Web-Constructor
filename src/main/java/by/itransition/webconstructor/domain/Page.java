@@ -3,8 +3,11 @@ package by.itransition.webconstructor.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,5 +41,11 @@ public class Page {
     public void clearElements() {
         this.elements.clear();
     }
+
+    @CreationTimestamp
+    private Date creationDate;
+
+    @UpdateTimestamp
+    private Date updateDate;
 
 }

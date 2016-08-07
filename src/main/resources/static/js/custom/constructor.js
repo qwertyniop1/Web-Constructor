@@ -35,8 +35,6 @@
         selector: '#text-area'
     });
 
-
-
     $(document.body).on('click', '.edit-element', function () {
         let element = $(this).closest('.my-element');
         let id = element.attr('class');

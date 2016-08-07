@@ -3,9 +3,12 @@ package by.itransition.webconstructor.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,4 +31,11 @@ public class Site implements Serializable{
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Page> pages = new HashSet<>(0);
+
+    @CreationTimestamp
+    private Date creationDate;
+
+    @UpdateTimestamp
+    private Date updateDate;
+
 }
