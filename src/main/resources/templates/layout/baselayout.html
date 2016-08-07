@@ -1,41 +1,42 @@
-<html xmlns:layout="http://www.w3.org/1999/xhtml"
+<html layout:decorator="layout/barelayout"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
-    <th:block layout:fragment="styles">
+    <th:block layout:fragment="bare-styles">
+        <th:block layout:fragment="styles">
 
+        </th:block>
     </th:block>
     <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE">Web constructor</title>
 </head>
 <body>
-    <div id="wrap">
-        <div th:replace="layout/template :: navbar">
+<div layout:fragment="navigation">
+    <div th:replace="layout/template :: navbar">
 
-        </div>
-        <div layout:fragment="nowrap-content">
+    </div>
+</div>
+<div layout:fragment="body">
 
-        </div>
-        <div class="container">
-            <div layout:fragment="content" style="margin-bottom: 10%">
+    <div layout:fragment="nowrap-content">
 
-            </div>
+    </div>
+    <div class="container">
+        <div layout:fragment="content" style="margin-bottom: 10%">
+
         </div>
     </div>
+</div>
+
 
     <div th:replace="layout/template :: footer">
 
     </div>
-
-    <script type="text/javascript" src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-        });
-    </script>
+<th:block layout:fragment="bare-scripts">
     <th:block layout:fragment="scripts">
 
     </th:block>
+</th:block>
+
+
 </body>
 </html>
