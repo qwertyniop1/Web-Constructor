@@ -1,4 +1,5 @@
-$(document).ready(function () {
+// TODO validation input
+ $(document).ready(function () {
 
     // setup toolbar and edit field
     var toolbar = $('.my-toolbar');
@@ -109,7 +110,7 @@ $(document).ready(function () {
     $('#modal-text').on('click', '.btn-primary', function () {
         let root = $(this).closest('.modal');
         let content = tinyMCE.get('text-area').getContent();
-        createMethods['text'](root.data('elementId'), content);
+        createMethods['text'](root.data('elementId'), {text: content});
         root.modal('hide');
     });
 
@@ -288,6 +289,7 @@ processElement['image'] = function (element) {
 };
 processElement['text'] = function (element) {
     let data = element.find('.my-text-content');
+    console.log(data);
     return {
         width: 0,
         height: 0,
@@ -306,11 +308,12 @@ processElement['video'] = function (element) {
 };
 
 function loadElement(element) {
-    let type = element.type.$name;
-    let _element = map['tool-' + type.toLowerCase()];
+    let type = element.type.$name.toLowerCase();
+    let _element = map['tool-' + type];
     let base = $('.my-content:eq(' + element.location + ')');
     base.append(createElement(_element[0], _element[1]));
-    createMethods[type.toLowerCase()](base.find('.my-element').attr('id'), {
+    if ((element.url.length === 0 && type !== 'text') || (element.text.length === 0 && type === 'text')) return;
+    createMethods[type](base.find('.my-element').attr('id'), {
         width: element.width,
         height: element.height,
         url: element.url,

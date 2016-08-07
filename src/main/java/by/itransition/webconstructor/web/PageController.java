@@ -39,7 +39,7 @@ public class PageController {
 
     @PostMapping("/{page}")
     public @ResponseBody
-    String update(@PathVariable("page") Long id, /*@RequestParam("layout") int layoutId,*/ @RequestBody PageDto response, Model model) {
+    String update(@PathVariable("page") Long id, @RequestBody PageDto response, Model model) {
         pageService.update(id, response);
         return "";
     }
