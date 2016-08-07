@@ -9,5 +9,13 @@ public class ElementDto {
 
     private int location;
 
+    private int width;
+
+    private int height;
+
+    private String url;
+
+    private String text;
+
 }
 

@@ -28,7 +28,15 @@ public class Page {
     @Column(name = "layout")
     private int layoutId = 0;
 
-    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Element> elements = new HashSet<>(0);
+
+    public void addElement(Element element) {
+        this.elements.add(element);
+    }
+
+    public void clearElements() {
+        this.elements.clear();
+    }
 
 }

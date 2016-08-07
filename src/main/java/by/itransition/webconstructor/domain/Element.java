@@ -16,10 +16,19 @@ public class Element {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    private int location;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
     private Page page;
+
+    private int location;
+
+    private int width;
+
+    private int height;
+
+    private String url;
+
+    @Lob
+    private String text;
 
 }

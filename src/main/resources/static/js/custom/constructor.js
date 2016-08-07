@@ -102,14 +102,14 @@ $(document).ready(function () {
             loop: $('#video-loop').prop('checked'),
             autoplay: $('#video-auto').prop('checked')
         };
-        createVideo(root.data('elementId'), config);
+        createMethods['video'](root.data('elementId'), config);
         root.modal('hide');
     });
 
     $('#modal-text').on('click', '.btn-primary', function () {
         let root = $(this).closest('.modal');
         let content = tinyMCE.get('text-area').getContent();
-        createText(root.data('elementId'), content);
+        createMethods['text'](root.data('elementId'), content);
         root.modal('hide');
     });
 
@@ -143,7 +143,7 @@ $(document).ready(function () {
                 height: $('#photo-height').val(),
                 url: cloudUrl
             };
-            createPhoto(root.data('elementId'), config);
+            createMethods['image'](root.data('elementId'), config);
             Dropzone.instances[0].removeAllFiles();
             root.modal('hide');
         }
@@ -237,18 +237,100 @@ map['tool-table'] = ['my-table', '/images/table.png'];
 map['tool-comment'] = ['my-comments', ''];
 map['tool-rating'] = ['my-rating', ''];
 
-function loadElement(type, number) {
-    let element = map['tool-' + type.toLowerCase()];
-    $('.my-content:eq(' + number + ')').append(createElement(element[0], element[1]));
+var createMethods = {};
+createMethods['text'] = function (id, config) {
+    let template = $('#' + id);
+    template.find('.my-icon').remove();
+    template.find('.my-text-content').remove();
+    template.append('<div class="my-text-content">' + config.text + '</div>');
+};
+createMethods['image'] = function (id, config) {
+    let url = config.url;
+    let sizeString = '/c_pad,h_' + config.height + ',w_' + config.width;
+    url = insertAfter(url, sizeString, 'upload');
+    let template = $('#' + id);
+    template.find('.my-icon').remove();
+    template.find('img').remove();
+    template.append($('<img src="' + url + '"/>').attr('data-my-src', config)
+        .data('mySrc', config));
+};
+createMethods['video'] = function (id, config) {
+    let url = parseYoutubeUrl(config.url);
+    if (url.length === 1) {
+        customAlert('Invalid URL'); // TODO locale
+        return;
+    }
+    url = 'https://www.youtube.com/embed/' + url + '?';
+    if (config.autoplay) {
+        url += 'autoplay=1&'
+    }
+    if (config.loop) {
+        url += 'loop=1'
+    }
+    let template = $('#' + id);
+    template.find('.my-icon').remove();
+    template.find('iframe').remove();
+    template.append($('<iframe width="' + config.width + '" height="' + config.height + '" ' +
+        ' src="' + url + '" ' +
+        'frameborder="0" allowfullscreen="true">').attr('data-my-src', config.url)
+        .data('mySrc', config.url));
+};
+
+var processElement = {};
+processElement['image'] = function (element) {
+    let data = element.find('img:not(.my-icon)').data('mySrc');
+    return {
+        width: data !== null ? data.width : 0,
+        height: data !== null ? data.height : 0,
+        url: data !== null ? data.url : '',
+        text: ''
+    }
+};
+processElement['text'] = function (element) {
+    let data = element.find('.my-text-content');
+    return {
+        width: 0,
+        height: 0,
+        url: '',
+        text: data.length !== 0 ? data.html() : ''
+    }
+};
+processElement['video'] = function (element) {
+    let video = element.find('iframe');
+    return {
+        width: video.length !== 0 ? video.attr('width') : 0,
+        height: video.length !== 0 ? video.attr('height') : 0,
+        url: video.length !== 0 ? video.data('mySrc') : '',
+        text: ''
+    }
+};
+
+function loadElement(element) {
+    let type = element.type.$name;
+    let _element = map['tool-' + type.toLowerCase()];
+    let base = $('.my-content:eq(' + element.location + ')');
+    base.append(createElement(_element[0], _element[1]));
+    createMethods[type.toLowerCase()](base.find('.my-element').attr('id'), {
+        width: element.width,
+        height: element.height,
+        url: element.url,
+        text: element.text,
+        autoplay: false, //FIXME lol
+        loop: false
+    });
 }
 
 function saveElement(element) {
     let regex = /my-element my-([\w]+)/;
-    // let type = element.attr('class').match(regex)[1];
-    // $('.my-content').index(element.closest('.my-content'));
+    let type = element.attr('class').match(regex)[1];
+    let data = processElement[type](element);
     return {
-        type: element.attr('class').match(regex)[1],
-        location:  $('.my-content').index(element.closest('.my-content'))
+        type: type,
+        location:  $('.my-content').index(element.closest('.my-content')),
+        width: data.width,
+        height: data.height,
+        url: data.url,
+        text: data.text
     };
 }
 
@@ -271,43 +353,15 @@ function createElement(type, icon) {
 }
 
 function createVideo(id, config) {
-    let url = parseYoutubeUrl(config.url);
-    if (url.length === 1) {
-        customAlert('Invalid URL'); // TODO locale
-        return;
-    }
-    url = 'https://www.youtube.com/embed/' + url + '?';
-    if (config.autoplay) {
-        url += 'autoplay=1&'
-    }
-    if (config.loop) {
-        url += 'loop=1'
-    }
-    let template = $('#' + id);
-    template.find('.my-icon').remove();
-    template.find('iframe').remove();
-    template.append($('<iframe width="' + config.width + '" height="' + config.height + '" ' +
-        ' src="' + url + '" ' +
-        'frameborder="0" allowfullscreen="true">').attr('data-my-src', config.url)
-        .data('mySrc', config.url));
+
 }
 
 function createPhoto(id, config) {
-    let url = config.url;
-    let sizeString = '/c_pad,h_' + config.height + ',w_' + config.width;
-    url = insertAfter(url, sizeString, 'upload');
-    let template = $('#' + id);
-    template.find('.my-icon').remove();
-    template.find('img').remove();
-    template.append($('<img src="' + url + '"/>').attr('data-my-src', config)
-        .data('mySrc', config));
+
 }
 
 function createText(id, content) {
-    let template = $('#' + id);
-    template.find('.my-icon').remove();
-    template.find('.my-text-content').remove();
-    template.append('<div class="my-text-content">' + content + '</div>');
+
 }
 
 function customAlert(message, title = '') {

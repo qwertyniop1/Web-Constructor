@@ -74,7 +74,7 @@
 
             var elements = [[${page.elements}]];
             elements.forEach(function (element) {
-                loadElement(element.type.$name, element.location);
+                loadElement(element);
                 console.log(element);
             });
 
@@ -82,15 +82,12 @@
                 let elements = [];
                 $('.my-element').each(function () {
                     elements.push(saveElement($(this)));
-                    // console.log($(this).children(':last-child')[0].outerHTML);
                 });
 
                 $.postJSON('/pages/[[${page.id}]]', {
                     elements: elements,
                     layout: currentLayout
                 }, function (response, status) {
-                    console.log(response);
-                    console.log(status);
                     window.location.href = '/sites/[[${page.site.id}]]';
                 }, [[${_csrf.token}]]);
 

@@ -57,17 +57,19 @@ public class PageServiceImpl implements PageService{
         Page page = pageRepository.findOne(id);
         page.setLayoutId(pageDto.getLayout());
         ElementDto[] elementDtos = pageDto.getElements();
-        Set<Element> elements = new HashSet<>();
+        page.clearElements();
         for (ElementDto dto : elementDtos) {
             Element element = new Element();
             element.setLocation(dto.getLocation());
             element.setType(Type.valueOf(dto.getType().toUpperCase()));
             element.setPage(page);
-            elements.add(element);
+            element.setWidth(dto.getWidth());
+            element.setHeight(dto.getHeight());
+            element.setUrl(dto.getUrl());
+            element.setText(dto.getText());
+            page.addElement(element);
         }
-        page.setElements(elements);
         pageRepository.save(page);
-
     }
 
     @Override
