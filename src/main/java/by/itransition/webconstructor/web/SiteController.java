@@ -16,7 +16,7 @@ public class SiteController {
     SiteService siteService;
 
     @GetMapping
-    public String view(Model model) {
+    public String index(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("sites", siteService.getSites(user));
         return "sites/list";

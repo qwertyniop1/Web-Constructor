@@ -37,6 +37,11 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
+    public Site getSite(User user, String name) {
+        return siteRepository.findByUserAndName(user, name).get(0);
+    }
+
+    @Override
     public List<Site> getSites(User user) {
         return siteRepository.findByUser(user);
     }

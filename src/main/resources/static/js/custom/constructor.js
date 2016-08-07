@@ -103,14 +103,14 @@
             loop: $('#video-loop').prop('checked'),
             autoplay: $('#video-auto').prop('checked')
         };
-        createMethods['video'](root.data('elementId'), config);
+        myRenderer.createMethods['video'](root.data('elementId'), config);
         root.modal('hide');
     });
 
     $('#modal-text').on('click', '.btn-primary', function () {
         let root = $(this).closest('.modal');
         let content = tinyMCE.get('text-area').getContent();
-        createMethods['text'](root.data('elementId'), {text: content});
+        myRenderer.createMethods['text'](root.data('elementId'), {text: content});
         root.modal('hide');
     });
 
@@ -144,7 +144,7 @@
                 height: $('#photo-height').val(),
                 url: cloudUrl
             };
-            createMethods['image'](root.data('elementId'), config);
+            myRenderer.createMethods['image'](root.data('elementId'), config);
             Dropzone.instances[0].removeAllFiles();
             root.modal('hide');
         }
@@ -165,7 +165,7 @@
 var VIDEO_HEIGHT = 315;
 var VIDEO_WIDTH = 560;
 var MAX_ELEMENT_IN_BLOCK = 3;
-var layouts = [
+var layouts = [ // TODO delete
     [[12], [12]],
     [[12], [6, 6]],
     [[6, 6], [12]],
@@ -193,13 +193,7 @@ function recreateLayout(container, layoutId) {
 
 function generateGrid(container, rows) {
 
-    rows.forEach(function (row) {
-        let rowTemplate = $('<div class="row"></div>');
-        row.forEach(function (col) {
-            rowTemplate.append('<div class="my-content col-md-' + col + '"></div>');
-        });
-        container.append(rowTemplate);
-    }) ;
+    myRenderer.renderGrid(container, rows);
 
     var editField = $('.my-content');
 
@@ -231,51 +225,12 @@ function generateGrid(container, rows) {
 }
 
 var map = {};
-map['tool-text'] = ['my-text', '/images/text.png'];
-map['tool-image'] = ['my-image', '/images/camera.png'];
-map['tool-video'] = ['my-video', '/images/movie.png'];
-map['tool-table'] = ['my-table', '/images/table.png'];
-map['tool-comment'] = ['my-comments', ''];
-map['tool-rating'] = ['my-rating', ''];
-
-var createMethods = {};
-createMethods['text'] = function (id, config) {
-    let template = $('#' + id);
-    template.find('.my-icon').remove();
-    template.find('.my-text-content').remove();
-    template.append('<div class="my-text-content">' + config.text + '</div>');
-};
-createMethods['image'] = function (id, config) {
-    let url = config.url;
-    let sizeString = '/c_pad,h_' + config.height + ',w_' + config.width;
-    url = insertAfter(url, sizeString, 'upload');
-    let template = $('#' + id);
-    template.find('.my-icon').remove();
-    template.find('img').remove();
-    template.append($('<img src="' + url + '"/>').attr('data-my-src', config)
-        .data('mySrc', config));
-};
-createMethods['video'] = function (id, config) {
-    let url = parseYoutubeUrl(config.url);
-    if (url.length === 1) {
-        customAlert('Invalid URL'); // TODO locale
-        return;
-    }
-    url = 'https://www.youtube.com/embed/' + url + '?';
-    if (config.autoplay) {
-        url += 'autoplay=1&'
-    }
-    if (config.loop) {
-        url += 'loop=1'
-    }
-    let template = $('#' + id);
-    template.find('.my-icon').remove();
-    template.find('iframe').remove();
-    template.append($('<iframe width="' + config.width + '" height="' + config.height + '" ' +
-        ' src="' + url + '" ' +
-        'frameborder="0" allowfullscreen="true">').attr('data-my-src', config.url)
-        .data('mySrc', config.url));
-};
+map['text'] = '/images/text.png';
+map['image'] = '/images/camera.png';
+map['video'] = '/images/movie.png';
+map['table'] = '/images/table.png';
+map['comment'] = '';
+map['rating'] = '';
 
 var processElement = {};
 processElement['image'] = function (element) {
@@ -307,20 +262,10 @@ processElement['video'] = function (element) {
     }
 };
 
-function loadElement(element) {
+function loadForEdit(element) {
     let type = element.type.$name.toLowerCase();
     let _element = map['tool-' + type];
-    let base = $('.my-content:eq(' + element.location + ')');
-    base.append(createElement(_element[0], _element[1]));
-    if ((element.url.length === 0 && type !== 'text') || (element.text.length === 0 && type === 'text')) return;
-    createMethods[type](base.find('.my-element').attr('id'), {
-        width: element.width,
-        height: element.height,
-        url: element.url,
-        text: element.text,
-        autoplay: false, //FIXME lol
-        loop: false
-    });
+    myRenderer.loadElement(element, type, map[type]);
 }
 
 function saveElement(element) {
@@ -342,29 +287,9 @@ function addElement(item, container) {
         customAlert('You can\'t put more than ' + MAX_ELEMENT_IN_BLOCK + ' elements in block'); //TODO locale
         return;
     }
-    let element = map[item.attr('id')];
-    container.append(createElement(element[0], element[1]));
-}
-
-var idCounter = 1;
-function createElement(type, icon) {
-    let wrapper = $(baseElement);
-    wrapper.addClass(type);
-    wrapper.attr('id', 'element-' + idCounter++);
-    wrapper.append($('<img class="my-icon" height="256" width="256" src="' + icon + '">'));
-    return wrapper;
-}
-
-function createVideo(id, config) {
-
-}
-
-function createPhoto(id, config) {
-
-}
-
-function createText(id, content) {
-
+    let type = item.attr('id').slice(5); //FIXME loh
+    let icon = map[type];
+    container.append(myRenderer.createElement('my-' + type, true, icon));
 }
 
 function customAlert(message, title = '') {
@@ -375,24 +300,6 @@ function customAlert(message, title = '') {
     alert.fadeTo(2000, 500).slideUp(500, function(){
         alert.slideUp(500);
     });
-}
-
-function customSplice(str, substr, position) {
-    return [str.slice(0, position), substr, str.slice(position)].join('');
-}
-
-function insertAfter(str, substr, targetWord) {
-    return customSplice(str, substr, str.indexOf(targetWord) + targetWord.length);
-}
-
-function parseYoutubeUrl(url) {
-    function check(str) {
-        let pos = url.indexOf(str);
-        return pos !== -1 ? pos + str.length : 0;
-    }
-    let position = check('youtube.com/watch?v=') ||
-        check('youtu.be/');
-    return position !== 0 ? url.slice(position) : ' ';
 }
 
 function getLayoutFromId(id) {

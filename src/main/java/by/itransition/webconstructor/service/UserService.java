@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
+    User getUser(String username);
+
     boolean registerUser(UserDto userDto, HttpServletRequest request);
 
     VerificationToken createVerificationToken(User user, String token);

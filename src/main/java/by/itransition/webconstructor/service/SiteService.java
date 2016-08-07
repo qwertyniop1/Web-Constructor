@@ -10,6 +10,8 @@ public interface SiteService {
 
     Site getSite(Long id);
 
+    Site getSite(User user, String name);
+
     List<Site> getSites(User user);
 
 //    List<Page> getPages(Long siteId);

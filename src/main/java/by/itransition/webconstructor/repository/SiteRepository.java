@@ -11,4 +11,6 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 
     List<Site> findByUser(User user);
 
+    List<Site> findByUserAndName(User user, String name);
+
 }

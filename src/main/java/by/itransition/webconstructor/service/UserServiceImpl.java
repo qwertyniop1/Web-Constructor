@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService{
     ApplicationEventPublisher eventPublisher;
 
     @Override
+    public User getUser(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
     public boolean registerUser(UserDto userDto, HttpServletRequest request) {
         User user = saveUser(userDto);
         if (user == null) {

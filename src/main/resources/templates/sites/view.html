@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+
+    <th:block layout:fragment="styles">
+        <!--<link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>-->
+        <style>
+            .my-element {
+                text-align: center;
+            }
+            .row {
+                margin-bottom: 35px;
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="main">
+
+    </div>
+</div>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="js/custom/renderer.js" th:src="@{/js/custom/renderer.js}"></script>
+    <script th:inline="javascript">
+        //        <![CDATA[
+
+        $(document).ready(function () {
+
+            var pageLayout = [[${page.layoutId}]];
+            var elements = [[${page.elements}]];
+
+            myRenderer.renderLayout($('#main'), pageLayout);
+            elements.forEach(function (element) {
+                myRenderer.load(element);
+            });
+
+        });
+
+        //        ]]>
+    </script>
+</th:block>
+</body>
+</html>
