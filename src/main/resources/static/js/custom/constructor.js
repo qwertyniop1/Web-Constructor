@@ -91,7 +91,7 @@
         } else if (id.indexOf('my-comments') !== -1) {
         } else if (id.indexOf('my-ratings') !== -1) {
         }
-
+//FIXME placing many blocks disable!!!!!
     });
 
     $(document.body).on('click', '.del-element', function () {

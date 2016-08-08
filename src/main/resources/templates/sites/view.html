@@ -5,13 +5,16 @@
 <head>
 
     <th:block layout:fragment="bare-styles">
-        <!--<link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>-->
+        <link rel="stylesheet" href="css/custom/view.css" th:href="@{/css/custom/view.css}"/>
         <style>
             .my-element {
                 text-align: center;
             }
             .row {
                 margin-bottom: 35px;
+            }
+            .row:first-of-type {
+                margin-top: 50px;
             }
         </style>
     </th:block>
@@ -51,11 +54,24 @@
                         </ul>
                     </li>
                 </ul>
+                <div th:replace="layout/template :: search"/>
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
+    <!--</nav>-->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a th:href="@{~/site/{user}/{site}(user=${page.site.user.username},site=${page.site.name})}" th:text="${page.site.name}">Site name</a>
+            </li>
+            <li th:each="pageNav : ${page.site.pages}" th:unless="${pageNavStat.index} &gt; 7"> <!-- TODO fix-->
+                <a th:href="@{~/site/{user}/{site}/{page}(user=${pageNav.site.user.username},site=${pageNav.site.name},page=${pageNav.id})}"
+                   th:text="${pageNav.name}">Page</a>
+            </li>
+        </ul>
+    </div>
 </div>
 <div layout:fragment="body">
     <div id="main" class="container" style="margin-bottom: 10%">
