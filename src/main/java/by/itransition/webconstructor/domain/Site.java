@@ -25,12 +25,16 @@ public class Site implements Serializable{
 
     private String name = "New site";
 
+    private String logo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Page> pages = new HashSet<>(0);
+
+//    private boolean menuHorizontal;
 
     @CreationTimestamp
     private Date creationDate;

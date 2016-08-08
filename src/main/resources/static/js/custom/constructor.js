@@ -18,17 +18,22 @@
         maxFiles: 1,
         addRemoveLinks: true,
         //dictDefaultMessage: '', //TODO dict
+        init: function () {
+            this.on('removedfile', function (file) {
+                $('#photo-url').val('');
+            });
+            this.on('success', function (file, response) {
+                $('#photo-url').val('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
+            });
+        },
         sending: function (file, xhr, formData) {
             formData.append('api_key', 891695265656755);
             formData.append('timestamp', Date.now() / 1000 | 0);
             formData.append('upload_preset', 'lrwcwlyh ');
-        },
-       /* complete: function (file) {
-            //this.removeAllFiles();
-        },*/
-        success: function (file, response) {
-            $('#photo-url').val('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
         }
+        // success: function (file, response) {
+        //     $('#photo-url').val('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
+        // }
     };
 
     tinymce.init({
@@ -63,6 +68,7 @@
             }
             $('#photo-url').closest('.form-group').removeClass('has-error')
             $('.help-block').addClass('hidden');
+            Dropzone.instances[0].removeAllFiles();
             $('#modal-photo').modal('show'); //TODO lol
         } else if (id.indexOf('my-video') !== -1) {
             $('#modal-video').attr('data-element-id', element.attr('id'));

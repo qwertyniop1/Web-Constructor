@@ -5,8 +5,10 @@ import lombok.Data;
 @Data
 public class PageDto {
 
-    private ElementDto[] elements;
+    private String name;
 
     private int layout;
+
+    private ElementDto[] elements;
 
 }

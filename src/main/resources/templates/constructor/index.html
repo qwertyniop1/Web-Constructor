@@ -49,6 +49,7 @@
         </button>
     </div>
 
+    <input type="text" id="page-title" th:value="${page.name}"/>
     <button type="button" class="btn btn-default" id="save-page">
         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
     </button>
@@ -86,6 +87,7 @@
 
                 $.postJSON('/pages/[[${page.id}]]', {
                     elements: elements,
+                    name: $('#page-title').val(),
                     layout: currentLayout
                 }, function (response, status) {
                     window.location.href = '/sites/[[${page.site.id}]]';

@@ -3,6 +3,7 @@ package by.itransition.webconstructor.service;
 import by.itransition.webconstructor.domain.Page;
 import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.User;
+import by.itransition.webconstructor.dto.SiteDto;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface SiteService {
 
     long create(User user);
 
-    void update(Long id, String name);
+    void update(Long id, SiteDto site);
 
     void delete(Long id);
 }

@@ -56,6 +56,7 @@ public class PageServiceImpl implements PageService{
     public void update(Long id, PageDto pageDto) {
         Page page = pageRepository.findOne(id);
         page.setLayoutId(pageDto.getLayout());
+        page.setName(pageDto.getName());
         ElementDto[] elementDtos = pageDto.getElements();
         page.clearElements();
         for (ElementDto dto : elementDtos) {

@@ -1,6 +1,8 @@
 package by.itransition.webconstructor.web;
 
+import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.User;
+import by.itransition.webconstructor.dto.SiteDto;
 import by.itransition.webconstructor.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,14 +34,15 @@ public class SiteController {
 
     @GetMapping("/{site}")
     public String edit(@PathVariable("site") Long id, Model model) {
-        model.addAttribute("site", siteService.getSite(id));
-        //model.addAttribute("pages", siteService.getPages(id));
+        Site site = siteService.getSite(id);
+        model.addAttribute("site", site);
+        model.addAttribute("siteDto", new SiteDto(site));
         return "sites/site";
     }
 
     @PostMapping("/{site}")
-    public String update(@PathVariable("site") Long id, @RequestParam String name, Model model) {
-        siteService.update(id, name);
+    public String update(@PathVariable("site") Long id, @ModelAttribute("siteDto") SiteDto site, Model model) {
+        siteService.update(id, site);
         return "redirect:/sites";
     }
 

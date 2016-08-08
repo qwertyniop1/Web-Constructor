@@ -4,7 +4,148 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <th:block layout:fragment="styles">
+        <link rel="stylesheet" href="css/dropzone.css" th:href="@{/css/dropzone.css}"/>
         <style>
+
+            .funkyradio div {
+                clear: both;
+                overflow: hidden;
+            }
+
+            .funkyradio label {
+                width: 100%;
+                border-radius: 3px;
+                border: 1px solid #D1D3D4;
+                font-weight: normal;
+            }
+
+            .funkyradio input[type="radio"]:empty,
+            .funkyradio input[type="checkbox"]:empty {
+                display: none;
+            }
+
+            .funkyradio input[type="radio"]:empty ~ label,
+            .funkyradio input[type="checkbox"]:empty ~ label {
+                position: relative;
+                line-height: 2.5em;
+                text-indent: 3.25em;
+                margin-top: 2em;
+                cursor: pointer;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .funkyradio input[type="radio"]:empty ~ label:before,
+            .funkyradio input[type="checkbox"]:empty ~ label:before {
+                position: absolute;
+                display: block;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                content: '';
+                width: 2.5em;
+                background: #D1D3D4;
+                border-radius: 3px 0 0 3px;
+            }
+
+            .funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+            .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+                color: #888;
+            }
+
+            .funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+            .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+                content: '\2714';
+                text-indent: .9em;
+                color: #C2C2C2;
+            }
+
+            .funkyradio input[type="radio"]:checked ~ label,
+            .funkyradio input[type="checkbox"]:checked ~ label {
+                color: #777;
+            }
+
+            .funkyradio input[type="radio"]:checked ~ label:before,
+            .funkyradio input[type="checkbox"]:checked ~ label:before {
+                content: '\2714';
+                text-indent: .9em;
+                color: #333;
+                background-color: #ccc;
+            }
+
+            .funkyradio input[type="radio"]:focus ~ label:before,
+            .funkyradio input[type="checkbox"]:focus ~ label:before {
+                box-shadow: 0 0 0 3px #999;
+            }
+
+            .funkyradio-default input[type="radio"]:checked ~ label:before,
+            .funkyradio-default input[type="checkbox"]:checked ~ label:before {
+                color: #333;
+                background-color: #ccc;
+            }
+
+            .funkyradio-primary input[type="radio"]:checked ~ label:before,
+            .funkyradio-primary input[type="checkbox"]:checked ~ label:before {
+                color: #fff;
+                background-color: #337ab7;
+            }
+
+            .funkyradio-success input[type="radio"]:checked ~ label:before,
+            .funkyradio-success input[type="checkbox"]:checked ~ label:before {
+                color: #fff;
+                background-color: #5cb85c;
+            }
+
+            .funkyradio-danger input[type="radio"]:checked ~ label:before,
+            .funkyradio-danger input[type="checkbox"]:checked ~ label:before {
+                color: #fff;
+                background-color: #d9534f;
+            }
+
+            .funkyradio-warning input[type="radio"]:checked ~ label:before,
+            .funkyradio-warning input[type="checkbox"]:checked ~ label:before {
+                color: #fff;
+                background-color: #f0ad4e;
+            }
+
+            .funkyradio-info input[type="radio"]:checked ~ label:before,
+            .funkyradio-info input[type="checkbox"]:checked ~ label:before {
+                color: #fff;
+                background-color: #5bc0de;
+            }
+
+            .funkyradio-primary {
+                width: 150px;
+                display: inline-block;
+                margin-right: 25px;
+            }
+            .funkyradio-primary label {
+                margin-top: 0 !important;
+            }
+
+            #upload-area {
+                width: 150px;
+                border: 3px dashed rgba(26, 110, 204, 0.48);
+                border-radius: 10px;
+                padding: 5px;
+            }
+            .dropzone .dz-preview .dz-image {
+                width: 100px;
+                height: 100px;
+            }
+            #remove-logo {
+                position: absolute;
+                right: 0;
+                top: 0;
+                display: none;
+                z-index: 100;
+            }
+            .dz-preview:hover #remove-logo {
+                display: block;
+            }
+
             .add-page {
                 text-align: center;
                 margin-top: 30px;
@@ -30,22 +171,36 @@
     <div class="row">
         <div class="col-md-6">
             <h3>Settings</h3>
-            <form th:action="@{/sites/{id}/(id=${site.id})}" method="post">
+            <form th:action="@{/sites/{id}/(id=${site.id})}" th:object="${siteDto}" method="post" id="settings">
                 <div class="form-group">
-                    <label for="name">Site name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Site name" th:value="${site.name}"/>
+                    <label th:for="${#ids.next('name')}">Site name</label>
+                    <input type="text" class="form-control" th:field="*{name}" placeholder="Site name"/>
+                </div>
+                <div class="form-group">
+                    <label>Site logo</label>
+                    <input type="hidden" th:field="*{logo}"/>
+                    <div id="upload-area" class="dropzone">
+
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Design theme</label>
-                    <br/>
-                    <label class="radio-inline"><input type="radio" name="theme" value="light" checked="checked"/>Light</label>
-                    <label class="radio-inline"><input type="radio" name="theme" value="dark"/>Dark</label>
+                    <div class="funkyradio">
+                        <div class="funkyradio-primary" th:each="th : ${siteDto.allThemes}">
+                            <input type="radio" th:field="*{theme}" th:value="${th}" />
+                            <label th:for="${#ids.prev('theme')}" th:text="#{${'siteDto.theme.' + th}}">Theme</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Navigation menu</label>
-                    <br/>
-                    <label class="checkbox-inline"><input type="checkbox" name="horizontal"/>Horizontal</label>
-                    <label class="checkbox-inline"><input type="checkbox" name="vertical"/>Vertical</label>
+                    <div class="funkyradio">
+                        <div class="funkyradio-primary" th:each="menu : ${siteDto.allMenu}">
+                            <input type="checkbox" th:field="*{menus}" th:value="${menu}" />
+                            <label th:for="${#ids.prev('menus')}"
+                                   th:text="#{${'siteDto.menu.' + menu}}">Menu</label>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-default">Save</button>
             </form>
@@ -68,7 +223,7 @@
                     <div class="panel-body" >
                         <div class="toolbar">
                             <a th:href="@{/site/{user}/{site}/{page}(user=${site.user.username},site=${site.name},page=${page.id})}"
-                               class="btn btn-info btn-xs" rel="tooltip" title="View">
+                               target="_blank" class="btn btn-info btn-xs" rel="tooltip" title="View">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                             </a>
                             <button class="btn btn-danger btn-xs" rel="tooltip" title="Remove" th:onclick="'removePage(' + ${page.id} + ');'">
@@ -84,14 +239,65 @@
 
 </div>
 <th:block layout:fragment="scripts">
+    <script type="text/javascript" src="js/dropzone.js" th:src="@{/js/dropzone.js}"></script>
+    <script type="text/javascript" src="js/jquery.form.min.js" th:src="@{/js/jquery.form.min.js}"></script>
     <script th:inline="javascript">
         //        <![CDATA[
 
+        var myDropzone;
+
         $(document).ready(function () {
+            Dropzone.autoDiscover = false;
+             myDropzone = new Dropzone("#upload-area", {
+                url: 'https://api.cloudinary.com/v1_1/cloud9/image/upload',
+                acceptedFiles:'.jpg,.png,.jpeg,.gif',
+                uploadMultiple: false,
+                maxFiles: 1,
+                thumbnailWidth: 100,
+                thumbnailHeight: 100,
+                 //dictDefaultMessage: '', //TODO dict
+                init: function () {
+                    this.on('removedfile', function (file) {
+                        $('#logo').val('');
+                    });
+                    this.on('success', function (file, response) {
+                        $('#logo').val(response.public_id);
+                    });
+                    this.on('addedfile', function(file) {
+                        buttonLogo(file);
+                    });
+                    this.on('drop', function (event) {
+                        this.removeAllFiles(true);
+                    });
+                },
+                sending: function (file, xhr, formData) {
+                    formData.append('api_key', 891695265656755);
+                    formData.append('timestamp', Date.now() / 1000 | 0);
+                    formData.append('upload_preset', 'lrwcwlyh ');
+                }
+            });
+
+            let mockFile = { name: [[${site.name}]], size: 0 };
+            myDropzone.options.addedfile.call(Dropzone.instances[0], mockFile);
+            myDropzone.options.thumbnail.call(Dropzone.instances[0], mockFile,
+                    'http://res.cloudinary.com/itraphotocloud/image/upload/c_scale,h_100,w_100/v1470657288/' + [[${siteDto.logo}]] + '.png');
+            myDropzone.emit("complete", mockFile);
+            myDropzone.files.push(mockFile);
+            buttonLogo(mockFile);
+
+            $('#upload-area').on('click', function () {
+                myDropzone.removeAllFiles(true);
+            });
 
         });
 
         function create() {
+            $('#settings').ajaxSubmit(function () {
+                addPage();
+            });
+        }
+
+        function addPage() {
             $.post('/pages/create', {
                 site: [[${site.id}]],
                 [[${_csrf.parameterName}]]: [[${_csrf.token}]]
@@ -108,6 +314,32 @@
                     window.location.href = '/sites/[[${site.id}]]';
                 }
             });
+        }
+
+        function buttonLogo(file) {
+            let tmp = '<button class="btn btn-danger btn-xs" id="remove-logo">' +
+                    '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>' +
+                    '</button>';
+            // Create the remove button
+            let removeButton = Dropzone.createElement(tmp);
+
+            // Capture the Dropzone instance as closure.
+            let _this = myDropzone;
+
+            // Listen to the click event
+            removeButton.addEventListener("click", function(e) {
+                // Make sure the button click doesn't submit the form:
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Remove the file preview.
+                _this.removeFile(file);
+                // If you want to the delete the file on the server as well,
+                // you can do the AJAX request here.
+            });
+
+            // Add the button to the file preview element.
+            file.previewElement.appendChild(removeButton);
         }
 
         //        ]]>

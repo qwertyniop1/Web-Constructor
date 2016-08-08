@@ -61,6 +61,9 @@
 
 #upload-area {
     margin-bottom: 10px;
+    border: 3px dashed rgba(26, 110, 204, 0.48);
+    border-radius: 30px;
+    text-align: center;
 }
 
 .my-text-content {

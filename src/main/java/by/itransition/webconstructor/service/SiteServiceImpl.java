@@ -3,6 +3,7 @@ package by.itransition.webconstructor.service;
 import by.itransition.webconstructor.domain.Page;
 import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.User;
+import by.itransition.webconstructor.dto.SiteDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.repository.PageRepository;
 import by.itransition.webconstructor.repository.SiteRepository;
@@ -38,7 +39,11 @@ public class SiteServiceImpl implements SiteService{
 
     @Override
     public Site getSite(User user, String name) {
-        return siteRepository.findByUserAndName(user, name).get(0);
+        List<Site> sites = siteRepository.findByUserAndName(user, name); //TODO only 1 site
+        if (sites.size() == 0) {
+            throw new ResourceNotFoundException();
+        }
+        return sites.get(0);
     }
 
     @Override
@@ -59,9 +64,10 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
-    public void update(Long id, String name) {
+    public void update(Long id, SiteDto siteDto) {
         Site site = siteRepository.findOne(id);
-        site.setName(name);
+        site.setName(siteDto.getName());
+        site.setLogo(siteDto.getLogo());
         siteRepository.save(site);
     }
 
