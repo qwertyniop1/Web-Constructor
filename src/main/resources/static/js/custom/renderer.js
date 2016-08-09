@@ -36,9 +36,10 @@ var myRenderer = {
     },
     loadElement: function(element, type, icon) {
         let base = $('.my-content:eq(' + element.location + ')');
-        base.append(myRenderer.createElement('my-' + type, icon !== undefined, icon));
+        let created = myRenderer.createElement('my-' + type, icon !== undefined, icon);
+        base.append(created);
         if ((element.url.length === 0 && type !== 'text') || (element.text.length === 0 && type === 'text')) return;
-        this.createMethods[type](base.find('.my-element').attr('id'), {
+        this.createMethods[type](created.attr('id'), {
             width: element.width,
             height: element.height,
             url: element.url,

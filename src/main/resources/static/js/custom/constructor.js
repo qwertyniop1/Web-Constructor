@@ -268,7 +268,7 @@ processElement['video'] = function (element) {
 
 function loadForEdit(element) {
     let type = element.type.$name.toLowerCase();
-    let _element = map['tool-' + type];
+    let _element = map[type];
     myRenderer.loadElement(element, type, map[type]);
 }
 

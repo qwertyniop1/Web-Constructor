@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="css/custom/view.css" th:href="@{/css/custom/view.css}"/>
         <style>
             .my-element {
-                text-align: center;
+                text-align: initial;
             }
             .row {
                 margin-bottom: 35px;
@@ -33,7 +33,7 @@
                 </button>
                 <a class="navbar-brand" rel="home" href="#" th:title="${page.site.name}" style="padding-top: 10px"
                    th:href="@{~/site/{user}/{site}(user=${page.site.user.username},site=${page.site.name})}">
-                    <img th:src="@{http://res.cloudinary.com/itraphotocloud/image/upload/c_scale,h_32,w_32/v1470657288/{logo}.png(logo=${page.site.logo})}"/>
+                    <img th:src="@{http://res.cloudinary.com/itraphotocloud/image/upload/c_scale,h_32,w_32/{logo}.png(logo=${page.site.logo})}"/>
                 </a>
                 <a class="navbar-brand" th:href="@{~/site/{user}/{site}(user=${page.site.user.username},site=${page.site.name})}" th:text="${page.site.name}">Site name</a>
             </div>

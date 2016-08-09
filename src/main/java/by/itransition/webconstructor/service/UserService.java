@@ -10,6 +10,8 @@ public interface UserService {
 
     User getUser(String username);
 
+    void updateUser(User user, UserDto profile);
+
     boolean registerUser(UserDto userDto, HttpServletRequest request);
 
     VerificationToken createVerificationToken(User user, String token);

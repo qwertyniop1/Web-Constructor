@@ -4,6 +4,7 @@ import by.itransition.webconstructor.domain.Role;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.domain.VerificationToken;
 import by.itransition.webconstructor.dto.UserDto;
+import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.event.OnRegistrationCompleteEvent;
 import by.itransition.webconstructor.repository.TokenRepository;
 import by.itransition.webconstructor.repository.UserRepository;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 @Transactional
 public class UserServiceImpl implements UserService{
 
+    private static final String DEFAULT_AVATAR = "anonymous-man_bszhtk";
     @Autowired
     UserRepository userRepository;
 
@@ -34,7 +36,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+        return user;
+    }
+
+    @Override
+    public void updateUser(User user, UserDto profile) {
+        user.setFirstname(profile.getFirstname());
+        user.setLastname(profile.getLastname());
+        userRepository.save(user);
     }
 
     @Override
@@ -93,6 +106,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEnabled(false);
         user.setRole(Role.ROLE_USER);
+        user.setAvatar(DEFAULT_AVATAR);
         return user;
     }
 

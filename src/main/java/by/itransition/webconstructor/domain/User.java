@@ -3,15 +3,13 @@ package by.itransition.webconstructor.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @EqualsAndHashCode(exclude = "sites")
@@ -23,17 +21,22 @@ public class User implements UserDetails {
     @Id
     private String username;
 
+    private String password;
+
+    private boolean locked;
+
+    private boolean enabled;
+
     private String firstname;
 
     private String lastname;
 
     private String email;
 
-    private String password;
+    private String avatar;
 
-    private boolean locked;
-
-    private boolean enabled;
+    @CreationTimestamp
+    private Date registrationDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Site> sites = new HashSet<>(0);

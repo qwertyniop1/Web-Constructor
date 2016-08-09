@@ -116,6 +116,50 @@
                 }
             });
 
+            $('#settings').validate({
+                rules: {
+                    firstname: {
+                        minlength: 2,
+                        maxlength: 60,
+                        required: true
+                    },
+                    lastname: {
+                        minlength: 2,
+                        maxlength: 60,
+                        required: true
+                    },
+                    oldPassword: {
+                        minlength: 8,
+                        maxlength: 60
+                    },
+                    password: {
+                        minlength: 8,
+                        maxlength: 60
+                    },
+                    matchingPassword: {
+                        equalTo : "#password"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function (label, element) {
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                    $(element).tooltipster('hide');
+                },
+                errorPlacement: function (error, element) {
+                    var lastError = $(element).data('lastError'),
+                            newError = $(error).text();
+
+                    $(element).data('lastError', newError);
+
+                    if(newError !== '' && newError !== lastError){
+                        $(element).tooltipster('content', newError);
+                        $(element).tooltipster('show');
+                    }
+                }
+            });
+
         });
         //        ]]>
     </script>

@@ -27,7 +27,7 @@ public class SiteDto {
         this.name = site.getName();
         this.logo = site.getLogo();
         if (this.logo == null || this.logo.length() == 0) {
-            this.logo = "ohwxpcsqygwqcu6o3fbz"; //FIXME loh
+            this.logo = "rwkhctdn9wyli2cvwfxn"; //FIXME loh
         }
     }
 

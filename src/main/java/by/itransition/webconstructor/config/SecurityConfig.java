@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**", "/js/**", "/fonts/**", "/images/**").permitAll() // TODO 11
                 .antMatchers("/login*", "/register", "/confirm", "/auth-error").anonymous()
                 .antMatchers("/", "/site/**").permitAll()
-                .antMatchers("/**").access("hasRole('USER')")
+                .antMatchers("/**").access("hasAnyRole('USER','ADMIN')")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login?error=true")
                 .failureHandler(authenticationFailureHandler)
