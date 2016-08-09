@@ -2,6 +2,7 @@ package by.itransition.webconstructor.web;
 
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.UserDto;
+import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -23,7 +24,12 @@ public class UserController {
 //    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping
     public String currentUser(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user;
+        try {
+            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (ClassCastException ex) {
+            throw new ResourceNotFoundException();
+        }
         return "redirect:/user/" + user.getUsername();
     }
 
@@ -36,9 +42,16 @@ public class UserController {
 
     @GetMapping("/{user}")
     public String profile(@PathVariable("user") String username, Model model) {
+        User owner = null;
+        try {
+            owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (ClassCastException ex) {
+
+        }
         User user = userService.getUser(username);
         model.addAttribute("user", user);
         model.addAttribute("profile", new UserDto(user)); //TODO don't show if this is not owner's profile
+        model.addAttribute("owner", user.equals(owner));
         return "user/profile";
     }
 
