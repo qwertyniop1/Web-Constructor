@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Component("siteService")
@@ -50,6 +49,15 @@ public class SiteServiceImpl implements SiteService{
     @Override
     public List<Site> getSites(User user) {
         return siteRepository.findByUser(user);
+    }
+
+    @Override
+    public Map<Long, Double> getSitesRates(List<Site> sites) {
+        Map<Long, Double> ratings = new HashMap<>();
+        for (Site site : sites) {
+            ratings.put(site.getId(), average(site.getRates()));
+        }
+        return ratings;
     }
 
     @Override
@@ -112,5 +120,13 @@ public class SiteServiceImpl implements SiteService{
             return MenuOrientation.BOTH;
         }
         return MenuOrientation.valueOf(menus.get(0).toUpperCase());
+    }
+
+    private double average(Set<Rate> rates) {
+        double result = 0;
+        for (Rate rate : rates) {
+            result += rate.getValue();
+        }
+        return result != 0 ? Math.round(result / rates.size() * 2) / 2.0 : 0;
     }
 }

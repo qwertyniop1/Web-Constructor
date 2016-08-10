@@ -39,14 +39,15 @@ public class ViewController {
     public String viewPage(@PathVariable("user") String username, @PathVariable String site,
                        @PathVariable Long page, Model model) {
         User user = null;
+        Page requestedPage = pageService.getPage(page);
         try {
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            model.addAttribute("rate", siteService.getRate(siteService.getSite(user, site).getId(),
+            model.addAttribute("rate", siteService.getRate(requestedPage.getSite().getId(),
                     user));
         } catch (ClassCastException ex) {
 
         }
-        model.addAttribute("page", fixPages(pageService.getPage(page)));
+        model.addAttribute("page", fixPages(requestedPage));
         return "sites/view";
     }
 

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/sites")
 public class SiteController {
@@ -20,7 +22,9 @@ public class SiteController {
     @GetMapping
     public String index(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("sites", siteService.getSites(user));
+        List<Site> sites = siteService.getSites(user);
+        model.addAttribute("sites", sites);
+        model.addAttribute("rates", siteService.getSitesRates(sites));
         return "sites/list";
     }
 

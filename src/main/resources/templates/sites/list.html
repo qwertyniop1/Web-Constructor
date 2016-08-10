@@ -4,7 +4,8 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <th:block layout:fragment="styles">
-       <style>
+        <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
+        <style>
            .post
            {
                background-color: #FFF;
@@ -71,7 +72,7 @@
     <h2>My sites</h2>
     <button type="button" class="btn btn-success center-block" onclick="create()">Add site</button>
     <div class="row">
-        <div th:each="site : ${sites}" class="col-sm-4 col-md-4">
+        <div th:each="site : ${sites}" th:object="${site.id}" class="col-sm-4 col-md-4">
             <div class="post">
                 <div class="post-img-content">
                     <a th:href="@{/sites/{site}(site=${site.id})}">
@@ -86,14 +87,12 @@
                         By <b th:text="${site.user.username}">Author</b> |
                         <time datetime="2014-01-20" th:text="${#dates.format(site.creationDate, 'dd MMM yyyy')}">January 20th, 2014</time>
                     </div>
+                    <input name="rating" th:value="${rates[#object]}" value="3.5" class="rating-loading"/>
                     <div th:text="${site.description}" style="overflow: hidden; height: 130px;">
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
                         Ipsum has been the industry's standard dummy text ever since the 1500s, when an
                         unknown printer took a galley of type and scrambled it to make a type specimen book.
                     </div>
-                    <!--<div>-->
-                        <!--<a href="http://www.jquery2dotnet.com/2014/01/jquery-highlight-table-row-and-column.html" class="btn btn-warning btn-sm">Read more</a>-->
-                    <!--</div>-->
                 </div>
             </div>
         </div>
@@ -102,14 +101,18 @@
 
 </div>
 <th:block layout:fragment="scripts">
-
-
+    <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
+    <!--<script type="text/javascript" src="js/kartik/locales/ru.js" th:src="@{/js/kartik/locales/ru.js}"></script>-->
     <script th:inline="javascript">
         //        <![CDATA[
 
         $(document).ready(function () {
 
-
+            $('.rating-loading').rating({
+                step: 0.5,
+                displayOnly: true,
+                size: 'xs'
+            });
 
         });
 

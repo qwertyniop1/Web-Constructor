@@ -6,6 +6,7 @@ import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.SiteDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SiteService {
 
@@ -14,6 +15,8 @@ public interface SiteService {
     Site getSite(User user, String name);
 
     List<Site> getSites(User user);
+
+    Map<Long, Double> getSitesRates(List<Site> sites);
 
     void setRate(Long id, double rate, User user);
 
