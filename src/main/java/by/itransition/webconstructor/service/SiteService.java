@@ -15,6 +15,10 @@ public interface SiteService {
 
     List<Site> getSites(User user);
 
+    void setRate(Long id, double rate, User user);
+
+    double getRate(Long id, User user);
+
 //    List<Page> getPages(Long siteId);
 
     long create(User user);

@@ -5,6 +5,7 @@
 <head>
 
     <th:block layout:fragment="bare-styles">
+        <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
         <link rel="stylesheet" href="css/custom/view.css" th:href="@{/css/custom/view.css}"/>
         <style>
             .my-element {
@@ -80,8 +81,14 @@
     <div id="main" class="container" style="margin-bottom: 10%">
 
     </div>
+    <div sec:authorize="isAuthenticated()" class="container">
+        <label for="site-rating" class="control-label">Rate this site</label>
+        <input id="site-rating" name="rating" th:value="${rate}" class="rating-loading"/>
+    </div>
 </div>
 <th:block layout:fragment="bare-scripts">
+    <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
+    <!--<script type="text/javascript" src="js/kartik/locales/ru.js" th:src="@{/js/kartik/locales/ru.js}"></script>-->
     <script type="text/javascript" src="js/custom/renderer.js" th:src="@{/js/custom/renderer.js}"></script>
     <script th:inline="javascript">
         //        <![CDATA[
@@ -96,7 +103,49 @@
                 myRenderer.load(element);
             });
 
+            $('#site-rating').rating({
+                step: 0.5,
+                starCaptions: {
+                    0.5: 'Very Poor',
+                    1: 'Very Poor',
+                    1.5: 'Poor',
+                    2: 'Poor',
+                    2.5: 'Ok',
+                    3: 'Ok',
+                    3.5: 'Good',
+                    4: 'Good',
+                    4.5: 'Very Good',
+                    5: 'Very Good'
+                },
+                starCaptionClasses: {
+                    0.5: 'text-danger',
+                    1: 'text-danger',
+                    1.5: 'text-warning',
+                    2: 'text-warning',
+                    2.5: 'text-info',
+                    3: 'text-info',
+                    3.5: 'text-primary',
+                    4: 'text-primary',
+                    4.5: 'text-success',
+                    5: 'text-success'
+                }
+            });
+
+            $('#site-rating').on('rating.change', function(event, value, caption) {
+                rate(value);
+            });
+
         });
+
+        function rate(value) {
+            $.post('/site/rate', {
+                site: [[${page.site.id}]],
+                rate: value,
+                [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+            }, function (response, status) {
+
+            });
+        }
 
         //        ]]>
     </script>

@@ -12,8 +12,8 @@ import javax.persistence.*;
 import java.util.*;
 
 @Data
-@EqualsAndHashCode(exclude = "sites")
-@ToString(exclude = "sites")
+@EqualsAndHashCode(exclude = {"sites", "rates"})
+@ToString(exclude = {"sites", "rates"})
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -40,6 +40,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Site> sites = new HashSet<>(0);
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Rate> rates = new HashSet<>(0);
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)

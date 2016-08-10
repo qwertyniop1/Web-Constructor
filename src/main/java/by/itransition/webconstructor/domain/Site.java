@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = "pages")
-@ToString(exclude = "pages")
+@EqualsAndHashCode(exclude = {"pages", "rates"})
+@ToString(exclude = {"pages", "rates"})
 @Entity
 @Table(name = "sites")
 public class Site implements Serializable{
@@ -37,6 +37,9 @@ public class Site implements Serializable{
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Page> pages = new HashSet<>(0);
 
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Rate> rates = new HashSet<>(0);
+
 //    private boolean menuHorizontal;
 
     @CreationTimestamp
@@ -44,5 +47,9 @@ public class Site implements Serializable{
 
     @UpdateTimestamp
     private Date updateDate;
+
+//    public void addRate(Rate rate) {
+//        this.rates.add(rate);
+//    }
 
 }

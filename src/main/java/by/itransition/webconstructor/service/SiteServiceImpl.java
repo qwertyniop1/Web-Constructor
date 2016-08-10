@@ -1,11 +1,13 @@
 package by.itransition.webconstructor.service;
 
 import by.itransition.webconstructor.domain.Page;
+import by.itransition.webconstructor.domain.Rate;
 import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.SiteDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.repository.PageRepository;
+import by.itransition.webconstructor.repository.RateRepository;
 import by.itransition.webconstructor.repository.SiteRepository;
 import by.itransition.webconstructor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,12 @@ import java.util.Objects;
 public class SiteServiceImpl implements SiteService{
 
     private static final String DEFAULT_LOGO = "rwkhctdn9wyli2cvwfxn";
+
     @Autowired
     private SiteRepository siteRepository;
 
-//    @Autowired
-//    private PageRepository pageRepository;
-
+    @Autowired
+    private RateRepository rateRepository;
 
     @Override
     public Site getSite(Long id) {
@@ -51,6 +53,26 @@ public class SiteServiceImpl implements SiteService{
     @Override
     public List<Site> getSites(User user) {
         return siteRepository.findByUser(user);
+    }
+
+    @Override
+    public void setRate(Long id, double rate, User user) {
+        Site site = siteRepository.findOne(id);
+        Rate siteRate = rateRepository.findByUserAndSite(user, site);
+        if (siteRate == null) {
+            siteRate = new Rate();
+            siteRate.setUser(user);
+            siteRate.setSite(site);
+        }
+        siteRate.setValue(rate);
+        rateRepository.save(siteRate);
+    }
+
+    @Override
+    public double getRate(Long id, User user) {
+        Site site = siteRepository.findOne(id);
+        Rate siteRate = rateRepository.findByUserAndSite(user, site);
+        return siteRate != null ? siteRate.getValue() : 0;
     }
 
 //    @Override
