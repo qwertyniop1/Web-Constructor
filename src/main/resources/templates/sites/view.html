@@ -20,12 +20,17 @@
             .row:first-of-type {
                 margin-top: 50px;
             }
+            .top-space {
+                margin-top: 50px;
+            }
         </style>
     </th:block>
 </head>
 <body>
 <div layout:fragment="navigation">
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <nav th:if="${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).HORIZONTAL}
+    or ${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).BOTH}"
+         class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -65,7 +70,9 @@
         <!-- /.container -->
     </nav>
     <!--</nav>-->
-    <div id="sidebar-wrapper">
+    <div th:if="${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).VERTICAL}
+    or ${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).BOTH}"
+         id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li class="sidebar-brand">
                 <a th:href="@{~/site/{user}/{site}(user=${page.site.user.username},site=${page.site.name})}" th:text="${page.site.name}">Site name</a>
@@ -78,7 +85,8 @@
     </div>
 </div>
 <div layout:fragment="body">
-    <div id="main" class="container" style="margin-bottom: 10%">
+    <div id="main" class="container" style="margin-bottom: 10%"
+         th:classappend="${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).HORIZONTAL} or ${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).BOTH} ? top-space : no-space">
 
     </div>
     <div sec:authorize="isAuthenticated()" class="container">
@@ -92,6 +100,11 @@
     <script type="text/javascript" src="js/custom/renderer.js" th:src="@{/js/custom/renderer.js}"></script>
     <script th:inline="javascript">
         //        <![CDATA[
+
+        if ([[${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).HORIZONTAL}
+            or ${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).NONE}]]) {
+            $("#wrap").toggleClass("toggled");
+        }
 
         $(document).ready(function () {
 

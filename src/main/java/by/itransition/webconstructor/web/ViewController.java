@@ -32,7 +32,7 @@ public class ViewController {
                        Model model) {
         return String.format("redirect:/site/%s/%s/%d", user, site,
                 siteService.getSite(userService.getUser(user), site)
-                        .getPages().iterator().next().getId());
+                        .getPages().iterator().next().getId()); //FIXME 0 pages crash!!!
     }
 
     @GetMapping("/{user}/{site}/{page}")

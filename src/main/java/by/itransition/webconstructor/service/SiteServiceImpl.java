@@ -1,9 +1,6 @@
 package by.itransition.webconstructor.service;
 
-import by.itransition.webconstructor.domain.Page;
-import by.itransition.webconstructor.domain.Rate;
-import by.itransition.webconstructor.domain.Site;
-import by.itransition.webconstructor.domain.User;
+import by.itransition.webconstructor.domain.*;
 import by.itransition.webconstructor.dto.SiteDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.repository.PageRepository;
@@ -85,6 +82,7 @@ public class SiteServiceImpl implements SiteService{
         Site site = new Site();
         site.setUser(user);
         site.setLogo(DEFAULT_LOGO);
+        site.setMenuOrientation(MenuOrientation.NONE);
         return siteRepository.save(site).getId();
     }
 
@@ -96,11 +94,23 @@ public class SiteServiceImpl implements SiteService{
         logo = (logo == null || Objects.equals(logo, "")) ? DEFAULT_LOGO : logo;
         site.setLogo(logo);
         site.setDescription(siteDto.getDescription());
+        site.setMenuOrientation(getMenuOrientation(siteDto));
         siteRepository.save(site);
     }
 
     @Override
     public void delete(Long id) {
         siteRepository.delete(id);
+    }
+
+    private MenuOrientation getMenuOrientation(SiteDto site) {
+        List<String> menus = site.getMenus();
+        if (menus.size() == 0) {
+            return MenuOrientation.NONE;
+        }
+        if (menus.size() == 2) {
+            return MenuOrientation.BOTH;
+        }
+        return MenuOrientation.valueOf(menus.get(0).toUpperCase());
     }
 }

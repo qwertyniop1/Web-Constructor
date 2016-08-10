@@ -40,7 +40,9 @@ public class Site implements Serializable{
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Rate> rates = new HashSet<>(0);
 
-//    private boolean menuHorizontal;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MenuOrientation menuOrientation;
 
     @CreationTimestamp
     private Date creationDate;
