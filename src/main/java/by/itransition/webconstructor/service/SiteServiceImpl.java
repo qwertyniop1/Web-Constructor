@@ -15,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component("siteService")
 @Transactional
 public class SiteServiceImpl implements SiteService{
 
+    private static final String DEFAULT_LOGO = "rwkhctdn9wyli2cvwfxn";
     @Autowired
     private SiteRepository siteRepository;
 
@@ -60,6 +62,7 @@ public class SiteServiceImpl implements SiteService{
     public long create(User user) {
         Site site = new Site();
         site.setUser(user);
+        site.setLogo(DEFAULT_LOGO);
         return siteRepository.save(site).getId();
     }
 
@@ -67,7 +70,10 @@ public class SiteServiceImpl implements SiteService{
     public void update(Long id, SiteDto siteDto) {
         Site site = siteRepository.findOne(id);
         site.setName(siteDto.getName());
-        site.setLogo(siteDto.getLogo());
+        String logo = siteDto.getLogo();
+        logo = (logo == null || Objects.equals(logo, "")) ? DEFAULT_LOGO : logo;
+        site.setLogo(logo);
+        site.setDescription(siteDto.getDescription());
         siteRepository.save(site);
     }
 

@@ -13,6 +13,8 @@ public class SiteDto {
 
     private String name;
 
+    private String description;
+
     private String logo;
 
     private final String[] allMenu = {"vertical", "horizontal"};
@@ -25,6 +27,7 @@ public class SiteDto {
 
     public SiteDto(Site site) {
         this.name = site.getName();
+        this.description = site.getDescription();
         this.logo = site.getLogo();
         if (this.logo == null || this.logo.length() == 0) {
             this.logo = "rwkhctdn9wyli2cvwfxn"; //FIXME loh

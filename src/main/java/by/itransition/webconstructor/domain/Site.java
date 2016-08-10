@@ -25,6 +25,9 @@ public class Site implements Serializable{
 
     private String name = "New site";
 
+    @Lob
+    private String description;
+
     private String logo;
 
     @ManyToOne(fetch = FetchType.LAZY)

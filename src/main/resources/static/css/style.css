@@ -1,6 +1,6 @@
 html,
 body {
-    padding-top: 50px;
+    padding-top: 30px;
     height: 100%;
     /* The html and body elements cannot have any padding or margin. */
 }
@@ -31,4 +31,10 @@ body {
         padding-left: 20px;
         padding-right: 20px;
     }
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }

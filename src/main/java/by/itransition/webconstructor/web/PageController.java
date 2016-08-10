@@ -48,7 +48,7 @@ public class PageController {
     public @ResponseBody
     String remove(@PathVariable("page") Long id, Model model) {
         pageService.delete(id);
-        return null;
+        return "";
     }
 
 }

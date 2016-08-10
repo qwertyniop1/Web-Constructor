@@ -3,17 +3,105 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
+    <th:block layout:fragment="styles">
+       <style>
+           .post
+           {
+               background-color: #FFF;
+               overflow: hidden;
+               box-shadow: 0 0 1px #CCC;
+               padding-top: 10px;
+           }
+           .post img:hover
+           {
+               filter: blur(2px);
+               -webkit-filter: blur(2px);
+               -moz-filter: blur(2px);
+               -o-filter: blur(2px);
+               -ms-filter: blur(2px);
+           }
+           .post .content
+           {
+               padding: 15px;
+           }
+           .post .author
+           {
+               font-size: 11px;
+               color: #737373;
+               padding: 25px 30px 20px;
+           }
+           .post .post-img-content
+           {
+               height: 196px;
+               position: relative;
+           }
+           .post .post-img-content img
+           {
+               position: absolute;
+           }
+           .post .post-title
+           {
+               display: table-cell;
+               vertical-align: bottom;
+               z-index: 2;
+               position: relative;
+           }
+           .post .post-title b
+           {
+               background-color: rgba(51, 51, 51, 0.58);
+               display: inline-block;
+               margin-bottom: 5px;
+               color: #FFF;
+               padding: 10px 15px;
+               margin-top: 5px;
+           }
 
+           .col-md-4 {
+               margin-top: 50px;
+           }
+           .content {
+               height: 220px;
+               text-align: justify;
+           }
+       </style>
+        
+    </th:block>
 </head>
 <body>
 <div layout:fragment="content">
-    <button type="button" class="btn btn-default" onclick="create()">Add site</button>
-    <ul>
-        <li th:each="site : ${sites}">
-            <a th:href="@{/sites/{id}(id=${site.id})}" th:text="${site.name}"></a>
-            <button type="button" class="btn btn-default btn-xs" th:onclick="'removeSite(' + ${site.id} + ');'">Delete</button>
-        </li>
-    </ul>
+
+    <h2>My sites</h2>
+    <button type="button" class="btn btn-success center-block" onclick="create()">Add site</button>
+    <div class="row">
+        <div th:each="site : ${sites}" class="col-sm-4 col-md-4">
+            <div class="post">
+                <div class="post-img-content">
+                    <a th:href="@{/sites/{site}(site=${site.id})}">
+                        <img th:src="@{http://res.cloudinary.com/itraphotocloud/image/upload/c_pad,w_460,h_250/{logo}.png(logo=${site.logo})}"
+                             class="img-responsive" />
+                        <span class="post-title"><b th:text="${site.name}">Make a Image Blur Effects With</b><br />
+                            <!--<b>CSS3 Blur</b>--></span>
+                    </a>
+                </div>
+                <div class="content">
+                    <div class="author">
+                        By <b th:text="${site.user.username}">Author</b> |
+                        <time datetime="2014-01-20" th:text="${#dates.format(site.creationDate, 'dd MMM yyyy')}">January 20th, 2014</time>
+                    </div>
+                    <div th:text="${site.description}" style="overflow: hidden; height: 130px;">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                        unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    </div>
+                    <!--<div>-->
+                        <!--<a href="http://www.jquery2dotnet.com/2014/01/jquery-highlight-table-row-and-column.html" class="btn btn-warning btn-sm">Read more</a>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 <th:block layout:fragment="scripts">
     <script th:inline="javascript">
@@ -31,16 +119,6 @@
                 [[${_csrf.parameterName}]]: [[${_csrf.token}]]
             }, function (response, status) {
                 window.location.href = '/sites/' + response;
-            });
-        }
-
-        function removeSite(id) {
-            $.ajax({
-                url: '/sites/' + id + '?' + [[${_csrf.parameterName}]] + '=' + [[${_csrf.token}]],
-                type: 'DELETE',
-                success: function(result) {
-                    window.location.href = '/sites/';
-                }
             });
         }
 
