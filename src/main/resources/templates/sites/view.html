@@ -116,37 +116,40 @@
                 myRenderer.load(element);
             });
 
-            $('#site-rating').rating({
-                step: 0.5,
-                starCaptions: {
-                    0.5: 'Very Poor',
-                    1: 'Very Poor',
-                    1.5: 'Poor',
-                    2: 'Poor',
-                    2.5: 'Ok',
-                    3: 'Ok',
-                    3.5: 'Good',
-                    4: 'Good',
-                    4.5: 'Very Good',
-                    5: 'Very Good'
-                },
-                starCaptionClasses: {
-                    0.5: 'text-danger',
-                    1: 'text-danger',
-                    1.5: 'text-warning',
-                    2: 'text-warning',
-                    2.5: 'text-info',
-                    3: 'text-info',
-                    3.5: 'text-primary',
-                    4: 'text-primary',
-                    4.5: 'text-success',
-                    5: 'text-success'
-                }
-            });
-
-            $('#site-rating').on('rating.change', function(event, value, caption) {
-                rate(value);
-            });
+            $('#site-rating')
+                    .rating({
+                        step: 0.5,
+                        starCaptions: {
+                            0.5: 'Very Poor',
+                            1: 'Very Poor',
+                            1.5: 'Poor',
+                            2: 'Poor',
+                            2.5: 'Ok',
+                            3: 'Ok',
+                            3.5: 'Good',
+                            4: 'Good',
+                            4.5: 'Very Good',
+                            5: 'Very Good'
+                        },
+                        starCaptionClasses: {
+                            0.5: 'text-danger',
+                            1: 'text-danger',
+                            1.5: 'text-warning',
+                            2: 'text-warning',
+                            2.5: 'text-info',
+                            3: 'text-info',
+                            3.5: 'text-primary',
+                            4: 'text-primary',
+                            4.5: 'text-success',
+                            5: 'text-success'
+                        }
+                    })
+                    .on('rating.change', function(event, value, caption) {
+                        rate(value);
+                    })
+                    .on('rating.clear', function(event) {
+                        rate(0); //TODO delete rate from db
+                    });
 
         });
 

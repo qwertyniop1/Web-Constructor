@@ -5,58 +5,8 @@
 <head>
     <th:block layout:fragment="styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
+        <link rel="stylesheet" href="css/custom/thumbnails.css" th:href="@{/css/custom/thumbnails.css}"/>
         <style>
-           .post
-           {
-               background-color: #FFF;
-               overflow: hidden;
-               box-shadow: 0 0 1px #CCC;
-               padding-top: 10px;
-           }
-           .post img:hover
-           {
-               filter: blur(2px);
-               -webkit-filter: blur(2px);
-               -moz-filter: blur(2px);
-               -o-filter: blur(2px);
-               -ms-filter: blur(2px);
-           }
-           .post .content
-           {
-               padding: 15px;
-           }
-           .post .author
-           {
-               font-size: 11px;
-               color: #737373;
-               padding: 25px 30px 20px;
-           }
-           .post .post-img-content
-           {
-               height: 196px;
-               position: relative;
-           }
-           .post .post-img-content img
-           {
-               position: absolute;
-           }
-           .post .post-title
-           {
-               display: table-cell;
-               vertical-align: bottom;
-               z-index: 2;
-               position: relative;
-           }
-           .post .post-title b
-           {
-               background-color: rgba(51, 51, 51, 0.58);
-               display: inline-block;
-               margin-bottom: 5px;
-               color: #FFF;
-               padding: 10px 15px;
-               margin-top: 5px;
-           }
-
            .col-md-4 {
                margin-top: 50px;
            }
@@ -64,6 +14,9 @@
                height: 220px;
                text-align: justify;
            }
+            .post {
+                padding-top: 10px;
+            }
        </style>
     </th:block>
 </head>
@@ -72,7 +25,7 @@
     <h2>My sites</h2>
     <button type="button" class="btn btn-success center-block" onclick="create()">Add site</button>
     <div class="row">
-        <div th:each="site : ${sites}" th:object="${site.id}" class="col-sm-4 col-md-4">
+        <div th:each="site : ${sites}" class="col-sm-4 col-md-4">
             <div class="post">
                 <div class="post-img-content">
                     <a th:href="@{/sites/{site}(site=${site.id})}">
@@ -87,7 +40,16 @@
                         By <b th:text="${site.user.username}">Author</b> |
                         <time datetime="2014-01-20" th:text="${#dates.format(site.creationDate, 'dd MMM yyyy')}">January 20th, 2014</time>
                     </div>
-                    <input name="rating" th:value="${rates[#object]}" value="3.5" class="rating-loading"/>
+                    <table>
+                        <tr>
+                            <td>
+                                <input name="rating" th:value="${rates[site.id]}" value="3.5" class="rating-loading"/>
+                            </td>
+                            <td style="padding-left: 20px">
+                                <em th:text="${#lists.size(site.rates)} + ' votes'">0</em>
+                            </td>
+                        </tr>
+                    </table>
                     <div th:text="${site.description}" style="overflow: hidden; height: 130px;">
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
                         Ipsum has been the industry's standard dummy text ever since the 1500s, when an
@@ -102,7 +64,6 @@
 </div>
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
-    <!--<script type="text/javascript" src="js/kartik/locales/ru.js" th:src="@{/js/kartik/locales/ru.js}"></script>-->
     <script th:inline="javascript">
         //        <![CDATA[
 

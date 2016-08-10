@@ -216,7 +216,10 @@
             <h3>Pages</h3>
             <div class="panel panel-warning" th:if="${#lists.isEmpty(site.pages)}">
                 <div class="panel-heading">
-                    <h3 class="panel-title">No pages</h3>
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                          No pages
+                    </h3>
                 </div>
                 <div class="panel-body">
                     You haven't got any pages. Create page and fill them with content.

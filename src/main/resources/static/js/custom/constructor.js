@@ -2,7 +2,7 @@
  $(document).ready(function () {
 
     // setup toolbar and edit field
-    var toolbar = $('.my-toolbar');
+    var toolbar = $('#my-toolbar');
 
     $('.my-tool', toolbar).draggable({
         revert: 'invaid',
@@ -202,7 +202,10 @@ function generateGrid(container, rows) {
     var editField = $('.my-content');
 
     editField.droppable({
-        accept: '.my-toolbar > .my-tool',
+        accept: '#my-toolbar > .my-tool',
+        classes: {
+            "ui-droppable-hover": "my-state-hover"
+        },
         drop: function (event, ui) {
             addElement(ui.draggable, $(this));
         }
@@ -214,6 +217,9 @@ function generateGrid(container, rows) {
         connectWith: editField,
         containment: 'body',
         tolerance: 'pointer',
+        // helper: function () {
+        //     return helper;
+        // },
         over: function () {
             shouldDelete = false;
         },

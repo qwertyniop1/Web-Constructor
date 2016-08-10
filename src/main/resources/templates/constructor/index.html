@@ -13,46 +13,48 @@
 <body>
 <div layout:fragment="nowrap-content">
     <th:block th:replace="constructor/elements :: alert"/>
-
-    <div class="my-toolbar flex-container">
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-text">
-            <span class="glyphicon glyphicon-font" aria-hidden="true"></span> Text
-        </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-image">
-            <span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Image
-        </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-video">
-            <span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video
-        </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-table">
-            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Table
-        </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-comment">
-            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comments
-        </button>
-        <!--<button type="button" class="my-tool btn btn-default btn-lg" id="tool-rating">-->
-            <!--<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Rate-->
-        <!--</button>-->
+    <div class="container">
+        <div class="col-md-8">
+            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                <div class="btn-group" role="group" aria-label="..." id="my-toolbar">
+                    <button type="button" class="my-tool btn btn-default" id="tool-text">
+                        <span class="glyphicon glyphicon-font" aria-hidden="true"></span> Text
+                    </button>
+                    <button type="button" class="my-tool btn btn-default" id="tool-image">
+                        <span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Image
+                    </button>
+                    <button type="button" class="my-tool btn btn-default" id="tool-video">
+                        <span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video
+                    </button>
+                    <button type="button" class="my-tool btn btn-default" id="tool-table">
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Table
+                    </button>
+                </div>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default my-layout-set" id="layout-1">
+                        <img src="/images/layout1.png" width="15" height="15"/>
+                    </button>
+                    <button type="button" class="btn btn-default my-layout-set" id="layout-2">
+                        <img src="/images/layout2.png" width="15" height="15"/>
+                    </button>
+                    <button type="button" class="btn btn-default my-layout-set" id="layout-3">
+                        <img src="/images/layout3.png" width="15" height="15"/>
+                    </button>
+                    <button type="button" class="btn btn-default my-layout-set" id="layout-4">
+                        <img src="/images/layout4.png" width="15" height="15"/>
+                    </button>
+                </div>
+        </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-inline pull-right">
+                <input type="text" class="form-control" id="page-title" th:value="${page.name}"/>
+                <button type="button" class="btn btn-primary" id="save-page">
+                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+                </button>
+            </div>
+        </div>
     </div>
-    <div>
-        <button type="button" class="btn btn-default my-layout-set" id="layout-1">
-            <img src="/images/layout1.png"/>
-        </button>
-        <button type="button" class="btn btn-default my-layout-set" id="layout-2">
-            <img src="/images/layout2.png"/>
-        </button>
-        <button type="button" class="btn btn-default my-layout-set" id="layout-3">
-            <img src="/images/layout3.png"/>
-        </button>
-        <button type="button" class="btn btn-default my-layout-set" id="layout-4">
-            <img src="/images/layout4.png"/>
-        </button>
-    </div>
-
-    <input type="text" id="page-title" th:value="${page.name}"/>
-    <button type="button" class="btn btn-default" id="save-page">
-        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
-    </button>
 
     <div class="row my-container">
 
