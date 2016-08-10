@@ -3,7 +3,6 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
-
     <th:block layout:fragment="bare-styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
         <link rel="stylesheet" href="css/custom/view.css" th:href="@{/css/custom/view.css}"/>
@@ -25,6 +24,7 @@
             }
         </style>
     </th:block>
+    <title th:text="${page.name} + ' - ' + ${page.site.name}"></title>
 </head>
 <body>
 <div layout:fragment="navigation">

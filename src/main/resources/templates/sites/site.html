@@ -3,6 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
+    <title th:text="${site.name}"></title>
     <th:block layout:fragment="styles">
         <link rel="stylesheet" href="css/dropzone.css" th:href="@{/css/dropzone.css}"/>
         <style>

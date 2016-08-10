@@ -3,6 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
+    <title th:text="${user.username}"></title>
     <th:block layout:fragment="bare-styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
         <link rel="stylesheet" href="css/custom/profile.css" th:href="@{/css/custom/profile.css}"/>
