@@ -1,5 +1,6 @@
 package by.itransition.webconstructor.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -31,6 +32,7 @@ public class Page {
     @Column(name = "layout")
     private int layoutId = 0;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Element> elements = new HashSet<>(0);
 

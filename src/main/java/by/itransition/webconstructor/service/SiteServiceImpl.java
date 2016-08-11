@@ -90,6 +90,7 @@ public class SiteServiceImpl implements SiteService{
         Site site = new Site();
         site.setUser(user);
         site.setLogo(DEFAULT_LOGO);
+        site.setDescription("");
         site.setMenuOrientation(MenuOrientation.NONE);
         return siteRepository.save(site).getId();
     }

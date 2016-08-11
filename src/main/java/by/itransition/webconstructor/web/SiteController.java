@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/sites")
@@ -21,10 +22,6 @@ public class SiteController {
 
     @GetMapping
     public String index(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Site> sites = siteService.getSites(user);
-        model.addAttribute("sites", sites);
-        model.addAttribute("rates", siteService.getSitesRates(sites));
         return "sites/list";
     }
 
@@ -58,4 +55,17 @@ public class SiteController {
         return "";
     }
 
+    @GetMapping("/list.json")
+    public @ResponseBody
+    List<Site> sites() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return siteService.getSites(user);
+    }
+
+    @GetMapping("/rates.json")
+    public @ResponseBody
+    Map<Long, Double> rates() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return siteService.getSitesRates(siteService.getSites(user));
+    }
 }

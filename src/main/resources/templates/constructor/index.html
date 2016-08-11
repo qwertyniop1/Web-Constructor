@@ -7,7 +7,6 @@
     <th:block layout:fragment="styles">
         <link rel="stylesheet" href="css/dropzone.css" th:href="@{/css/dropzone.css}"/>
         <link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>
-
     </th:block>
 </head>
 <body>
@@ -96,6 +95,8 @@
                 }, [[${_csrf.token}]]);
 
             });
+
+            initWYSIWYG([[${#locale.language}]]);
 
         });
         //        ]]>

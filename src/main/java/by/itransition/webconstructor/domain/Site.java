@@ -1,5 +1,6 @@
 package by.itransition.webconstructor.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -34,6 +35,7 @@ public class Site implements Serializable{
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Page> pages = new HashSet<>(0);
 

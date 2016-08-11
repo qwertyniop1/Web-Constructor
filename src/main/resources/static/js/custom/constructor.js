@@ -36,10 +36,6 @@
         // }
     };
 
-    tinymce.init({
-        selector: '#text-area'
-    });
-
     $(document.body).on('click', '.edit-element', function () {
         let element = $(this).closest('.my-element');
         let id = element.attr('class');
@@ -300,6 +296,22 @@ function addElement(item, container) {
     let type = item.attr('id').slice(5); //FIXME loh
     let icon = map[type];
     container.append(myRenderer.createElement('my-' + type, true, icon));
+}
+
+function initWYSIWYG(locale) {
+    tinymce.init({
+        language: locale,
+        selector: '#text-area',
+        // auto_focus: '#text-area',
+        // plugins: 'emoticons autolink wordcount contextmenu image imagetools link lists table textcolor colorpicker',
+        // menubar: "file edit view insert table format",
+        // toolbar: "undo redo | bold italic forecolor backcolor |  | image link table | formats",
+        // contextmenu: "link image inserttable | cell row column deletetable",
+        // contextmenu_never_use_native: true,
+        // imagetools_toolbar: "rotateleft rotateright | flipv fliph | editimage imageoptions",
+        // default_link_target: "_blank",
+        browser_spellcheck: true
+    });
 }
 
 function customAlert(message, title = '') {

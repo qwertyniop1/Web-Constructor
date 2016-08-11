@@ -1,5 +1,6 @@
 package by.itransition.webconstructor.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
