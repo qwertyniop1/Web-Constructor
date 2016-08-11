@@ -1,12 +1,11 @@
 package by.itransition.webconstructor.service;
 
-import by.itransition.webconstructor.domain.Element;
-import by.itransition.webconstructor.domain.Page;
-import by.itransition.webconstructor.domain.Site;
-import by.itransition.webconstructor.domain.Type;
+import by.itransition.webconstructor.domain.*;
+import by.itransition.webconstructor.dto.CommentDto;
 import by.itransition.webconstructor.dto.ElementDto;
 import by.itransition.webconstructor.dto.PageDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
+import by.itransition.webconstructor.repository.CommentRepository;
 import by.itransition.webconstructor.repository.ElementsRepository;
 import by.itransition.webconstructor.repository.PageRepository;
 import by.itransition.webconstructor.repository.SiteRepository;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +28,9 @@ public class PageServiceImpl implements PageService{
     @Autowired
     SiteRepository siteRepository;
 
+    @Autowired
+    CommentRepository commentRepository;
+
 //    @Autowired
 //    ElementsRepository elementsRepository;
 
@@ -38,6 +41,49 @@ public class PageServiceImpl implements PageService{
             throw new ResourceNotFoundException();
         }
         return page;
+    }
+
+    @Override
+    public void addComment(User user, CommentDto comment) {
+        Page page = pageRepository.findOne(comment.getPage());
+        Comment newComment = new Comment();
+        newComment.setUser(user);
+        newComment.setPage(page);
+        newComment.setContent(comment.getContent());
+        newComment.setInternalId(comment.getId());
+        newComment.setParent(comment.getParent());
+        commentRepository.save(newComment);
+    }
+
+    @Override
+    public void updateComment(CommentDto comment) {
+        Page page = pageRepository.findOne(comment.getPage());
+        Comment newComment = commentRepository.findByPageAndInternalId(page, comment.getId());
+        if (newComment == null) {
+            return;
+        }
+        newComment.setPage(page);
+        newComment.setContent(comment.getContent());
+        newComment.setInternalId(comment.getId());
+        newComment.setParent(comment.getParent());
+        commentRepository.save(newComment);
+    }
+
+    @Override
+    public void deleteComment(CommentDto comment) {
+        Comment deletedComment = commentRepository
+                .findByPageAndInternalId(pageRepository.findOne(comment.getPage()), comment.getId());
+        commentRepository.delete(deletedComment);
+    }
+
+    @Override
+    public List<CommentDto> getComments(Long id, User user) {
+        List<Comment> comments = commentRepository.findByPage(pageRepository.findOne(id));
+        List<CommentDto> resultList = new ArrayList<>();
+        for (Comment comment : comments) {
+            resultList.add(new CommentDto(comment, user));
+        }
+        return resultList;
     }
 
 //    @Override

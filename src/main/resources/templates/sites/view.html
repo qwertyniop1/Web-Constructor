@@ -5,6 +5,8 @@
 <head>
     <th:block layout:fragment="bare-styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
+        <link rel="stylesheet" href="css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"/>
+        <link rel="stylesheet" href="css/jquery-comments.css" th:href="@{/css/jquery-comments.css}"/>
         <link rel="stylesheet" href="css/custom/view.css" th:href="@{/css/custom/view.css}"/>
         <style>
             .my-element {
@@ -93,10 +95,14 @@
         <label for="site-rating" class="control-label">Rate this site</label>
         <input id="site-rating" name="rating" th:value="${rate}" class="rating-loading"/>
     </div>
+    <div id="comments-container">
+
+    </div>
 </div>
 <th:block layout:fragment="bare-scripts">
     <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
-    <!--<script type="text/javascript" src="js/kartik/locales/ru.js" th:src="@{/js/kartik/locales/ru.js}"></script>-->
+    <script type="text/javascript" src="js/kartik/locales/ru.js" th:src="@{/js/kartik/locales/{loc}.js(loc=${#locale})}"></script>
+    <script type="text/javascript" src="js/jquery-comments.min.js" th:src="@{/js/jquery-comments.min.js}"></script>
     <script type="text/javascript" src="js/custom/renderer.js" th:src="@{/js/custom/renderer.js}"></script>
     <script th:inline="javascript">
         //        <![CDATA[
@@ -151,7 +157,58 @@
                         rate(0); //TODO delete rate from db
                     });
 
+            var tmp = [[${rate != null}]];
+            $('#comments-container').comments({
+                profilePictureURL: 'http://res.cloudinary.com/itraphotocloud/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/' +
+                        [[${user.avatar}]] + '.png',
+                currentUserIsAdmin: [[${user.role == T(by.itransition.webconstructor.domain.Role).ROLE_ADMIN}]],
+                fieldMappings: {
+                    profileURL: 'profileUrl',
+                    profilePictureURL: 'profilePictureURL',
+                    createdByAdmin: 'createdByAdmin',
+                    createdByCurrentUser: 'createdByCurrentUser',
+                    upvoteCount: 'upvoteCount',
+                    userHasUpvoted: 'userHasUpvoted'
+                },
+                refresh: function() {
+                    console.log('lol');
+                },
+                getComments: function(success, error) {
+                    $.get('/site/comments.json', {page: [[${page.id}]]}, function (response, status) {
+                        success(response);
+                    }).fail(error);
+                },
+                postComment: function (commentJSON, success, error) {
+                    sendComment(commentJSON, success, error, 'add');
+                },
+                putComment: function (commentJSON, success, error) {
+                    sendComment(commentJSON, success, error, 'edit');
+                },
+                deleteComment: function (commentJSON, success, error) {
+                    deleteComment(commentJSON, success, error)
+                },
+                upvoteComment: function (commentJSON, success, error) {
+                    console.log('upvote');
+                    console.log(commentJSON);
+                    success(commentJSON);
+                }
+            });
+
         });
+
+        function deleteComment(comment, success, error) {
+            comment['page'] = [[${page.id}]];
+            $.postJSON('/site/comment/remove', comment, function (response, status) {
+                success();
+            }, [[${_csrf.token}]]);
+        }
+
+        function sendComment(comment, success, error, action) {
+            comment['page'] = [[${page.id}]];
+            $.postJSON('/site/comment/' + action, comment, function (response, status) {
+                success(comment);
+            }, [[${_csrf.token}]]);
+        }
 
         function rate(value) {
             $.post('/site/rate', {

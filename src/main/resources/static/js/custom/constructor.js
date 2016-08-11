@@ -329,15 +329,3 @@ function getLayoutFromId(id) {
     return id.match(regex)[1] - 1;
 }
 
-$.postJSON = function(url, data, callback, token) {
-    return jQuery.ajax({
-        'type': 'POST',
-        'url': url,
-        'contentType': 'application/json',
-        'data': JSON.stringify(data),
-        'dataType': 'json',
-        'headers': { 'X-CSRF-TOKEN': token },
-        // 'success': callback
-        'complete': callback
-    });
-};

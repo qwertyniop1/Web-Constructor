@@ -107,7 +107,6 @@
                     dataset: {
                         records: response,
                         perPageDefault: 6
-//                        perPageOptions: [3, 6]
                     },
                     writers: {
                         _rowWriter: rowWriter
@@ -120,7 +119,7 @@
                     }
                 });
 
-                $('#dynatable-query-search-site-list').addClass('form-control');
+                $('#dynatable-query-search-site-list').addClass('form-control').attr('placeholder', 'Search');
                 $('#dynatable-search-site-list')
                         .contents().filter(function(){
                             return this.nodeType === 3;
@@ -153,7 +152,7 @@
                                         <input name="rating" value="' + rates[record.id] + '" class="rating-loading"/>\
                                     </td>\
                                     <td style="padding-left: 20px">\
-                                        <em>' + record.rates.length + '</em>\
+                                        <em>' + record.rates.length + '  votes</em>\
                                     </td>\
                                 </tr>\
                             </table>\

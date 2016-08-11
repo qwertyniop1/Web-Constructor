@@ -5,18 +5,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.*;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-@EqualsAndHashCode(exclude = {"sites", "rates"})
-@ToString(exclude = {"sites", "rates"})
+@EqualsAndHashCode(exclude = {"sites", "rates", "comments"})
+@ToString(exclude = {"sites", "rates", "comments"})
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -48,6 +51,10 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Rate> rates = new HashSet<>(0);
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //FIXME cascade
+    private Set<Comment> comments = new HashSet<>(0);
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
