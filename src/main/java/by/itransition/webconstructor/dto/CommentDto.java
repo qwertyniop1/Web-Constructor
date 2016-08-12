@@ -1,6 +1,7 @@
 package by.itransition.webconstructor.dto;
 
 import by.itransition.webconstructor.domain.Comment;
+import by.itransition.webconstructor.domain.Like;
 import by.itransition.webconstructor.domain.Role;
 import by.itransition.webconstructor.domain.User;
 import lombok.Data;
@@ -51,8 +52,20 @@ public class CommentDto {
         this.modified = formatData(comment.getModified());
         this.content = comment.getContent();
         getUserInfo(comment.getUser(), currentUser);
-        this.upvoteCount = 0;
-        this.userHasUpvoted = false; //FIXME lol
+        this.upvoteCount = comment.getLikes().size();
+        this.userHasUpvoted = isLikedByUser(comment, currentUser); //FIXME lol
+    }
+
+    private boolean isLikedByUser(Comment comment, User currentUser) {
+        if (currentUser == null) {
+            return false;
+        }
+        for (Like like : comment.getLikes()) {
+            if (like.getUser().getUsername().equals(currentUser.getUsername())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String formatData(Date date) {
@@ -68,7 +81,7 @@ public class CommentDto {
     }
 
     private boolean isCurrentUserComment(User user, User currentUser) {
-        return user.getUsername().equals(currentUser.getUsername());
+        return currentUser != null && user.getUsername().equals(currentUser.getUsername());
     }
 
     private boolean isAdminComment(User user) {

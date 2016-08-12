@@ -18,8 +18,8 @@ import java.util.*;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-@EqualsAndHashCode(exclude = {"sites", "rates", "comments"})
-@ToString(exclude = {"sites", "rates", "comments"})
+@EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes"})
+@ToString(exclude = {"sites", "rates", "likes"})
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -55,6 +55,10 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //FIXME cascade
     private Set<Comment> comments = new HashSet<>(0);
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Like> likes = new HashSet<>(0);
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)

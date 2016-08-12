@@ -1,13 +1,19 @@
 package by.itransition.webconstructor.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = "likes")
+@ToString(exclude = "likes")
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -23,6 +29,9 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     private User user;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Like> likes = new HashSet<>(0);
 
     private String internalId;
 

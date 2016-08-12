@@ -37,9 +37,9 @@ public class ViewController {
                         .getPages().iterator().next().getId()); //FIXME 0 pages crash!!!
     }
 
-    @GetMapping("/{user}/{site}/{page}")
-    public String viewPage(@PathVariable("user") String username, @PathVariable String site,
-                       @PathVariable Long page, Model model) {
+    @GetMapping("/{owner}/{site}/{pageId}")
+    public String viewPage(@PathVariable("owner") String username, @PathVariable String site,
+                       @PathVariable("pageId") Long page, Model model) {
         User user = null;
         Page requestedPage = pageService.getPage(page);
         try {
@@ -60,40 +60,6 @@ public class ViewController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         siteService.setRate(site, rate, user);
         return "";
-    }
-
-    @GetMapping("/comments.json")
-    public @ResponseBody
-    List<CommentDto> comments(@RequestParam Long page) {
-        User user = null;
-        try {
-            user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        } catch (ClassCastException ignored) {
-
-        }
-        return pageService.getComments(page, user);
-    }
-
-    @PostMapping("/comment/add")
-    public @ResponseBody
-    String addComment(@RequestBody CommentDto comment) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        pageService.addComment(user, comment);
-        return "OK";
-    }
-
-    @PostMapping("/comment/edit")
-    public @ResponseBody
-    String editComment(@RequestBody CommentDto comment) {
-        pageService.updateComment(comment);
-        return "OK";
-    }
-
-    @PostMapping("/comment/remove")
-    public @ResponseBody
-    String removeComment(@RequestBody CommentDto comment) {
-        pageService.deleteComment(comment);
-        return "OK";
     }
 
     private Page fixPages(Page page) {

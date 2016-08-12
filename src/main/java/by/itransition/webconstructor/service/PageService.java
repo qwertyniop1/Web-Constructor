@@ -11,14 +11,6 @@ public interface PageService {
 
     Page getPage(Long id);
 
-    void addComment(User user, CommentDto comment);
-
-    void updateComment(CommentDto comment);
-
-    void deleteComment(CommentDto comment);
-
-    List<CommentDto> getComments(Long id, User user);
-
     long create(Long siteId);
 
     void update(Long id, PageDto page);
