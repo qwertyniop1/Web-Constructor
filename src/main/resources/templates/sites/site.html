@@ -6,126 +6,10 @@
     <title th:text="${site.name}"></title>
     <th:block layout:fragment="styles">
         <link rel="stylesheet" href="css/dropzone.css" th:href="@{/css/dropzone.css}"/>
+        <link rel="stylesheet" href="css/jquery.tagit.css" th:href="@{/css/jquery.tagit.css}"/>
+        <link rel="stylesheet" href="css/tagit.ui-zendesk.css" th:href="@{/css/tagit.ui-zendesk.css}"/>
+        <link rel="stylesheet" href="css/custom/site.css" th:href="@{/css/custom/site.css}"/>
         <style>
-
-            .funkyradio div {
-                clear: both;
-                overflow: hidden;
-            }
-
-            .funkyradio label {
-                width: 100%;
-                border-radius: 3px;
-                border: 1px solid #D1D3D4;
-                font-weight: normal;
-            }
-
-            .funkyradio input[type="radio"]:empty,
-            .funkyradio input[type="checkbox"]:empty {
-                display: none;
-            }
-
-            .funkyradio input[type="radio"]:empty ~ label,
-            .funkyradio input[type="checkbox"]:empty ~ label {
-                position: relative;
-                line-height: 2.5em;
-                text-indent: 3.25em;
-                margin-top: 2em;
-                cursor: pointer;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            .funkyradio input[type="radio"]:empty ~ label:before,
-            .funkyradio input[type="checkbox"]:empty ~ label:before {
-                position: absolute;
-                display: block;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                content: '';
-                width: 2.5em;
-                background: #D1D3D4;
-                border-radius: 3px 0 0 3px;
-            }
-
-            .funkyradio input[type="radio"]:hover:not(:checked) ~ label,
-            .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
-                color: #888;
-            }
-
-            .funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
-            .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
-                content: '\2714';
-                text-indent: .9em;
-                color: #C2C2C2;
-            }
-
-            .funkyradio input[type="radio"]:checked ~ label,
-            .funkyradio input[type="checkbox"]:checked ~ label {
-                color: #777;
-            }
-
-            .funkyradio input[type="radio"]:checked ~ label:before,
-            .funkyradio input[type="checkbox"]:checked ~ label:before {
-                content: '\2714';
-                text-indent: .9em;
-                color: #333;
-                background-color: #ccc;
-            }
-
-            .funkyradio input[type="radio"]:focus ~ label:before,
-            .funkyradio input[type="checkbox"]:focus ~ label:before {
-                box-shadow: 0 0 0 3px #999;
-            }
-
-            .funkyradio-default input[type="radio"]:checked ~ label:before,
-            .funkyradio-default input[type="checkbox"]:checked ~ label:before {
-                color: #333;
-                background-color: #ccc;
-            }
-
-            .funkyradio-primary input[type="radio"]:checked ~ label:before,
-            .funkyradio-primary input[type="checkbox"]:checked ~ label:before {
-                color: #fff;
-                background-color: #337ab7;
-            }
-
-            .funkyradio-success input[type="radio"]:checked ~ label:before,
-            .funkyradio-success input[type="checkbox"]:checked ~ label:before {
-                color: #fff;
-                background-color: #5cb85c;
-            }
-
-            .funkyradio-danger input[type="radio"]:checked ~ label:before,
-            .funkyradio-danger input[type="checkbox"]:checked ~ label:before {
-                color: #fff;
-                background-color: #d9534f;
-            }
-
-            .funkyradio-warning input[type="radio"]:checked ~ label:before,
-            .funkyradio-warning input[type="checkbox"]:checked ~ label:before {
-                color: #fff;
-                background-color: #f0ad4e;
-            }
-
-            .funkyradio-info input[type="radio"]:checked ~ label:before,
-            .funkyradio-info input[type="checkbox"]:checked ~ label:before {
-                color: #fff;
-                background-color: #5bc0de;
-            }
-
-            .funkyradio-primary {
-                width: 150px;
-                display: inline-block;
-                margin-right: 25px;
-            }
-            .funkyradio-primary label {
-                margin-top: 0 !important;
-            }
-
             #upload-area {
                 width: 150px;
                 border: 3px dashed rgba(26, 110, 204, 0.48);
@@ -179,10 +63,11 @@
                     <label th:for="${#ids.next('name')}">Site name</label>
                     <input type="text" class="form-control" th:field="*{name}" placeholder="Site name"/>
                 </div>
-                <div class="form-group">
-                    <label>Tags</label>
-                    <input type="text" class="form-control" placeholder="Tags"/>
-                </div>
+                <label>Tags</label>
+                <ul id="site-tags">
+                    <!-- Existing list items will be pre-added to the tags -->
+                    <li th:each="tag : ${site.tags}" th:text="${tag.value}">Tag1</li>
+                </ul>
                 <div class="form-group">
                     <label th:for="${#ids.next('description')}">Description:</label>
                     <textarea class="form-control" rows="5" th:field="*{description}" placeholder="Site description"></textarea>
@@ -256,6 +141,8 @@
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/dropzone.js" th:src="@{/js/dropzone.js}"></script>
     <script type="text/javascript" src="js/jquery.form.min.js" th:src="@{/js/jquery.form.min.js}"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" src="js/tag-it.min.js" th:src="@{/js/tag-it.min.js}"></script>
     <script th:inline="javascript">
         //        <![CDATA[
 
@@ -303,6 +190,7 @@
             $('#upload-area').on('click', function () {
                 myDropzone.removeAllFiles(true);
             });
+            getTags();
 
         });
 
@@ -338,6 +226,26 @@
                 success: function(result) {
                     window.location.href = '/sites/[[${site.id}]]';
                 }
+            });
+        }
+
+        function initTags(tagList) {
+            $('#site-tags').tagit({
+                availableTags: tagList,
+                removeConfirmation: true,
+                caseSensitive: false,
+                tagLimit: 10
+//                placeholderText: 'Input tags...'
+            });
+        }
+
+        function getTags() {
+            let tags = [];
+            $.get('/api/tags.json', {}, function (response, status) {
+                response.forEach(function (tag) {
+                    tags.push(tag.value);
+                });
+                initTags(tags);
             });
         }
 

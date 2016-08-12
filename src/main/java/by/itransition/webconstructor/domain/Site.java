@@ -14,8 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = {"pages", "rates"})
-@ToString(exclude = {"pages", "rates"})
+@EqualsAndHashCode(exclude = {"pages", "rates", "tags"})
+@ToString(exclude = {"pages", "rates", "tags"})
 @Entity
 @Table(name = "sites")
 public class Site implements Serializable{
@@ -42,6 +42,11 @@ public class Site implements Serializable{
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Rate> rates = new HashSet<>(0);
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(joinColumns = @JoinColumn(name = "site_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    private Set<Tag> tags = new HashSet<>(0);
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MenuOrientation menuOrientation;
@@ -52,8 +57,12 @@ public class Site implements Serializable{
     @UpdateTimestamp
     private Date updateDate;
 
-//    public void addRate(Rate rate) {
-//        this.rates.add(rate);
-//    }
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void clearTags() {
+        this.tags.clear();
+    }
 
 }

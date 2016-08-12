@@ -48,8 +48,7 @@ public class SiteController {
     }
 
     @DeleteMapping("/{site}")
-    public
-    @ResponseBody
+    public @ResponseBody
     String remove(@PathVariable("site") Long id, Model model) {
         siteService.delete(id);
         return "";

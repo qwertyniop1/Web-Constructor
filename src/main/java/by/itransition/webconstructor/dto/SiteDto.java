@@ -21,6 +21,8 @@ public class SiteDto {
 
     private String logo;
 
+    private List<String> tags = new ArrayList<>(0);
+
     private final String[] allMenu = {VERTICAL, HORIZONTAL};
 
     private List<String> menus = new ArrayList<>(0);
