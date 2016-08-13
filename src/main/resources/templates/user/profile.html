@@ -6,6 +6,7 @@
     <title th:text="${user.username}"></title>
     <th:block layout:fragment="bare-styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
+        <link rel="stylesheet" href="css/jquery.dynatable.css" th:href="@{/css/jquery.dynatable.css}"/>
         <link rel="stylesheet" href="css/custom/profile.css" th:href="@{/css/custom/profile.css}"/>
         <link rel="stylesheet" href="css/custom/thumbnails.css" th:href="@{/css/custom/thumbnails.css}"/>
         <th:block th:replace="auth/validation :: styles"/>
@@ -126,7 +127,9 @@
                         </form>
                     </div>
                     <div th:unless="${owner}" class="tab-pane fade in" id="tab4">
-                        <h3>Sites</h3>
+                        <div style="display: inline-block">
+                            <h3>Sites</h3>
+                        </div>
                         <div class="panel panel-info" th:if="${#lists.isEmpty(user.sites)}">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
@@ -138,36 +141,7 @@
                                 This user haven't create any sites yet.
                             </div>
                         </div>
-                        <div class="row">
-                            <div th:each="site : ${user.sites}" class="col-sm-4 col-md-3">
-                                <div class="post">
-                                    <div class="post-img-content">
-                                        <a th:href="@{/site/{user}/{site}(user=${site.user.username},site=${site.name})}">
-                                            <img th:src="@{http://res.cloudinary.com/itraphotocloud/image/upload/c_pad,w_460,h_250/{logo}.png(logo=${site.logo})}"
-                                                 class="img-responsive" />
-                                            <span class="post-title"><b th:text="${site.name}">Make a Image Blur Effects With</b><br />
-                                                <!--<b>CSS3 Blur</b>--></span>
-                                        </a>
-                                    </div>
-                                    <div class="content">
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <input name="rating" th:value="${rates[site.id]}" value="3.5" class="rating-loading"/>
-                                                </td>
-                                                <td style="padding-left: 20px">
-                                                    <em th:text="${#lists.size(site.rates)} + ' votes'">0</em>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <div th:text="${site.description}" style="overflow: hidden; height: 80px;">
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                            Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                            unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="row" id="site-list">
                         </div>
                     </div>
                 </div>
@@ -177,17 +151,16 @@
 </div>
 <th:block layout:fragment="scripts">
     <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
+    <script type="text/javascript" src="js/jquery.dynatable.js" th:src="@{/js/jquery.dynatable.js}"></script>
+    <script type="text/javascript" src="js/moment-with-locales.js" th:src="@{/js/moment-with-locales.js}"></script>
+    <script type="text/javascript" src="js/custom/tables.js" th:src="@{/js/custom/tables.js}"></script>
     <!--<th:block th:replace="auth/validation :: scripts" />-->
     <script th:inline="javascript">
         //        <![CDATA[
 
         $(document).ready(function () {
 
-            $('.rating-loading').rating({
-                step: 0.5,
-                displayOnly: true,
-                size: 'xs'
-            });
+            initTables($('#site-list'), [[${user.username}]], [[${#locale.language}]], true);
 
             $(".btn-pref .btn").click(function () {
                 $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");

@@ -113,6 +113,7 @@ public class SiteServiceImpl implements SiteService{
             if (tag == null) {
                 tag = new Tag(t);
             }
+            tagRepository.save(tag);
             site.addTag(tag);
         }
     }

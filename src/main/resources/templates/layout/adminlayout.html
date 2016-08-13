@@ -1,0 +1,29 @@
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="css/admin/bootstrap.min.css" th:href="@{/css/admin/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="css/admin/sb-admin-2.css" th:href="@{/css/admin/sb-admin-2.css}"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"/>
+    <th:block layout:fragment="styles">
+
+    </th:block>
+    <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE">Administrator</title>
+</head>
+<body>
+
+<th:block layout:fragment="body">
+
+</th:block>
+
+<div th:replace="layout/template :: footer">
+
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<th:block layout:fragment="scripts">
+
+</th:block>
+</body>
+</html>

@@ -30,37 +30,15 @@
     <h2>My sites</h2>
     <button type="button" class="btn btn-success center-block" onclick="create()">Add site</button>
     <div class="row" id="site-list">
-        <div class="col-sm-4 col-md-4">
-            <div class="post">
-                <div class="post-img-content">
-                    <a href="/sites/">
-                        <img src="http://placehold.it/460x250"
-                             class="img-responsive" />
-                        <span class="post-title"><b>Site name</b><br />
-                            <!--<b>CSS3 Blur</b>--></span>
-                    </a>
-                </div>
-                <div class="content">
-                    <div class="author">
-                        By <b>Author</b> |
-                        <time datetime="2014-01-20">January 20th, 2014</time>
-                    </div>
-                    <table>
-                        <tr>
-                            <td>
-                                <input name="rating" value="3.5" class="rating-loading"/>
-                            </td>
-                            <td style="padding-left: 20px">
-                                <em>0</em>
-                            </td>
-                        </tr>
-                    </table>
-                    <div style="overflow: hidden; height: 130px;">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    </div>
-                </div>
+        <div class="panel panel-info site-thumb">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    No sites
+                </h3>
+            </div>
+            <div class="panel-body">
+                You haven't create any sites yet.
             </div>
         </div>
     </div>
@@ -70,104 +48,16 @@
     <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
     <script type="text/javascript" src="js/jquery.dynatable.js" th:src="@{/js/jquery.dynatable.js}"></script>
     <script type="text/javascript" src="js/moment-with-locales.js" th:src="@{/js/moment-with-locales.js}"></script>
+    <script type="text/javascript" src="js/custom/tables.js" th:src="@{/js/custom/tables.js}"></script>
 
     <script th:inline="javascript">
         //        <![CDATA[
 
-        var siteList;
-        var rates;
-
         $(document).ready(function () {
 
-            moment.locale([[${#locale.language}]]);
-
-            siteList = $('#site-list');
-
-            siteList.bind('dynatable:afterUpdate', function(e, dynatable){
-                $('.rating-loading').rating({
-                    step: 0.5,
-                    displayOnly: true,
-                    size: 'xs'
-                });
-            });
-
-            $.get('/sites/rates.json', {}, function (response, status) {
-                rates = response;
-                loadContent();
-            });
+            initTables($('#site-list'), [[${#authentication.getName()}]], [[${#locale.language}]]);
 
         });
-
-        function loadContent() {
-            $.get('/sites/list.json', {}, function (response, status) {
-                siteList.dynatable({
-                    table: {
-                        bodyRowSelector: '.col-sm-4'
-                    },
-                    dataset: {
-                        records: response,
-                        perPageDefault: 6
-                    },
-                    writers: {
-                        _rowWriter: rowWriter
-                    },
-                    readers: {
-                        _rowReader: rowReader
-                    },
-                    params: {
-                        records: 'sites'
-                    }
-                });
-
-                $('#dynatable-query-search-site-list').addClass('form-control').attr('placeholder', 'Search');
-                $('#dynatable-search-site-list')
-                        .contents().filter(function(){
-                            return this.nodeType === 3;
-                        }).remove();
-                $('.dynatable-per-page').remove();
-
-            });
-        }
-
-        function rowWriter(rowIndex, record, columns, cellWriter) {
-            let creationDate = moment(record.creationDate).format("D MMMM YYYY");
-            let element = '<div class="col-sm-4 col-md-4">\
-                    <div class="post">\
-                        <div class="post-img-content">\
-                            <a href="/sites/' + record.id + '">\
-                                <img src="http://res.cloudinary.com/itraphotocloud/image/upload/c_pad,w_460,h_250/' + record.logo + '.png"\
-                                class="img-responsive" />\
-                                <span class="post-title"><b>' + record.name + '</b><br />\
-                                <!--<b>CSS3 Blur</b>--></span>\
-                            </a>\
-                        </div>\
-                        <div class="content">\
-                            <div class="author">\
-                                By <b>' + record.user.username + '</b> |\
-                                <time datetime="2014-01-20">' + creationDate + '</time>\
-                            </div>\
-                            <table>\
-                                <tr>\
-                                    <td>\
-                                        <input name="rating" value="' + rates[record.id] + '" class="rating-loading"/>\
-                                    </td>\
-                                    <td style="padding-left: 20px">\
-                                        <em>' + record.rates.length + '  votes</em>\
-                                    </td>\
-                                </tr>\
-                            </table>\
-                            <div style="overflow: hidden; height: 130px;">' + record.description + '\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>';
-            return element;
-        }
-
-        function rowReader(index, li, record) {
-
-        }
-
 
         function create() {
             $.post('/sites/create', {

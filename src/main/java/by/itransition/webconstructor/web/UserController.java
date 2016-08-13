@@ -50,7 +50,7 @@ public class UserController {
         User owner = null;
         try {
             owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        } catch (ClassCastException ex) {
+        } catch (ClassCastException ignored) {
 
         }
         User user = userService.getUser(username);

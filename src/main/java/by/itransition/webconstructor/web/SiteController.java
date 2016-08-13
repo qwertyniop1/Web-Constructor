@@ -53,18 +53,4 @@ public class SiteController {
         siteService.delete(id);
         return "";
     }
-
-    @GetMapping("/list.json")
-    public @ResponseBody
-    List<Site> sites() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return siteService.getSites(user);
-    }
-
-    @GetMapping("/rates.json")
-    public @ResponseBody
-    Map<Long, Double> rates() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return siteService.getSitesRates(siteService.getSites(user));
-    }
 }

@@ -47,7 +47,7 @@ public class ViewController {
             model.addAttribute("user", user);
             model.addAttribute("rate", siteService.getRate(requestedPage.getSite().getId(),
                     user));
-        } catch (ClassCastException ex) {
+        } catch (ClassCastException ignored) {
 
         }
         model.addAttribute("page", fixPages(requestedPage));
@@ -71,3 +71,4 @@ public class ViewController {
         return page;
     }
 }
+// TODO average rate count when delete mark

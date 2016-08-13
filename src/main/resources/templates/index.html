@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html layout:decorator="layout/baselayout">
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
 <head>
-
+    <title>Welcome</title>
 </head>
 <body>
     <div layout:fragment="content">
-        Hello
+        <div id="tag-cloud">
+            <canvas width="300" height="300" id="tag-canvas">
+                <p>You are using old browser</p>
+                <ul>
+                    <li th:each="tag : ${tagList}"><a href="#" th:text="${tag.value}">Tag</a></li>
+                </ul>
+            </canvas>
+        </div>
     </div>
+
+    <th:block layout:fragment="scripts">
+        <script type="text/javascript" src="js/jquery.tagcanvas.min.js" th:src="@{/js/jquery.tagcanvas.min.js}"></script>
+        <script th:inline="javascript">
+            //        <![CDATA[
+
+            $(document).ready(function () {
+
+                $('#tag-canvas').tagcanvas({
+                    textColour : '#ff0000',
+                    outlineThickness : 1,
+                    maxSpeed : 0.05,
+                    reverse: true,
+                    depth : 0.75
+                });
+
+            });
+
+            //        ]]>
+        </script>
+    </th:block>
 </body>
 </html>

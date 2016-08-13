@@ -49,6 +49,13 @@
                                <li>
                                    <a th:href="@{/user/}" th:text="#{navbar.profile}">My profile</a>
                                </li>
+                               <li role="separator" class="divider"></li>
+                               <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                   <li>
+                                       <a th:href="@{/admin/}" th:text="#{navbar.admin}">My profile</a>
+                                   </li>
+                                   <li role="separator" class="divider"></li>
+                               </th:block>
                                <li>
                                    <a href="#" onclick="$('#logout').submit()" th:text="#{navbar.logout}">Logout</a>
                                </li>
