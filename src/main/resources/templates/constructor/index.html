@@ -49,7 +49,7 @@
             <div class="form-inline pull-right">
                 <input type="text" class="form-control" id="page-title" th:value="${page.name}"/>
                 <button type="button" class="btn btn-primary" id="save-page">
-                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+                    <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> <th:block th:text="#{general.save}">Save</th:block>
                 </button>
             </div>
         </div>

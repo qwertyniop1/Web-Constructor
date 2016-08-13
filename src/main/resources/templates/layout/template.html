@@ -17,7 +17,7 @@
                        <span class="icon-bar"></span>
                        <span class="icon-bar"></span>
                    </button>
-                   <a class="navbar-brand" th:href="@{~/}" th:text="#{navbar.title}">Web constructor</a>
+                   <a class="navbar-brand" th:href="@{~/}" th:text="#{my.application.name}">Web constructor</a>
                </div>
                <!-- Collect the nav links, forms, and other content for toggling -->
                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -32,6 +32,27 @@
                                </li>
                                <li>
                                    <a href="?lang=ru" th:text="Russian">Russian</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=de" th:text="German">German</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=fr" th:text="French">French</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=it" th:text="Italian">Italian</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=es" th:text="Spanish">Spanish</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=pl" th:text="Polish">Polish</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=uk" th:text="Ukrainian">Ukrainian</a>
+                               </li>
+                               <li>
+                                   <a href="?lang=be" th:text="Belorussian">Belorussian</a>
                                </li>
                            </ul>
                        </li>
@@ -75,7 +96,7 @@
    <th:block th:fragment="search">
        <form class="navbar-form navbar-right" style="margin-top: 10px">
            <div class="form-group">
-               <input type="text" class="form-control input-sm" placeholder="Search"/>
+               <input type="text" class="form-control input-sm" th:placeholder="#{navbar.search}"/>
            </div>
        </form>
    </th:block>

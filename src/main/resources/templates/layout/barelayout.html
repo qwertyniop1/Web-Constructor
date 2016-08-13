@@ -1,12 +1,12 @@
-<html xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
     <th:block layout:fragment="bare-styles">
 
     </th:block>
-    <title layout:title-pattern="$CONTENT_TITLE">Web constructor</title>
+    <title layout:title-pattern="$CONTENT_TITLE" th:text="#{my.application.name}">Web constructor</title>
 </head>
 <body>
 <div id="wrap">

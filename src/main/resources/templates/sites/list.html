@@ -27,17 +27,17 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h2>My sites</h2>
-    <button type="button" class="btn btn-success center-block" onclick="create()">Add site</button>
+    <h2 th:text="#{navbar.sites}">My sites</h2>
+    <button type="button" class="btn btn-success center-block" onclick="create()" th:text="#{sites.add}">Add site</button>
     <div class="row" id="site-list">
         <div class="panel panel-info site-thumb">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                    No sites
+                    <th:block th:text="#{sites.noSites}">No sites</th:block>
                 </h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" th:text="#{sites.noSitesMessage}">
                 You haven't create any sites yet.
             </div>
         </div>

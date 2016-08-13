@@ -51,94 +51,94 @@
             <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
                 <div class="btn-group" role="group">
                     <button type="button" id="info" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <div class="hidden-xs">Info</div>
+                        <div class="hidden-xs" th:text="#{profile.info}">Info</div>
                     </button>
                 </div>
                 <div class="btn-group" role="group">
                     <button type="button" id="rewards" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-                        <div class="hidden-xs">Rewards</div>
+                        <div class="hidden-xs" th:text="#{profile.rewards}">Rewards</div>
                     </button>
                 </div>
                 <div th:if="${owner}" class="btn-group" role="group">
                     <button type="button" id="settings-tab" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                        <div class="hidden-xs">Settings</div>
+                        <div class="hidden-xs" th:text="#{sites.settings}">Settings</div>
                     </button>
                 </div>
                 <div th:unless="${owner}" class="btn-group" role="group">
                     <button type="button" id="sites" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                        <div class="hidden-xs">Sites</div>
+                        <div class="hidden-xs" th:text="#{navbar.sites}">Sites</div>
                     </button>
                 </div>
             </div>
             <div class="well">
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="tab1">
-                        <h3>User information</h3>
+                        <h3 th:text="#{profile.userInfo}">User information</h3>
                         <table class="table table-hover">
                             <tr>
-                                <td>Login</td>
+                                <td th:text="#{login.username}">Login</td>
                                 <td th:text="${user.username}">Login</td>
                             </tr>
                             <tr>
-                                <td>Name</td>
+                                <td th:text="#{profile.name}">Name</td>
                                 <td th:text="${user.firstname} + ' ' + ${user.lastname}">Name</td>
                             </tr>
                             <tr>
-                                <td>Email</td>
+                                <td th:text="#{registration.email}">Email</td>
                                 <td th:text="${user.email}">Email</td>
                             </tr>
                             <tr>
-                                <td>Registered</td>
+                                <td th:text="#{profile.registered}">Registered</td>
                                 <td th:text="${#dates.format(user.registrationDate, 'dd MMM yyyy')}">N/D</td>
                             </tr>
                             <tr>
-                                <td>Sites quantity</td>
+                                <td th:text="#{profile.quantity}">Sites quantity</td>
                                 <td th:text="${#lists.size(user.sites)}">0</td>
                             </tr>
                         </table>
                     </div>
                     <div class="tab-pane fade in" id="tab2">
-                        <h3>Rewards</h3>
+                        <h3 th:text="#{profile.rewards}">Rewards</h3>
                     </div>
                     <div th:if="${owner}" class="tab-pane fade in" id="tab3">
-                        <h3>Settings</h3>
+                        <h3 th:text="#{sites.settings}">Settings</h3>
                         <form th:action="@{/user/}" th:object="${profile}" method="post" id="settings">
                             <div class="form-group">
-                                <label th:for="${#ids.next('firstname')}">First name</label>
-                                <input type="text" class="form-control" th:field="*{firstname}" placeholder="First name"/>
+                                <label th:for="${#ids.next('firstname')}" th:text="#{registration.firstname}">First name</label>
+                                <input type="text" class="form-control" th:field="*{firstname}" th:placeholder="#{registration.firstname}"/>
                             </div>
                             <div class="form-group">
-                                <label th:for="${#ids.next('lastname')}">Last name</label>
-                                <input type="text" class="form-control" th:field="*{lastname}" placeholder="Last name"/>
+                                <label th:for="${#ids.next('lastname')}" th:text="#{registration.lastname}">Last name</label>
+                                <input type="text" class="form-control" th:field="*{lastname}" th:placeholder="#{registration.lastname}"/>
                             </div>
                             <div class="form-group">
-                                <label th:for="${#ids.next('oldPassword')}">Old password</label>
-                                <input type="password" class="form-control" th:field="*{oldPassword}" placeholder="Old password"/>
+                                <label th:for="${#ids.next('oldPassword')}" th:text="#{profile.oldPass}">Old password</label>
+                                <input type="password" class="form-control" th:field="*{oldPassword}" th:placeholder="#{profile.oldPass}"/>
                             </div>
                             <div class="form-group">
-                                <label th:for="${#ids.next('password')}">Password</label>
-                                <input type="password" class="form-control" th:field="*{password}" placeholder="Password"/>
+                                <label th:for="${#ids.next('password')}" th:text="#{login.password}">Password</label>
+                                <input type="password" class="form-control" th:field="*{password}" th:placeholder="#{login.password}"/>
                             </div>
                             <div class="form-group">
-                                <label th:for="${#ids.next('matchingPassword')}">Password again</label>
-                                <input type="password" class="form-control" th:field="*{matchingPassword}" placeholder="Password again"/>
+                                <label th:for="${#ids.next('matchingPassword')}" th:text="#{registration.passwordRepeat}">Password again</label>
+                                <input type="password" class="form-control" th:field="*{matchingPassword}" th:placeholder="#{registration.passwordRepeat}"/>
                             </div>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" th:text="#{general.save}">Save</button>
                         </form>
                     </div>
                     <div th:unless="${owner}" class="tab-pane fade in" id="tab4">
                         <div style="display: inline-block">
-                            <h3>Sites</h3>
+                            <h3 th:text="#{navbar.sites}">Sites</h3>
                         </div>
                         <div class="panel panel-info" th:if="${#lists.isEmpty(user.sites)}">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
                                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                                      No sites
+                                      <th:block th:text="#{sites.noSites}">No sites</th:block>
                                 </h3>
                             </div>
                             <div class="panel-body">
-                                This user haven't create any sites yet.
+                                <th:block th:text="#{profile.noSitesMessage}">This user haven't create any sites yet.</th:block>
                             </div>
                         </div>
                         <div class="row" id="site-list">

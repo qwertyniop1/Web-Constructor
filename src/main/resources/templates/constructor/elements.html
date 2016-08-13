@@ -21,7 +21,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Video settings</h4>
+                    <h4 class="modal-title" th:text="#{constructor.form.video.title}">Video settings</h4>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -30,28 +30,28 @@
                             <input type="text" class="form-control" id="video-url" placeholder="YouTube URL"/>
                         </div>
                         <div class="form-group">
-                            <label for="video-width">Width</label>
+                            <label for="video-width" th:text="#{constructor.form.width}">Width</label>
                             <input type="number" class="form-control" id="video-width" value="560"/>
                         </div>
                         <div class="form-group">
-                            <label for="video-height">Height</label>
+                            <label for="video-height" th:text="#{constructor.form.height}">Height</label>
                             <input type="number" class="form-control" id="video-height" value="315"/>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" id="video-auto"/> Auto play
+                                <input type="checkbox" id="video-auto"/> <th:block th:text="#{constructor.form.video.autoplay}">Auto play</th:block>
                             </label>
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" id="video-loop"/> Loop
+                                <input type="checkbox" id="video-loop"/> <th:block th:text="#{constructor.form.video.loop}">Loop</th:block>
                             </label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{general.cancel}">Close</button>
+                    <button type="button" class="btn btn-primary" th:text="#{general.save}">Save changes</button>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Image settings</h4>
+                    <h4 class="modal-title" th:text="#{constructor.form.image.title}">Image settings</h4>
                 </div>
                 <div class="modal-body">
                     <div id="upload-area" class="dropzone">
@@ -73,24 +73,24 @@
                     </div>
                     <form>
                         <div class="form-group">
-                            <label for="video-url">Image URL</label>
+                            <label for="video-url" th:text="#{constructor.form.image.url}">Image URL</label>
                             <input type="text" class="form-control" id="photo-url" placeholder="Image URL"/>
-                            <span class="help-block hidden">Invalid URL.</span>
+                            <span class="help-block hidden" th:text="#{constructor.form.image.badUrl}">Invalid URL.</span>
                         </div>
                         <div class="form-group">
-                            <label for="photo-width">Width</label>
+                            <label for="photo-width" th:text="#{constructor.form.width}">Width</label>
                             <input type="number" class="form-control" id="photo-width" value="560"/>
                         </div>
                         <div class="form-group">
-                            <label for="photo-height">Height</label>
+                            <label for="photo-height" th:text="#{constructor.form.height}">Height</label>
                             <input type="number" class="form-control" id="photo-height" value="315"/>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{general.cancel}">Close</button>
                     <button type="button" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Save changes
+                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span><th:block th:text="#{general.save}">Save</th:block>
                     </button>
                 </div>
             </div>
@@ -104,18 +104,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Text editor</h4>
+                    <h4 class="modal-title" th:text="#{constructor.form.text.title}">Text editor</h4>
                 </div>
                 <div class="modal-body">
                     <form>
                         <textarea id="text-area">
-                            Put your text here...
+
                         </textarea>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{general.cancel}">Close</button>
+                    <button type="button" class="btn btn-primary" th:text="#{general.save}">
                         <!--<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>-->Save changes
                     </button>
                 </div>
@@ -126,19 +126,3 @@
 
 </body>
 </html>
-
-
-
-
-<!--<div th:fragment="base-element">-->
-<!--<div class="my-element">-->
-<!--<div class="toolbar">-->
-<!--<a href="#" class="btn btn-info" rel="tooltip" title="Settings">-->
-<!--<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>-->
-<!--</a>-->
-<!--<a href="#" class="btn btn-danger" rel="tooltip" title="Remove">-->
-<!--<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->

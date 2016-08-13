@@ -46,7 +46,7 @@
             if (text.length) {
                 tinyMCE.get('text-area').setContent(text.html());
             } else {
-                tinyMCE.get('text-area').setContent('Put your text here...');
+                tinyMCE.get('text-area').setContent('');
             }
             $('#modal-text').modal('show');
         } else if (id.indexOf('my-image') !== -1) {
