@@ -5,10 +5,14 @@
 <head>
     <title th:text="#{navbar.search}"></title>
     <th:block layout:fragment="styles">
+        <link rel="stylesheet" href="css/jquery.dynatable.css" th:href="@{/css/jquery.dynatable.css}"/>
         <style>
             .date {
                 font-size: 11px;
                 color: #737373;
+            }
+            ol {
+                margin-bottom: 50px;
             }
             ol li {
                 padding-top: 20px;
@@ -48,5 +52,68 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="js/jquery.dynatable.js" th:src="@{/js/jquery.dynatable.js}"></script>
+    <script th:inline="javascript">
+        //        <![CDATA[
+
+        $(document).ready(function () {
+
+            var resultList = $('ol');
+
+            if(resultList.find('li').length === 0) {
+                return;
+            }
+
+            resultList.dynatable({
+                table: {
+                    bodyRowSelector: 'li'
+                },
+                dataset: {
+                    perPageDefault: 10
+                },
+                writers: {
+                    _rowWriter: ulWriter
+                },
+                readers: {
+                    _rowReader: ulReader
+                },
+                params: {
+                    records: 'results'
+                }
+            });
+
+            $('.dynatable-search').remove();
+            $('.dynatable-per-page').remove();
+
+        });
+
+        function ulWriter(rowIndex, record, columns, cellWriter) {
+//            let date = moment(record.date).format("D MMMM YYYY");
+            let li = '<li>' +
+                    '<a href="' + record.pageUrl + '">' +
+                    '<h4>' + record.name + '</h4>' +
+                    '</a>' +
+                    '<div class="date">' +
+                    '<time datetime="2014-01-20">' + '' + '</time> - <a href="' + record.userUrl + '">' + record.username + '</a>' +
+                    '</div>' +
+                    '<span>' + record.description + '</span>' +
+                    '</li>';
+            return li;
+        }
+
+        function ulReader(index, li, record) {
+            let _li = $(li);
+            record.name = _li.find('h4').text();
+            record.username = _li.find('.date a').text();
+            record.description = _li.find('span').text();
+            record.pageUrl = _li.find('a:first').attr('href');
+            record.userUrl = _li.find('a:last').attr('href');
+        }
+
+        //        ]]>
+    </script>
+
+</th:block>
 </body>
 </html>
