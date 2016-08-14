@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.*;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +22,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes"})
 @ToString(exclude = {"sites", "rates", "comments", "likes"})
+@Indexed
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -33,8 +36,10 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    @Field
     private String firstname;
 
+    @Field
     private String lastname;
 
     private String email;

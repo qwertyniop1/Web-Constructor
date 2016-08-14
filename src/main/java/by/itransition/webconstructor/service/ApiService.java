@@ -8,4 +8,6 @@ public interface ApiService {
 
     List<Tag> getAllTags();
 
+    List<Tag> getTopTags();
+
 }

@@ -15,24 +15,24 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class PageSearch {
+public class EntitySearch {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List search(String text) {
+    public List search(String text, Class entity, String... fields) {
         FullTextEntityManager fullTextEntityManager =
                 Search.getFullTextEntityManager(entityManager);
         QueryBuilder queryBuilder = fullTextEntityManager
                 .getSearchFactory()
                 .buildQueryBuilder()
-                .forEntity(Page.class).get();
+                .forEntity(entity).get();
         Query query = queryBuilder
                 .keyword()
-                .onFields("name", "comments.content", "elements.text")
+                .onFields(fields)
                 .matching(text)
                 .createQuery();
-        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, Page.class);
+        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, entity);
         return fullTextQuery.getResultList();
     }
 

@@ -35,10 +35,31 @@
         </div>
         <div class="col-md-2"></div>
     </div>
-    <p th:if="${param.request != null and #lists.isEmpty(results)}" th:text="#{search.notFound(${param.request[0]})}" class="lead">Not found</p>
+    <p th:if="${param.request != null and #lists.isEmpty(results) and #lists.isEmpty(sites) and #lists.isEmpty(users)}"
+       th:text="#{search.notFound(${param.request[0]})}" class="lead">Not found</p>
     <div class="row">
         <div class="col-md-8">
             <ol>
+                <li th:each="user : ${users}">
+                    <a th:href="@{/user/{user}(user=${user.username})}">
+                        <h4 th:text="${user.firstname + ' ' + user.lastname}">Google</h4>
+                    </a>
+                    <div class="date">
+                        <time datetime="2014-01-20" th:text="${#dates.format(user.registrationDate, 'dd MMM yyyy')}">20 August 2016</time> -
+                        <a th:href="@{/user/{user}(user=${user.username})}" th:text="${user.username}">username</a>
+                    </div>
+                    <span></span>
+                </li>
+                <li th:each="site : ${sites}">
+                    <a th:href="@{/site/{user}/{site}(user=${site.user.username},site=${site.name})}">
+                        <h4 th:text="${site.name}">Google</h4>
+                    </a>
+                    <div class="date">
+                        <time datetime="2014-01-20" th:text="${#dates.format(site.updateDate, 'dd MMM yyyy')}">20 August 2016</time> -
+                        <a th:href="@{/user/{user}(user=${site.user.username})}" th:text="${site.user.username}">username</a>
+                    </div>
+                    <span th:text="${site.description}"></span>
+                </li>
                 <li th:each="page : ${results}">
                     <a th:href="@{/site/{user}/{site}/{page}(user=${page.site.user.username},site=${page.site.name},page=${page.id})}">
                         <h4 th:text="${page.name}">Google</h4>

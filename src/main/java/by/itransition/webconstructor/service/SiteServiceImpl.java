@@ -52,6 +52,12 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
+    public List<Site> findByTag(String value) {
+        Tag tag = tagRepository.findByValueIgnoringCase(value);
+        return tag != null ? new ArrayList<>(tag.getSites()) : null;
+    }
+
+    @Override
     public Map<Long, Double> getSitesRates(List<Site> sites) {
         Map<Long, Double> ratings = new HashMap<>();
         for (Site site : sites) {

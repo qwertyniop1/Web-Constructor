@@ -11,7 +11,9 @@
             <canvas width="300" height="300" id="tag-canvas">
                 <p>You are using old browser</p>
                 <ul>
-                    <li th:each="tag : ${tagList}"><a href="#" th:text="${tag.value}">Tag</a></li>
+                    <li th:each="tag : ${tagList}" th:unless="${#lists.isEmpty(tag.sites)}">
+                        <a th:href="@{/search(tag=${tag.value})}" th:text="${tag.value}" th:attr="data-weight=${#lists.size(tag.sites)}">Tag</a>
+                    </li>
                 </ul>
             </canvas>
         </div>
@@ -29,7 +31,11 @@
                     outlineThickness : 1,
                     maxSpeed : 0.05,
                     reverse: true,
-                    depth : 0.75
+                    depth : 0.75,
+                    weight: true,
+                    weightFrom: 'data-weight',
+                    weightSizeMin: 10,
+                    weightSizeMax: 72
                 });
 
             });

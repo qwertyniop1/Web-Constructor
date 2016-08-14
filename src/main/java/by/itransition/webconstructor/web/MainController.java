@@ -16,7 +16,7 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("tagList", apiService.getAllTags());
+        model.addAttribute("tagList", apiService.getTopTags());
         return "index";
     }
 

@@ -16,6 +16,8 @@ public interface SiteService {
 
     List<Site> getSites(User user);
 
+    List<Site> findByTag(String tag);
+
     Map<Long, Double> getSitesRates(List<Site> sites);
 
     void setRate(Long id, double rate, User user);
