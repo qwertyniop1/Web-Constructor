@@ -1,4 +1,7 @@
 // TODO validation input
+var DROPZONE_MESSAGE = 'Drop files here to upload';
+var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
+
  $(document).ready(function () {
 
     // setup toolbar and edit field
@@ -17,7 +20,7 @@
         uploadMultiple: false,
         maxFiles: 1,
         addRemoveLinks: true,
-        //dictDefaultMessage: '', //TODO dict
+        dictDefaultMessage: DROPZONE_MESSAGE,
         init: function () {
             this.on('removedfile', function (file) {
                 $('#photo-url').val('');
@@ -31,9 +34,6 @@
             formData.append('timestamp', Date.now() / 1000 | 0);
             formData.append('upload_preset', 'lrwcwlyh ');
         }
-        // success: function (file, response) {
-        //     $('#photo-url').val('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
-        // }
     };
 
     $(document.body).on('click', '.edit-element', function () {
@@ -157,20 +157,12 @@
         recreateLayout($('.my-container'), currentLayout);
     });
 
-
-
 });
 
 // config
 var VIDEO_HEIGHT = 315;
 var VIDEO_WIDTH = 560;
 var MAX_ELEMENT_IN_BLOCK = 3;
-var layouts = [ // TODO delete
-    [[12], [12]],
-    [[12], [6, 6]],
-    [[6, 6], [12]],
-    [[6, 6], [6, 6]]
-];
 
 var currentLayout = 0;
 
@@ -188,7 +180,7 @@ var baseElement = '\
 
 function recreateLayout(container, layoutId) {
     container.html('');
-    generateGrid(container, layouts[layoutId]);
+    generateGrid(container, myRenderer.layouts[layoutId]);
 }
 
 function generateGrid(container, rows) {
@@ -290,7 +282,7 @@ function saveElement(element) {
 
 function addElement(item, container) {
     if (container.find('.my-element').length >= MAX_ELEMENT_IN_BLOCK) {
-        customAlert('You can\'t put more than ' + MAX_ELEMENT_IN_BLOCK + ' elements in block'); //TODO locale
+        customAlert(MANY_ELEMENT_IN_BLOCK);
         return;
     }
     let type = item.attr('id').slice(5); //FIXME loh
@@ -312,6 +304,15 @@ function initWYSIWYG(locale) {
         // default_link_target: "_blank",
         browser_spellcheck: true
     });
+}
+
+function setDropzoneMessage(message) {
+    DROPZONE_MESSAGE = message;
+}
+
+function setLocaleMessage(message) {
+    message = message.replace('{0}', MAX_ELEMENT_IN_BLOCK);
+    MANY_ELEMENT_IN_BLOCK = message;
 }
 
 function customAlert(message, title = '') {

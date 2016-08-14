@@ -12,7 +12,7 @@
  */
 (function ($) {
     "use strict";
-    $.fn.ratingLocales['ua'] = {
+    $.fn.ratingLocales['uk'] = {
         defaultCaption: '{rating} Зірки',
         starCaptions: {
             0.5: 'Пів зірки',

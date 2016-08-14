@@ -68,7 +68,7 @@ var myRenderer = {
         'video': function (id, config) {
             let url = myRenderer.parseYoutubeUrl(config.url);
             if (url.length === 1) {
-                customAlert('Invalid URL'); // TODO locale
+                customAlert(INVALID_URL);
                 return;
             }
             url = 'https://www.youtube.com/embed/' + url + '?';
@@ -102,6 +102,9 @@ var myRenderer = {
     },
     insertAfter: function(str, substr, targetWord) {
         return this.customSplice(str, substr, str.indexOf(targetWord) + targetWord.length);
+    },
+    setLocaleMessage: function (message) {
+        INVALID_URL = message;
     }
 };
 
@@ -117,3 +120,5 @@ $.postJSON = function(url, data, callback, token) {
         'complete': callback
     });
 };
+
+var INVALID_URL = 'Invalid URL';

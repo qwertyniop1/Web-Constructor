@@ -124,18 +124,19 @@
 
             $('#site-rating')
                     .rating({
+                        language: [[${#locale.language}]],
                         step: 0.5,
                         starCaptions: {
-                            0.5: 'Very Poor',
-                            1: 'Very Poor',
-                            1.5: 'Poor',
-                            2: 'Poor',
-                            2.5: 'Ok',
-                            3: 'Ok',
-                            3.5: 'Good',
-                            4: 'Good',
-                            4.5: 'Very Good',
-                            5: 'Very Good'
+                            0.5: [[#{view.rate.veryPoor}]],
+                            1: [[#{view.rate.veryPoor}]],
+                            1.5: [[#{view.rate.poor}]],
+                            2: [[#{view.rate.poor}]],
+                            2.5: [[#{view.rate.ok}]],
+                            3: [[#{view.rate.ok}]],
+                            3.5: [[#{view.rate.good}]],
+                            4: [[#{view.rate.good}]],
+                            4.5: [[#{view.rate.veryGood}]],
+                            5: [[#{view.rate.veryGood}]]
                         },
                         starCaptionClasses: {
                             0.5: 'text-danger',
@@ -170,6 +171,26 @@
                     upvoteCount: 'upvoteCount',
                     userHasUpvoted: 'userHasUpvoted'
                 },
+                textareaPlaceholderText: [[#{comments.placeholder}]],
+                newestText: [[#{comments.newest}]],
+                oldestText: [[#{comments.oldest}]],
+                popularText: [[#{comments.popular}]],
+                sendText: [[#{comments.send}]],
+                replyText: [[#{comments.reply}]],
+                editText: [[#{comments.edit}]],
+                editedText: [[#{comments.edited}]],
+                youText: [[#{comments.you}]],
+                saveText: [[#{general.save}]],
+                deleteText: [[#{general.delete}]],
+                viewAllRepliesText: [[#{comments.viewAllReplies}]],
+                hideRepliesText: [[#{comments.hideReplies}]],
+                noCommentsText: [[#{comments.noComments}]],
+                /*textFormatter: function(text) {
+                    return i18n.translate(text);
+                },
+                timeFormatter: function(time) {
+                    return moment(time).fromNow();
+                },*/
                 refresh: function() {
                     console.log('lol');
                 },
