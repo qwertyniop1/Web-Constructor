@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
@@ -45,6 +46,7 @@ public class Comment {
     private Date modified;
 
     @Field
+    @Analyzer(definition = "customanalyzer")
     private String content;
 
 //    private int upvoteCount;

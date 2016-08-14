@@ -3,6 +3,8 @@ var _rates = {};
 var layout = 4;
 var height = 130;
 var itemsInPage = 6;
+var edit = true;
+var currentUser = '';
 
 function initTables(siteList, user, locale, small) {
     moment.locale(locale);
@@ -11,6 +13,8 @@ function initTables(siteList, user, locale, small) {
         layout = 3;
         height = 80;
         itemsInPage = 8;
+        edit = false;
+        currentUser = user;
     }
 
     siteList.bind('dynatable:afterUpdate', function(e, dynatable){
@@ -63,11 +67,11 @@ function loadContent(siteList, rates, user) {
 
 function rowWriter(rowIndex, record, columns, cellWriter) {
     let creationDate = moment(record.creationDate).format("D MMMM YYYY");
-
+    let link = edit ? '/sites/' + record.id : '/site/' + currentUser + '/' + record.name;
     return '<div class="col-sm-4 col-md-' + layout + ' site-thumb">\
                     <div class="post">\
                         <div class="post-img-content">\
-                            <a href="/sites/' + record.id + '">\
+                            <a href="' + link + '">\
                                 <img src="http://res.cloudinary.com/itraphotocloud/image/upload/c_pad,w_460,h_250/' + record.logo + '.png"\
                                 class="img-responsive" />\
                                 <span class="post-title"><b>' + record.name + '</b><br />\

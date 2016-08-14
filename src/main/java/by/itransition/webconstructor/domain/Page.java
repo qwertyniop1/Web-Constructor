@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Parameter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +30,7 @@ public class Page {
     private Long id;
 
     @Field
+    @Analyzer(definition = "customanalyzer")
     private String name = "New page";
 
     @ManyToOne(fetch = FetchType.LAZY)

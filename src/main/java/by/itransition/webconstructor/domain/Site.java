@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.snowball.SnowballPorterFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,6 +22,17 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"pages", "rates", "tags"})
 @ToString(exclude = {"pages", "rates", "tags"})
 @Indexed
+@AnalyzerDef(name = "customanalyzer",
+        tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+        filters = {
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = SnowballPorterFilterFactory.class, params = {
+                        @Parameter(name = "language", value = "English")
+                }),
+                @TokenFilterDef(factory = SnowballPorterFilterFactory.class, params = {
+                        @Parameter(name = "language", value = "Russian")
+                })
+        })
 @Entity
 @Table(name = "sites")
 public class Site implements Serializable{
@@ -29,9 +42,11 @@ public class Site implements Serializable{
     private Long id;
 
     @Field
+    @Analyzer(definition = "customanalyzer")
     private String name = "New site";
 
     @Field
+    @Analyzer(definition = "customanalyzer")
     @Lob
     private String description;
 
