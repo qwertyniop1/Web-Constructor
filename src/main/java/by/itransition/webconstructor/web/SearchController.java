@@ -17,7 +17,7 @@ public class SearchController {
 
     @GetMapping
     public String search(@RequestParam(required = false) String request, Model model) {
-        if (request != null && request.length() != 0) {
+        if (request != null && request.trim().length() > 0) {
             model.addAttribute("results", pageSearch.search(request));
         }
         return "search/index";

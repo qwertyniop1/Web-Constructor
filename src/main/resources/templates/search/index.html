@@ -35,6 +35,7 @@
         </div>
         <div class="col-md-2"></div>
     </div>
+    <p th:if="${param.request != null and #lists.isEmpty(results)}" th:text="#{search.notFound(${param.request[0]})}" class="lead">Not found</p>
     <div class="row">
         <div class="col-md-8">
             <ol>
@@ -43,7 +44,7 @@
                         <h4 th:text="${page.name}">Google</h4>
                     </a>
                     <div class="date">
-                        <time datetime="2014-01-20">20 August 2016</time> -
+                        <time datetime="2014-01-20" th:text="${#dates.format(page.updateDate, 'dd MMM yyyy')}">20 August 2016</time> -
                         <a th:href="@{/user/{user}(user=${page.site.user.username})}" th:text="${page.site.user.username}">username</a>
                     </div>
                     <span th:text="${page.site.description}"></span>
@@ -89,17 +90,15 @@
         });
 
         function ulWriter(rowIndex, record, columns, cellWriter) {
-//            let date = moment(record.date).format("D MMMM YYYY");
-            let li = '<li>' +
+            return '<li>' +
                     '<a href="' + record.pageUrl + '">' +
                     '<h4>' + record.name + '</h4>' +
                     '</a>' +
                     '<div class="date">' +
-                    '<time datetime="2014-01-20">' + '' + '</time> - <a href="' + record.userUrl + '">' + record.username + '</a>' +
+                    '<time datetime="2014-01-20">' + record.date + '</time> - <a href="' + record.userUrl + '">' + record.username + '</a>' +
                     '</div>' +
                     '<span>' + record.description + '</span>' +
                     '</li>';
-            return li;
         }
 
         function ulReader(index, li, record) {
@@ -109,6 +108,7 @@
             record.description = _li.find('span').text();
             record.pageUrl = _li.find('a:first').attr('href');
             record.userUrl = _li.find('a:last').attr('href');
+            record.date = _li.find('time').text();
         }
 
         //        ]]>
