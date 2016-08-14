@@ -1,6 +1,6 @@
 package by.itransition.webconstructor.search;
 
-import by.itransition.webconstructor.domain.Site;
+import by.itransition.webconstructor.domain.Page;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class SiteSearch {
+public class PageSearch {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -26,15 +26,14 @@ public class SiteSearch {
         QueryBuilder queryBuilder = fullTextEntityManager
                 .getSearchFactory()
                 .buildQueryBuilder()
-                .forEntity(Site.class).get();
+                .forEntity(Page.class).get();
         Query query = queryBuilder
                 .keyword()
-                .onFields("name", "description")
+                .onFields("name", "comments.content", "elements.text")
                 .matching(text)
                 .createQuery();
-        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, Site.class);
-        List result = fullTextQuery.getResultList();
-        return result;
+        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, Page.class);
+        return fullTextQuery.getResultList();
     }
 
 }

@@ -1,15 +1,52 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="#{navbar.search}"></title>
+    <th:block layout:fragment="styles">
+        <style>
+            .date {
+                font-size: 11px;
+                color: #737373;
+            }
+            ol li {
+                padding-top: 20px;
+                text-align: justify;
+            }
+        </style>
+    </th:block>
 </head>
 <body>
-<ol>
-    <li th:each="site : ${results}">
-        <b><span th:text="${site.name}"></span></b> -
-        <span th:text="${site.description}"></span> -
-        <span th:text="${site.id}"></span>
-    </li>
-</ol>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1 th:text="#{navbar.search}">Search</h1>
+            <form action="/search">
+                <div class="form-group">
+                    <input type="search" name="request" class="form-control" th:value="${param.request != null ? param.request[0] : ''}"/>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <ol>
+                <li th:each="page : ${results}">
+                    <a th:href="@{/site/{user}/{site}/{page}(user=${page.site.user.username},site=${page.site.name},page=${page.id})}">
+                        <h4 th:text="${page.name}">Google</h4>
+                    </a>
+                    <div class="date">
+                        <time datetime="2014-01-20">20 August 2016</time> -
+                        <a th:href="@{/user/{user}(user=${page.site.user.username})}" th:text="${page.site.user.username}">username</a>
+                    </div>
+                    <span th:text="${page.site.description}"></span>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
 </body>
 </html>

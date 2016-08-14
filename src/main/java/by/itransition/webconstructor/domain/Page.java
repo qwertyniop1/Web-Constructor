@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(exclude = {"elements", "comments"})
 @ToString(exclude = {"elements", "comments"})
+@Indexed
 @Entity
 @Table(name = "pages")
 public class Page {
@@ -24,7 +27,7 @@ public class Page {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Field
+    @Field
     private String name = "New page";
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,10 +37,12 @@ public class Page {
     @Column(name = "layout")
     private int layoutId = 0;
 
+    @IndexedEmbedded
     @JsonIgnore
     @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Element> elements = new HashSet<>(0);
 
+    @IndexedEmbedded
     @JsonIgnore
     @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>(0);

@@ -2,6 +2,7 @@ package by.itransition.webconstructor.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 
@@ -29,6 +30,7 @@ public class Element {
 
     private String url;
 
+    @Field
     @Lob
     private String text;
 

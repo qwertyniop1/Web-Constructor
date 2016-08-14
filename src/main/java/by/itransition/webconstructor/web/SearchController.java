@@ -1,6 +1,6 @@
 package by.itransition.webconstructor.web;
 
-import by.itransition.webconstructor.search.SiteSearch;
+import by.itransition.webconstructor.search.PageSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SearchController {
 
     @Autowired
-    private SiteSearch siteSearch;
+    private PageSearch pageSearch;
 
     @GetMapping
-    public String search(@RequestParam String request, Model model) {
-        model.addAttribute("results", siteSearch.search(request));
+    public String search(@RequestParam(required = false) String request, Model model) {
+        if (request != null && request.length() != 0) {
+            model.addAttribute("results", pageSearch.search(request));
+        }
         return "search/index";
     }
 

@@ -94,9 +94,9 @@
    </div>
 
    <th:block th:fragment="search">
-       <form class="navbar-form navbar-right" style="margin-top: 10px">
+       <form class="navbar-form navbar-right" action="/search" style="margin-top: 10px">
            <div class="form-group">
-               <input type="text" class="form-control input-sm" th:placeholder="#{navbar.search}"/>
+               <input type="text" class="form-control input-sm" name="request" th:placeholder="#{navbar.search}"/>
            </div>
        </form>
    </th:block>
