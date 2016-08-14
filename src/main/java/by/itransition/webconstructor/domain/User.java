@@ -19,7 +19,7 @@ import java.util.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes"})
-@ToString(exclude = {"sites", "rates", "likes"})
+@ToString(exclude = {"sites", "rates", "comments", "likes"})
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {

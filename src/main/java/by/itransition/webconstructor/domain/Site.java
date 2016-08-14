@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +19,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(exclude = {"pages", "rates", "tags"})
 @ToString(exclude = {"pages", "rates", "tags"})
+@Indexed
 @Entity
 @Table(name = "sites")
 public class Site implements Serializable{
@@ -24,8 +28,10 @@ public class Site implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Field
     private String name = "New site";
 
+    @Field
     @Lob
     private String description;
 
@@ -35,6 +41,7 @@ public class Site implements Serializable{
     @JoinColumn(name = "username", nullable = false)
     private User user;
 
+//    @IndexedEmbedded
     @JsonIgnore
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Page> pages = new HashSet<>(0);
