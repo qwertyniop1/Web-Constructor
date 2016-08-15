@@ -5,6 +5,8 @@ import by.itransition.webconstructor.domain.Site;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,12 @@ public class SiteDto {
     private static final String VERTICAL = "vertical";
     private static final String HORIZONTAL = "horizontal";
 
+    @NotNull
+    @Size(min = 5, max = 30)
     private String name;
 
+    @NotNull
+    @Size(min = 30, max = 255)
     private String description;
 
     private String logo;

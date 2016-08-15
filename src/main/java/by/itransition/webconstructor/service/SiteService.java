@@ -28,7 +28,7 @@ public interface SiteService {
 
     long create(User user);
 
-    void update(Long id, SiteDto site);
+    boolean update(Long id, SiteDto site);
 
     void delete(Long id);
 }

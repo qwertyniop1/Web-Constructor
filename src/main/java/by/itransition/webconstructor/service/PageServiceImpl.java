@@ -5,10 +5,7 @@ import by.itransition.webconstructor.dto.CommentDto;
 import by.itransition.webconstructor.dto.ElementDto;
 import by.itransition.webconstructor.dto.PageDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
-import by.itransition.webconstructor.repository.CommentRepository;
-import by.itransition.webconstructor.repository.ElementsRepository;
-import by.itransition.webconstructor.repository.PageRepository;
-import by.itransition.webconstructor.repository.SiteRepository;
+import by.itransition.webconstructor.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +19,30 @@ import java.util.Set;
 @Transactional
 public class PageServiceImpl implements PageService{
 
+    private static final int MAX_LENGTH = 255;
     @Autowired
     PageRepository pageRepository;
 
     @Autowired
     SiteRepository siteRepository;
 
-//    @Autowired
-//    ElementsRepository elementsRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Page getPage(Long id) {
         Page page = pageRepository.findOne(id);
         if (page == null) {
+            throw new ResourceNotFoundException();
+        }
+        return page;
+    }
+
+    @Override
+    public Page getUserPage(Long id, String username, String siteName) {
+        Page page = pageRepository.findOne(id);
+        Site site = siteRepository.findByUserAndNameAllIgnoringCase(userRepository.findByUsername(username), siteName);
+        if (site == null || page == null || !site.getPages().contains(page)) {
             throw new ResourceNotFoundException();
         }
         return page;
@@ -56,7 +64,7 @@ public class PageServiceImpl implements PageService{
     public void update(Long id, PageDto pageDto) {
         Page page = pageRepository.findOne(id);
         page.setLayoutId(pageDto.getLayout());
-        page.setName(pageDto.getName());
+        page.setName(checkName(pageDto.getName()));
         ElementDto[] elementDtos = pageDto.getElements();
         page.clearElements();
         for (ElementDto dto : elementDtos) {
@@ -71,6 +79,10 @@ public class PageServiceImpl implements PageService{
             page.addElement(element);
         }
         pageRepository.save(page);
+    }
+
+    private String checkName(String name) {
+        return name.length() > MAX_LENGTH ? name.substring(0, MAX_LENGTH - 1) : name;
     }
 
     @Override

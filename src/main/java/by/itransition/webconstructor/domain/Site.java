@@ -43,7 +43,7 @@ public class Site implements Serializable{
 
     @Field
     @Analyzer(definition = "customanalyzer")
-    private String name = "New site";
+    private String name;
 
     @Field
     @Analyzer(definition = "customanalyzer")

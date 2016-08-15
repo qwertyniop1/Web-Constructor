@@ -33,7 +33,6 @@ public class PageController {
         }
         page.setElements(elements);
         model.addAttribute("page", page);
-//        model.addAttribute("elementList", pageService.getElements(id));
         return "constructor/index";
     }
 

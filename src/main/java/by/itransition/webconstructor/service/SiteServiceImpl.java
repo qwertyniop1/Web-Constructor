@@ -18,6 +18,7 @@ import java.util.*;
 public class SiteServiceImpl implements SiteService{
 
     private static final String DEFAULT_LOGO = "rwkhctdn9wyli2cvwfxn";
+    private static final String DEFAULT_SITE_NAME = "New site";
 
     @Autowired
     private SiteRepository siteRepository;
@@ -39,11 +40,11 @@ public class SiteServiceImpl implements SiteService{
 
     @Override
     public Site getSite(User user, String name) {
-        List<Site> sites = siteRepository.findByUserAndName(user, name); //TODO only 1 site
-        if (sites.size() == 0) {
+        Site site = siteRepository.findByUserAndNameAllIgnoringCase(user, name); //TODO only 1 site
+        if (site == null) {
             throw new ResourceNotFoundException();
         }
-        return sites.get(0);
+        return site;
     }
 
     @Override
@@ -94,6 +95,7 @@ public class SiteServiceImpl implements SiteService{
     @Override
     public long create(User user) {
         Site site = new Site();
+        site.setName(generateName(siteRepository.findByUser(user)));
         site.setUser(user);
         site.setLogo(DEFAULT_LOGO);
         site.setDescription("");
@@ -101,15 +103,42 @@ public class SiteServiceImpl implements SiteService{
         return siteRepository.save(site).getId();
     }
 
+    private String generateName(List<Site> sites) {
+        String siteName = DEFAULT_SITE_NAME;
+        int number = 1;
+        while (!checkName(sites, siteName)) {
+            siteName = DEFAULT_SITE_NAME + " " + number;
+            number++;
+        }
+        return siteName;
+    }
+
+    private boolean checkName(List<Site> sites, String name) {
+        for (Site site : sites) {
+            if (site.getName().toLowerCase().equals(name.toLowerCase())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
-    public void update(Long id, SiteDto siteDto) {
+    public boolean update(Long id, SiteDto siteDto) {
         Site site = siteRepository.findOne(id);
+        if (!site.getName().equals(siteDto.getName()) && !checkName(siteDto.getName(), site.getUser())) {
+            return false;
+        }
         site.setName(siteDto.getName());
         site.setLogo(createLogo(siteDto));
         site.setDescription(siteDto.getDescription());
         site.setMenuOrientation(getMenuOrientation(siteDto));
         addTags(site, siteDto.getTags());
         siteRepository.save(site);
+        return true;
+    }
+
+    private boolean checkName(String name, User user) {
+        return siteRepository.findByUserAndNameAllIgnoringCase(user, name) == null;
     }
 
     private void addTags(Site site, List<String> tags) {

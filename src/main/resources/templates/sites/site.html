@@ -60,18 +60,20 @@
         <div class="col-md-6">
             <h3 th:text="#{sites.settings}">Settings</h3>
             <form th:action="@{/sites/{id}/(id=${site.id})}" th:object="${siteDto}" method="post" id="settings">
-                <div class="form-group">
+                <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
                     <label th:for="${#ids.next('name')}" th:text="#{sites.name}">Site name</label>
                     <input type="text" class="form-control" th:field="*{name}" th:placeholder="#{sites.name}"/>
+                    <span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect input</span>
                 </div>
                 <label th:text="#{sites.tags}">Tags</label>
                 <ul id="site-tags">
                     <!-- Existing list items will be pre-added to the tags -->
                     <li th:each="tag : ${site.tags}" th:text="${tag.value}">Tag1</li>
                 </ul>
-                <div class="form-group">
+                <div class="form-group" th:classappend="${#fields.hasErrors('description')}? has-error">
                     <label th:for="${#ids.next('description')}" th:text="#{sites.description}">Description:</label>
                     <textarea class="form-control" rows="5" th:field="*{description}" th:placeholder="#{sites.description}"></textarea>
+                    <span class="help-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect input</span>
                 </div>
                 <div class="form-group">
                     <label th:text="#{sites.logo}">Site logo</label>

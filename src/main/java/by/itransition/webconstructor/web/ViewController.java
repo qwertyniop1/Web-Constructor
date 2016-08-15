@@ -41,7 +41,7 @@ public class ViewController {
     public String viewPage(@PathVariable("owner") String username, @PathVariable String site,
                        @PathVariable("pageId") Long page, Model model) {
         User user = null;
-        Page requestedPage = pageService.getPage(page);
+        Page requestedPage = pageService.getUserPage(page, username, site);
         try {
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("user", user);

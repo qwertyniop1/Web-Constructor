@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +28,7 @@ public class SiteController {
     }
 
     @PostMapping("/create")
-    public
-    @ResponseBody
+    public @ResponseBody
     String create(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return String.valueOf(siteService.create(user));
@@ -42,8 +43,17 @@ public class SiteController {
     }
 
     @PostMapping("/{site}")
-    public String update(@PathVariable("site") Long id, @ModelAttribute("siteDto") SiteDto site, Model model) {
-        siteService.update(id, site);
+    public String update(@PathVariable("site") Long id,
+                         @ModelAttribute("siteDto") @Valid SiteDto site,
+                         BindingResult result, Model model) {
+        if (result.hasErrors() || !siteService.update(id, site)) {
+            model.addAttribute("site", siteService.getSite(id));
+            model.addAttribute("siteDto", site);
+            if (!result.hasErrors()) {
+                result.rejectValue("name", "sites.nameExist");
+            }
+            return "sites/site";
+        }
         return "redirect:/sites";
     }
 

@@ -47,10 +47,7 @@ public class Comment {
 
     @Field
     @Analyzer(definition = "customanalyzer")
+    @Lob
     private String content;
-
-//    private int upvoteCount;
-
-//    private boolean userHasUpvoted;
 
 }

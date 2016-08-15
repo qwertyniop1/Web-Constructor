@@ -11,6 +11,8 @@ public interface PageService {
 
     Page getPage(Long id);
 
+    Page getUserPage(Long id, String username, String site);
+
     long create(Long siteId);
 
     void update(Long id, PageDto page);
