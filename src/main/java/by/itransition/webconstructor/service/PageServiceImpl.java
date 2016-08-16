@@ -1,7 +1,6 @@
 package by.itransition.webconstructor.service;
 
 import by.itransition.webconstructor.domain.*;
-import by.itransition.webconstructor.dto.CommentDto;
 import by.itransition.webconstructor.dto.ElementDto;
 import by.itransition.webconstructor.dto.PageDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
@@ -10,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -28,6 +24,9 @@ public class PageServiceImpl implements PageService{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ElementsRepository elementsRepository;
 
     @Override
     public Page getPage(Long id) {
@@ -48,10 +47,10 @@ public class PageServiceImpl implements PageService{
         return page;
     }
 
-//    @Override
-//    public List<Element> getElements(Long id) {
-//        return elementsRepository.findByPage(pageRepository.findOne(id));
-//    }
+    @Override
+    public List<Element> getElements(Long id) {
+        return elementsRepository.findByPageOrderByIdAsc(pageRepository.findOne(id));
+    }
 
     @Override
     public long create(Long siteId) {

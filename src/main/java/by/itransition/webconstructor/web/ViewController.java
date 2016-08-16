@@ -4,6 +4,7 @@ import by.itransition.webconstructor.domain.Element;
 import by.itransition.webconstructor.domain.Page;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.CommentDto;
+import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.service.PageService;
 import by.itransition.webconstructor.service.SiteService;
 import by.itransition.webconstructor.service.UserService;
@@ -32,15 +33,17 @@ public class ViewController {
     @GetMapping("/{user}/{site}")
     public String view(@PathVariable String user, @PathVariable String site,
                        Model model) {
-        return String.format("redirect:/site/%s/%s/%d", user, site,
-                siteService.getSite(userService.getUser(user), site)
-                        .getPages().iterator().next().getId()); //FIXME 0 pages crash!!!
+        Set<Page> pages = siteService.getSite(userService.getUser(user), site).getPages();
+        if (pages.size() == 0) {
+            throw new ResourceNotFoundException();
+        }
+        return String.format("redirect:/site/%s/%s/%d", user, site, pages.iterator().next().getId());
     }
 
     @GetMapping("/{owner}/{site}/{pageId}")
     public String viewPage(@PathVariable("owner") String username, @PathVariable String site,
                        @PathVariable("pageId") Long page, Model model) {
-        User user = null;
+        User user;
         Page requestedPage = pageService.getUserPage(page, username, site);
         try {
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -52,6 +55,12 @@ public class ViewController {
         }
         model.addAttribute("page", fixPages(requestedPage));
         return "sites/view";
+    }
+
+    @GetMapping("/elements")
+    public @ResponseBody
+    List<Element> getPageElements(@RequestParam Long page, Model model) {
+        return pageService.getElements(page);
     }
 
     @PostMapping("/rate")
@@ -71,4 +80,3 @@ public class ViewController {
         return page;
     }
 }
-// TODO average rate count when delete mark

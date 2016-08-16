@@ -122,7 +122,7 @@
                 <button type="button" class="btn btn-default" onclick="create()" th:text="#{sites.addPage}">Add page</button>
             </div>
             <div style="margin-top: 50px">
-                <div th:each="page : ${site.pages}" class="panel panel-default">
+                <div th:each="page : ${#lists.sort(site.pages)}" class="panel panel-default">
                     <div class="panel-body" >
                         <div class="toolbar">
                             <a th:href="@{/site/{user}/{site}/{page}(user=${site.user.username},site=${site.name},page=${page.id})}"

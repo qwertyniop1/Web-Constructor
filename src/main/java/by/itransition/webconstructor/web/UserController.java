@@ -55,7 +55,7 @@ public class UserController {
         }
         User user = userService.getUser(username);
         model.addAttribute("user", user);
-        model.addAttribute("profile", new UserDto(user)); //TODO don't show if this is not owner's profile
+        model.addAttribute("profile", new UserDto(user));
         model.addAttribute("owner", user.equals(owner));
         model.addAttribute("rates", siteService.getSitesRates(siteService.getSites(user)));
         return "user/profile";

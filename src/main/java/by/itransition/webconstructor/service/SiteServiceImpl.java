@@ -40,7 +40,7 @@ public class SiteServiceImpl implements SiteService{
 
     @Override
     public Site getSite(User user, String name) {
-        Site site = siteRepository.findByUserAndNameAllIgnoringCase(user, name); //TODO only 1 site
+        Site site = siteRepository.findByUserAndNameAllIgnoringCase(user, name);
         if (site == null) {
             throw new ResourceNotFoundException();
         }
@@ -75,6 +75,10 @@ public class SiteServiceImpl implements SiteService{
             siteRate = new Rate();
             siteRate.setUser(user);
             siteRate.setSite(site);
+        }
+        if (rate == 0) {
+            rateRepository.delete(siteRate);
+            return;
         }
         siteRate.setValue(rate);
         rateRepository.save(siteRate);

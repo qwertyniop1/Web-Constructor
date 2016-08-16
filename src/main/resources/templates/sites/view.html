@@ -51,14 +51,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-left">
-                    <li th:each="pageNav : ${page.site.pages}" th:unless="${pageNavStat.index} &gt; 7">
+                    <li th:each="pageNav : ${#lists.sort(page.site.pages)}" th:unless="${pageNavStat.index + 1} &gt; 7">
                         <a th:href="@{~/site/{user}/{site}/{page}(user=${pageNav.site.user.username},site=${pageNav.site.name},page=${pageNav.id})}"
                            th:text="${pageNav.name}">Page</a>
                     </li>
                     <li class="dropdown" th:if="${#lists.size(page.site.pages) &gt; 7}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="#{general.showMore}">More... <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li th:each="pageNav : ${page.site.pages}" th:if="${pageNavStat.index} &gt; 7">
+                            <li th:each="pageNav : ${#lists.sort(page.site.pages)}" th:if="${pageNavStat.index + 1} &gt; 7">
                                 <a th:href="@{~/site/{user}/{site}/{page}(user=${pageNav.site.user.username},site=${pageNav.site.name},page=${pageNav.id})}"
                                     th:text="${pageNav.name}">Page</a>
                             </li>
@@ -79,7 +79,7 @@
             <li class="sidebar-brand">
                 <a th:href="@{~/site/{user}/{site}(user=${page.site.user.username},site=${page.site.name})}" th:text="${page.site.name}">Site name</a>
             </li>
-            <li th:each="pageNav : ${page.site.pages}" th:unless="${pageNavStat.index} &gt; 7"> <!-- TODO fix-->
+            <li th:each="pageNav : ${#lists.sort(page.site.pages)}">
                 <a th:href="@{~/site/{user}/{site}/{page}(user=${pageNav.site.user.username},site=${pageNav.site.name},page=${pageNav.id})}"
                    th:text="${pageNav.name}">Page</a>
             </li>
@@ -115,11 +115,12 @@
         $(document).ready(function () {
 
             var pageLayout = [[${page.layoutId}]];
-            var elements = [[${page.elements}]];
-
             myRenderer.renderLayout($('#main'), pageLayout);
-            elements.forEach(function (element) {
-                myRenderer.load(element);
+
+            $.get('/site/elements', {page: [[${page.id}]]}, function (response, status) {
+                response.forEach(function (element) {
+                    myRenderer.load(element);
+                });
             });
 
             $('#site-rating')

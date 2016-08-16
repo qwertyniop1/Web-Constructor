@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ElementsRepository extends JpaRepository<Element, Long> {
 
-    List<Element> findByPage(Page page);
+    List<Element> findByPageOrderByIdAsc(Page page);
 
 }

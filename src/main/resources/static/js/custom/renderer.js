@@ -32,7 +32,7 @@ var myRenderer = {
 
     // Elements rendering
     load: function (element) {
-        this.loadElement(element, element.type.$name.toLowerCase());
+        this.loadElement(element, element.type.toLowerCase());
     },
     loadElement: function(element, type, icon) {
         let base = $('.my-content:eq(' + element.location + ')');

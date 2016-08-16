@@ -19,6 +19,7 @@ public class Element {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "page_id", nullable = false)
     private Page page;

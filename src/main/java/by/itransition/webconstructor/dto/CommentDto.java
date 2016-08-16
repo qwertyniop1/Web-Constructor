@@ -53,7 +53,7 @@ public class CommentDto {
         this.content = comment.getContent();
         getUserInfo(comment.getUser(), currentUser);
         this.upvoteCount = comment.getLikes().size();
-        this.userHasUpvoted = isLikedByUser(comment, currentUser); //FIXME lol
+        this.userHasUpvoted = isLikedByUser(comment, currentUser);
     }
 
     private boolean isLikedByUser(Comment comment, User currentUser) {

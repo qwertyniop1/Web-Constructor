@@ -23,7 +23,7 @@ import java.util.Set;
 @Indexed
 @Entity
 @Table(name = "pages")
-public class Page {
+public class Page implements Comparable<Page> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,4 +64,8 @@ public class Page {
     @UpdateTimestamp
     private Date updateDate;
 
+    @Override
+    public int compareTo(Page o) {
+        return (int) (this.id - o.getId());
+    }
 }
