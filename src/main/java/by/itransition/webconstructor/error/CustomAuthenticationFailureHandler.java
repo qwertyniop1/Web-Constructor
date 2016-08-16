@@ -41,6 +41,9 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         } else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
             errorMessage = messages.getMessage("registration.expiredToken", null, locale);
         }
+        else if (exception.getMessage().equalsIgnoreCase("User account is locked")) {
+            errorMessage = messages.getMessage("login.banned", null, locale);
+        }
 
         request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
     }

@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -44,6 +47,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserDto> getAllUsers() {
+        return userRepository.findByEnabled(true).stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
+    @Override
     public void updateUser(User user, UserDto profile) {
         user.setFirstname(profile.getFirstname());
         user.setLastname(profile.getLastname());
@@ -58,8 +66,8 @@ public class UserServiceImpl implements UserService{
         }
         try {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
-                    String.format("%s://%s:%d", request.getScheme(),
-                            request.getServerName(), request.getServerPort()), request.getLocale()));
+                    String.format("%s://%s", request.getScheme(),
+                            request.getHeader("Host")), request.getLocale()));
         } catch (Exception ex) {
             return false;
         }

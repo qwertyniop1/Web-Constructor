@@ -2,14 +2,13 @@ package by.itransition.webconstructor.web;
 
 import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.Tag;
+import by.itransition.webconstructor.dto.UserDto;
 import by.itransition.webconstructor.service.ApiService;
 import by.itransition.webconstructor.service.SiteService;
 import by.itransition.webconstructor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -33,13 +32,22 @@ public class ApiController {
     }
 
     @GetMapping("/sites.json")
-    public List<Site> sites(@RequestParam String user) {
-        return siteService.getSites(userService.getUser(user));
+    public List<Site> sites(@RequestParam(required = false) String user) {
+        return user != null
+                ? siteService.getSites(userService.getUser(user))
+                : siteService.getAllSites();
     }
 
     @GetMapping("/rates.json")
     public Map<Long, Double> rates(@RequestParam String user) {
         return siteService.getSitesRates(siteService.getSites(userService.getUser(user)));
+    }
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/users.json")
+    public @ResponseBody
+    List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
     }
 
 //    public List<Tag> getSiteTags() {

@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="css/admin/bootstrap.min.css" th:href="@{/css/admin/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="css/jquery.dynatable.css" th:href="@{/css/jquery.dynatable.css}"/>
+
     <link rel="stylesheet" href="css/admin/sb-admin-2.css" th:href="@{/css/admin/sb-admin-2.css}"/>
     <link rel="stylesheet" href="css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"/>
+    <style>
+        th a {
+            color: #337ab7 !important;
+        }
+        .dynatable-per-page-select {
+            width: 80px;
+        }
+    </style>
     <th:block layout:fragment="styles">
 
     </th:block>
     <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE">Administrator</title>
 </head>
 <body>
+<div class="container">
+    <th:block layout:fragment="body">
 
-<th:block layout:fragment="body">
+    </th:block>
+</div>
 
-</th:block>
 
 <div th:replace="layout/template :: footer">
 
@@ -22,6 +34,9 @@
 
 <script type="text/javascript" src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="js/jquery.dynatable.js" th:src="@{/js/jquery.dynatable.js}"></script>
+<script type="text/javascript" src="js/moment-with-locales.js" th:src="@{/js/moment-with-locales.js}"></script>
+
 <th:block layout:fragment="scripts">
 
 </th:block>

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -43,9 +44,17 @@ public class UserDto {
 
     private String avatar;
 
+    private boolean active;
+
+    private Date registered;
+
     public UserDto(User user) {
         this.firstname = user.getFirstname();
         this.lastname = user.getLastname();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
         this.avatar = user.getAvatar();
+        this.active = user.isAccountNonLocked();
+        this.registered = user.getRegistrationDate();
     }
 }

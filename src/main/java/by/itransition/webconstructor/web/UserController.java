@@ -26,7 +26,6 @@ public class UserController {
     private SiteService siteService;
 
 //TODO Security!!!
-//    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping
     public String currentUser(Model model) {
         User user;

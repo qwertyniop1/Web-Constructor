@@ -5,10 +5,13 @@ import by.itransition.webconstructor.domain.VerificationToken;
 import by.itransition.webconstructor.dto.UserDto;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface UserService {
 
     User getUser(String username);
+
+    List<UserDto> getAllUsers();
 
     void updateUser(User user, UserDto profile);
 

@@ -14,6 +14,8 @@ public interface SiteService {
 
     Site getSite(User user, String name);
 
+    List<Site> getAllSites();
+
     List<Site> getSites(User user);
 
     List<Site> findByTag(String tag);
