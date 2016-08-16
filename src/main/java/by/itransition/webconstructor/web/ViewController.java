@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +38,9 @@ public class ViewController {
         if (pages.size() == 0) {
             throw new ResourceNotFoundException();
         }
-        return String.format("redirect:/site/%s/%s/%d", user, site, pages.iterator().next().getId());
+        List<Page> pageList = new ArrayList<>(pages);
+        pageList.sort(null);
+        return String.format("redirect:/site/%s/%s/%d", user, site,pageList.get(0).getId());
     }
 
     @GetMapping("/{owner}/{site}/{pageId}")

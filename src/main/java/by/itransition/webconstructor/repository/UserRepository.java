@@ -9,6 +9,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     List<User> findByEnabled(boolean enabled);
 
+    List<User> findByEnabledAndLocked(boolean enabled, boolean locked);
+
     User findByUsername(String username);
 
     User findByEmail(String email);

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <title>Sites</title>
+    <title th:text="#{navbar.sites}">Sites</title>
 </head>
 <body>
 <th:block layout:fragment="body">
@@ -23,8 +23,6 @@
     <script th:inline="javascript">
         //        <![CDATA[
 
-        var DATE_FORMAT = "D.MM.YYYY";
-
         $(document).ready(function () {
             loadSites();
 
@@ -37,8 +35,8 @@
                 resultElement.id = counter + 1;
                 resultElement.name = element.name;
                 resultElement.user = element.user.username;
-                resultElement.created = moment(element.creationDate).format(DATE_FORMAT);
-                resultElement.updated = moment(element.updateDate).format(DATE_FORMAT);
+                resultElement.created = moment(element.creationDate).format("D MM YYYY");
+                resultElement.updated = moment(element.updateDate).format("D MM YYYY");
                 result.push(resultElement);
             });
             return result;
@@ -53,7 +51,7 @@
                         perPageOptions: [5, 10, 20, 50, 100]
                     },
                     params: {
-                        records: 'sites'
+                        records: ''
                     }
                 });
                 $('#dynatable-query-search-sites-table').addClass('form-control').attr('placeholder', 'Search');

@@ -38,6 +38,11 @@ public class ApiController {
                 : siteService.getAllSites();
     }
 
+    @GetMapping("/topSites.json")
+    public List<Site> topSites(@RequestParam(required = false) Integer quantity) {
+        return siteService.getTopSites(quantity);
+    }
+
     @GetMapping("/rates.json")
     public Map<Long, Double> rates(@RequestParam String user) {
         return siteService.getSitesRates(siteService.getSites(userService.getUser(user)));
@@ -48,6 +53,11 @@ public class ApiController {
     public @ResponseBody
     List<UserDto> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/topUsers.json")
+    List<UserDto> getTopUsers(@RequestParam(required = false) Integer quantity) {
+        return apiService.getTopUsers(quantity);
     }
 
 //    public List<Tag> getSiteTags() {

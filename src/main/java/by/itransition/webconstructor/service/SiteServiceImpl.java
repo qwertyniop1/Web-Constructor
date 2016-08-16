@@ -19,6 +19,7 @@ public class SiteServiceImpl implements SiteService{
 
     private static final String DEFAULT_LOGO = "rwkhctdn9wyli2cvwfxn";
     private static final String DEFAULT_SITE_NAME = "New site";
+    private static final int DEFAULT_TOP_SIZE = 10;
 
     @Autowired
     private SiteRepository siteRepository;
@@ -50,6 +51,16 @@ public class SiteServiceImpl implements SiteService{
     @Override
     public List<Site> getAllSites() {
         return siteRepository.findAll();
+    }
+
+    @Override
+    public List<Site> getTopSites(Integer quantity) {
+        if (quantity == null) {
+            quantity = DEFAULT_TOP_SIZE;
+        }
+        List<Site> sites = siteRepository.findAll();
+        sites.sort((o1, o2) -> (int) (average(o2.getRates()) - average(o1.getRates())));
+        return sites.size() > quantity ? new ArrayList<>(sites.subList(0, quantity)) : sites;
     }
 
     @Override
