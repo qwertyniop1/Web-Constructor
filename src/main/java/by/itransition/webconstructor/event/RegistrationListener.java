@@ -32,6 +32,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private Environment environment;
 
     @Override
+    @Async
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
         confirmRegistration(event);
     }

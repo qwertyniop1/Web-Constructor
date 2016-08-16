@@ -95,8 +95,10 @@
         <label for="site-rating" class="control-label" th:text="#{view.rate}">Rate this site</label>
         <input id="site-rating" name="rating" th:value="${rate}" class="rating-loading"/>
     </div>
-    <div id="comments-container">
+    <div class="container">
+        <div id="comments-container">
 
+        </div>
     </div>
 </div>
 <th:block layout:fragment="bare-scripts">

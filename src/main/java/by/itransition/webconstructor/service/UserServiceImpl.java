@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService{
 
     private static final String DEFAULT_AVATAR = "anonymous-man_bszhtk";
+    private static final int NAME_MIN_LENGHT = 2;
+    private static final int NAME_MAX_LENGHT = 60;
+    private static final int PASSWORD_MAX_LENGHT = 60;
+    private static final int PASSWORD_MIN_LENGHT = 8;
     @Autowired
     UserRepository userRepository;
 
@@ -52,10 +56,60 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateUser(User user, UserDto profile) {
+    public boolean updateUser(User user, UserDto profile) {
+        if (!checkData(user, profile)) {
+            return false;
+        }
+        updatePassword(user, profile);
+        userRepository.save(user);
+        return true;
+    }
+
+    private void updatePassword(User user, UserDto profile) {
+        if (!isChangingPassword(profile)) {
+            return;
+        }
+        if (!verifyPassword(user.getPassword(), profile.getOldPassword())) {
+            return;
+        }
+        if (!passwordMathes(profile.getPassword(), profile.getMatchingPassword())) {
+            return;
+        }
+        if (!validateNewPassword(profile.getPassword())) {
+            return;
+        }
+        user.setPassword(passwordEncoder.encode(profile.getPassword()));
+    }
+
+    private boolean validateNewPassword(String password) {
+        return password.length() >= PASSWORD_MIN_LENGHT && password.length() <= PASSWORD_MAX_LENGHT;
+    }
+
+    private boolean passwordMathes(String password, String matchingPassword) {
+        return password.equals(matchingPassword);
+    }
+
+    private boolean verifyPassword(String userPassword, String password) {
+        return passwordEncoder.matches(password, userPassword);
+    }
+
+    private boolean isChangingPassword(UserDto profile) {
+        return profile.getOldPassword().length() != 0
+                && profile.getPassword().length() != 0
+                && profile.getMatchingPassword().length() != 0;
+    }
+
+    private boolean checkData(User user, UserDto profile) {
+        if (!checkString(user, profile.getFirstname()) || !checkString(user, profile.getLastname())) {
+            return false;
+        }
         user.setFirstname(profile.getFirstname());
         user.setLastname(profile.getLastname());
-        userRepository.save(user);
+        return true;
+    }
+
+    private boolean checkString(User user, String string) {
+        return string.length() >= NAME_MIN_LENGHT && string.length() <= NAME_MAX_LENGHT;
     }
 
     @Override

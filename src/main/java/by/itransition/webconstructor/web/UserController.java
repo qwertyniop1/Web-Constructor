@@ -25,7 +25,6 @@ public class UserController {
     @Autowired
     private SiteService siteService;
 
-//TODO Security!!!
     @GetMapping
     public String currentUser(Model model) {
         User user;

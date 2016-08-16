@@ -13,7 +13,7 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
 
-    void updateUser(User user, UserDto profile);
+    boolean updateUser(User user, UserDto profile);
 
     boolean registerUser(UserDto userDto, HttpServletRequest request);
 
