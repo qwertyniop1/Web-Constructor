@@ -92,6 +92,7 @@ function rowWriter(rowIndex, record, columns, cellWriter) {
                                     </td>\
                                 </tr>\
                             </table>\
+                            <div class="tags">' + siteTags(record.tags) + '</div>\
                             <div style="overflow: hidden; height: ' + height + 'px;">' + record.description + '\
                             </div>\
                         </div>\
@@ -102,7 +103,15 @@ function rowReader(index, li, record) {
 
 }
 
-
+function siteTags(tagList) {
+    let result = '';
+    tagList.forEach(function (tag) {
+        result += '<a href="/search?tag=' + tag.value + '">' +
+            '<span class="badge" style="margin-right: 5px">' + tag.value + '</span>' +
+            '</a>';
+    });
+    return result;
+}
 
 
 

@@ -74,6 +74,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private VerificationToken token;
 
