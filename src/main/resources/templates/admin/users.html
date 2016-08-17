@@ -29,12 +29,19 @@
             loadSites();
 
             $(document).on('click', '.btn-danger', function () {
+                $('#delete-modal')
+                        .attr('data-user', $(this).data('user'))
+                        .data('user', $(this).data('user'))
+                        .modal('show');
+            });
+
+            $('#delete-button').on('click', function () {
                 $.post('/admin/delete', {
-                    username: $(this).data('user'),
-                    [[${_csrf.parameterName}]]: [[${_csrf.token}]]
-                }, function (response, status) {
+                     username: $('#delete-modal').data('user'),
+                     [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                 }, function (response, status) {
                     window.location.href = '/admin/users';
-                });
+                 });
             });
 
             $(document).on('click', '.btn-warning', function () {
@@ -111,6 +118,24 @@
 
         //        ]]>
     </script>
+    <!-- Modal -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete user</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">Are you sure you want to remove this user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="delete-button">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </th:block>
 </body>
 </html>
