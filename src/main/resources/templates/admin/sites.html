@@ -33,8 +33,8 @@
             data.forEach(function (element, counter) {
                 let resultElement = {};
                 resultElement.id = counter + 1;
-                resultElement.name = element.name;
-                resultElement.user = element.user.username;
+                resultElement.name = '<a href="/sites/' + element.id + '">' + element.name + '</a>';
+                resultElement.user = '<a href="/admin/user/' + element.user.username + '">' + element.user.username + '</a>';
                 resultElement.created = moment(element.creationDate).format("D MM YYYY");
                 resultElement.updated = moment(element.updateDate).format("D MM YYYY");
                 result.push(resultElement);

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/adminlayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <title th:text="${user.username}">User</title>
+</head>
+<body>
+<th:block layout:fragment="body">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <form id="user-form" th:action="@{~/admin/user/{user}(user=${user.username})}" th:object="${user}" method="post">
+            <div class="form-group" th:classappend="${#fields.hasErrors('username')}? has-error">
+                <label th:for="${#ids.next('username')}" th:text="#{login.username}">Username</label>
+                <input type="text" class="form-control-static" th:field="*{username}" th:placeholder="#{login.username}"/>
+                <span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect input</span>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('firstname')}? has-error">
+                <label th:for="${#ids.next('firstname')}" th:text="#{registration.firstname}">First name</label>
+                <input type="text" class="form-control" th:field="*{firstname}" th:placeholder="#{registration.firstname}"/>
+                <span class="help-block" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Incorrect input</span>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('lastname')}? has-error">
+                <label th:for="${#ids.next('lastname')}" th:text="#{registration.lastname}">Last name</label>
+                <input type="text" class="form-control" th:field="*{lastname}" th:placeholder="#{registration.lastname}"/>
+                <span class="help-block" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Incorrect input</span>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('email')}? has-error">
+                <label th:for="${#ids.next('email')}" th:text="#{registration.email}">Email</label>
+                <input type="email" class="form-control" th:field="*{email}" th:placeholder="#{registration.email}"/>
+                <span class="help-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect input</span>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('password')}? has-error">
+                <label th:for="${#ids.next('password')}" th:text="#{login.password}">Password</label>
+                <input type="password" class="form-control" th:field="*{password}" th:placeholder="#{login.password}"/>
+                <span class="help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect input</span>
+            </div>
+            <button type="submit" class="btn btn-default center-block" th:text="#{general.save}">Submit</button>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        //        <![CDATA[
+
+        $(document).ready(function () {
+            loadSites();
+
+        });
+
+        //        ]]>
+    </script>
+</th:block>
+</body>
+</html>

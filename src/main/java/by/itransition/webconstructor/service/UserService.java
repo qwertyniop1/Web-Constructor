@@ -13,6 +13,8 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
 
+    boolean editUser(String username, UserDto user);
+
     boolean updateUser(User user, UserDto profile);
 
     boolean registerUser(UserDto userDto, HttpServletRequest request);
@@ -20,6 +22,14 @@ public interface UserService {
     VerificationToken createVerificationToken(User user, String token);
 
     boolean activateUser(String token);
+
+    void makeAdmin(String username);
+
+    void banUser(String username);
+
+    void unbanUser(String username);
+
+    void deleteUser(String username);
 
     void resendConfirmationMessage(String email);
 

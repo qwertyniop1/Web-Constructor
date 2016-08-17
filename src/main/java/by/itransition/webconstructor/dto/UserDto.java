@@ -1,5 +1,6 @@
 package by.itransition.webconstructor.dto;
 
+import by.itransition.webconstructor.domain.Role;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.validation.PasswordMatches;
 import by.itransition.webconstructor.validation.ValidEmail;
@@ -46,6 +47,8 @@ public class UserDto {
 
     private boolean active;
 
+    private boolean admin;
+
     private Date registered;
 
     public UserDto(User user) {
@@ -55,6 +58,7 @@ public class UserDto {
         this.email = user.getEmail();
         this.avatar = user.getAvatar();
         this.active = user.isAccountNonLocked();
+        this.admin = user.getRole().equals(Role.ROLE_ADMIN);
         this.registered = user.getRegistrationDate();
     }
 }

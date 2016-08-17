@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <title>Users</title>
+    <title th:text="#{admin.users}">Users</title>
 </head>
 <body>
 <th:block layout:fragment="body">
@@ -15,6 +15,7 @@
             <th>Email</th>
             <th>Active</th>
             <th>Registered</th>
+            <th>Tools</th>
         </thead>
         <tbody>
         </tbody>
@@ -27,22 +28,61 @@
         $(document).ready(function () {
             loadSites();
 
+            $(document).on('click', '.btn-danger', function () {
+                $.post('/admin/delete', {
+                    username: $(this).data('user'),
+                    [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                }, function (response, status) {
+                    window.location.href = '/admin/users';
+                });
+            });
+
+            $(document).on('click', '.btn-warning', function () {
+                $.post('/admin/ban', {
+                    username: $(this).data('user'),
+                    [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                }, function (response, status) {
+                    window.location.href = '/admin/users';
+                });
+            });
+
+            $(document).on('click', '.btn-success', function () {
+                $.post('/admin/unban', {
+                    username: $(this).data('user'),
+                    [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                }, function (response, status) {
+                    window.location.href = '/admin/users';
+                });
+            });
+
         });
 
         function processData(data) {
             let result = [];
             data.forEach(function (element, counter) {
                 let resultElement = {};
+                let username = element.admin
+                        ? '<span class="fa fa-user" aria-hidden="true"></span>  <strong>' + element.username + '</strong>'
+                        : element.username;
                 resultElement.id = counter + 1;
-                resultElement.username = element.username;
+                resultElement.username = '<a href="/admin/user/' + element.username + '">' + username + '</a>';
                 resultElement.name = element.firstname + ' ' + element.lastname;
                 resultElement.email = element.email;
-                resultElement.active = element.active;
+                resultElement.active = element.active
+                        ? '<span class="fa fa-check" aria-hidden="true"></span>'
+                        : '<span class="fa fa-remove" aria-hidden="true"></span>';
                 resultElement.registered = moment(element.registered).format("D.MM.YYYY");
+                resultElement.tools = element.username !== [[${#authentication.getName()}]]
+                        ? (element.active
+                        ? createButton([[#{general.block}]], 'lock', 'warning', element.username)
+                        : createButton([[#{general.unblock}]], 'unlock', 'success', element.username)) +
+                        createButton([[#{general.delete}]], 'remove', 'danger', element.username)
+                        : '';
                 result.push(resultElement);
             });
             return result;
         }
+
         function loadSites() {
             $.get('/api/users.json', {}, function (response, status) {
                 let data = processData(response);
@@ -61,6 +101,12 @@
                 $('.dynatable-per-page-select').addClass('form-control');
                 $('.dynatable-per-page-label').remove();
             });
+        }
+
+        function createButton(title, icon, style, user) {
+            return '<a href="#" data-user="' + user + '" title="' + title + '" class="btn btn-' + style + ' btn-sm">' +
+                    '<span class="fa fa-' + icon + '" aria-hidden="true"></span>' +
+                    '</a>'
         }
 
         //        ]]>

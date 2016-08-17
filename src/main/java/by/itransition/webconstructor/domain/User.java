@@ -23,8 +23,8 @@ import java.util.*;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-@EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes"})
-@ToString(exclude = {"sites", "rates", "comments", "likes"})
+@EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes", "token"})
+@ToString(exclude = {"sites", "rates", "comments", "likes", "token"})
 @Indexed
 @Entity
 @Table(name = "users")
@@ -73,6 +73,9 @@ public class User implements UserDetails {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private VerificationToken token;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

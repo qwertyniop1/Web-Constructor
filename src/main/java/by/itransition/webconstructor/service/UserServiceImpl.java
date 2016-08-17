@@ -56,6 +56,31 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public boolean editUser(String username, UserDto userDto) {
+        User user = userRepository.findByUsername(username);
+        if (!checkUser(user, userDto)) {
+            return false;
+        }
+        user.setFirstname(userDto.getFirstname());
+        user.setLastname(userDto.getLastname());
+        user.setEmail(userDto.getEmail());
+        String password = userDto.getPassword();
+        if (password.length() != 0) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        return true;
+//
+//        user.setEnabled(false);
+//        user.setRole(Role.ROLE_USER);
+//        user.setAvatar(DEFAULT_AVATAR);
+    }
+
+    private boolean checkUser(User user, UserDto userDto) {
+        User tmp = userRepository.findByEmail(userDto.getEmail());
+        return !(tmp != null && !tmp.equals(user));
+    }
+
+    @Override
     public boolean updateUser(User user, UserDto profile) {
         if (!checkData(user, profile)) {
             return false;
@@ -147,6 +172,43 @@ public class UserServiceImpl implements UserService{
         user.setEnabled(true);
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public void makeAdmin(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return;
+        }
+        user.setRole(Role.ROLE_ADMIN);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void banUser(String username) {
+        changeUserLocked(username, true);
+    }
+
+    @Override
+    public void unbanUser(String username) {
+        changeUserLocked(username, false);
+    }
+
+    private void changeUserLocked(String username, boolean flag) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return;
+        }
+        user.setLocked(flag);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            userRepository.delete(user);
+        }
     }
 
     @Override
