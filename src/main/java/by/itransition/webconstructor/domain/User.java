@@ -78,6 +78,11 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private VerificationToken token;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(joinColumns = @JoinColumn(name = "user", referencedColumnName = "username"),
+            inverseJoinColumns = @JoinColumn(name = "reward_id", referencedColumnName = "id"))
+    private Set<Reward> rewards = new HashSet<>(0);
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();

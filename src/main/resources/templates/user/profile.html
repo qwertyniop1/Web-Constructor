@@ -28,6 +28,16 @@
             .col-md-3 {
                 margin-bottom: 35px;
             }
+
+            .panel-footer {
+                text-align: center;
+            }
+            .progress {
+                margin-bottom: 5px;
+            }
+            .img-disabled {
+                -webkit-filter: grayscale(100%) blur(5px);
+            }
         </style>
     </th:block>
 </head>
@@ -100,6 +110,27 @@
                     </div>
                     <div class="tab-pane fade in" id="tab2">
                         <h3 th:text="#{profile.rewards}">Rewards</h3>
+                        <div class="row">
+                            <div class="col-md-2" th:each="reward : ${#lists.sort(user.rewards)}">
+                                <div class="panel panel-default" th:with="type=${#strings.toLowerCase(reward.type) + 's'}">
+                                    <div class="panel-body">
+                                        <img th:src="@{/images/{icon}.png(icon=${reward.icon})}" width="128" height="128" alt=""
+                                             th:class="${reward.id % 4 == 1} ? img-disabled"/>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div class="progress"
+                                             th:with="percent=${reward.requirement != 0 ? #lists.size(user[type]) * 100 / reward.requirement : 100}">
+                                            <div class="progress-bar progress-bar-info" role="progressbar"
+                                                 th:attr="aria-valuenow=${percent}" aria-valuemin="0" aria-valuemax="100"
+                                                 th:style="'width: ' + ${percent} + '%;'">
+                                                <span class="sr-only">20% Complete</span>
+                                            </div>
+                                        </div>
+                                        <span th:text="${reward.requirement != 0 ? #lists.size(user[type]) + '/' + reward.requirement : #lists.size(user[type])}">5/10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div th:if="${owner}" class="tab-pane fade in" id="tab3">
                         <h3 th:text="#{sites.settings}">Settings</h3>
