@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,14 +35,14 @@ public class ViewController {
 
     @GetMapping("/{user}/{site}")
     public String view(@PathVariable String user, @PathVariable String site,
-                       Model model) {
+                       Model model) throws UnsupportedEncodingException {
         Set<Page> pages = siteService.getSite(userService.getUser(user), site).getPages();
         if (pages.size() == 0) {
             throw new ResourceNotFoundException();
         }
         List<Page> pageList = new ArrayList<>(pages);
         pageList.sort(null);
-        return String.format("redirect:/site/%s/%s/%d", user, site,pageList.get(0).getId());
+        return String.format("redirect:/site/%s/%s/%d", user, URLEncoder.encode(site, "UTF-8"), pageList.get(0).getId());
     }
 
     @GetMapping("/{owner}/{site}/{pageId}")
@@ -48,6 +50,9 @@ public class ViewController {
                        @PathVariable("pageId") Long page, Model model) {
         User user;
         Page requestedPage = pageService.getUserPage(page, username, site);
+        if (requestedPage.getElements().size() == 0) {
+            throw new ResourceNotFoundException();
+        }
         try {
             user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("user", user);

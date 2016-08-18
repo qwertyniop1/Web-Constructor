@@ -4,12 +4,15 @@ import by.itransition.webconstructor.domain.Page;
 import by.itransition.webconstructor.domain.Site;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.SiteDto;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.Map;
 
 public interface SiteService {
 
+    @PostAuthorize("hasRole('ROLE_ADMIN') or returnObject.user.username == principal.username")
     Site getSite(Long id);
 
     Site getSite(User user, String name);
