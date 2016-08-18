@@ -19,7 +19,7 @@ public interface UserService {
 
     boolean registerUser(UserDto userDto, HttpServletRequest request);
 
-    VerificationToken createVerificationToken(User user, String token);
+    VerificationToken createVerificationToken(String user, String token);
 
     boolean activateUser(String token);
 
