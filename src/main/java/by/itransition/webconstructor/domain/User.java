@@ -23,8 +23,8 @@ import java.util.*;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-@EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes", "token"})
-@ToString(exclude = {"sites", "rates", "comments", "likes", "token"})
+@EqualsAndHashCode(exclude = {"sites", "rates", "comments", "likes", "token", "rewards"})
+@ToString(exclude = {"sites", "rates", "comments", "likes", "token", "rewards"})
 @Indexed
 @Entity
 @Table(name = "users")
@@ -78,10 +78,18 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private VerificationToken token;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "user", referencedColumnName = "username"),
             inverseJoinColumns = @JoinColumn(name = "reward_id", referencedColumnName = "id"))
     private Set<Reward> rewards = new HashSet<>(0);
+
+    public void addReward(Reward reward) {
+        this.rewards.add(reward);
+    }
+
+    public void removeReward(Reward reward) {
+        this.rewards.remove(reward);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

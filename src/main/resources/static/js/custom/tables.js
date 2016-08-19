@@ -68,6 +68,7 @@ function loadContent(siteList, rates, user) {
 function rowWriter(rowIndex, record, columns, cellWriter) {
     let creationDate = moment(record.creationDate).format("D MMMM YYYY");
     let link = edit ? '/sites/' + record.id : '/site/' + currentUser + '/' + record.name;
+    let rate = _rates[record.id] || 0;
     return '<div class="col-sm-4 col-md-' + layout + ' site-thumb">\
                     <div class="post">\
                         <div class="post-img-content">\
@@ -85,7 +86,7 @@ function rowWriter(rowIndex, record, columns, cellWriter) {
                             <table>\
                                 <tr>\
                                     <td>\
-                                        <input name="rating" value="' + _rates[record.id] + '" class="rating-loading"/>\
+                                        <input name="rating" value="' + rate + '" class="rating-loading"/>\
                                     </td>\
                                     <td style="padding-left: 20px">\
                                         <em>' + record.rates.length + '  votes</em>\

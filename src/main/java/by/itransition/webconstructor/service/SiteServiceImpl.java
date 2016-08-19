@@ -3,8 +3,11 @@ package by.itransition.webconstructor.service;
 import by.itransition.webconstructor.domain.*;
 import by.itransition.webconstructor.dto.SiteDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
+import by.itransition.webconstructor.event.OnRateAddEvent;
+import by.itransition.webconstructor.event.OnSiteCreateEvent;
 import by.itransition.webconstructor.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,9 @@ public class SiteServiceImpl implements SiteService{
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public Site getSite(Long id) {
@@ -59,7 +65,7 @@ public class SiteServiceImpl implements SiteService{
             quantity = DEFAULT_TOP_SIZE;
         }
         List<Site> sites = siteRepository.findAll();
-        sites.sort((o1, o2) -> (int) (average(o2.getRates()) - average(o1.getRates())));
+        sites.sort((o1, o2) -> Double.compare(average(o2.getRates()), average(o1.getRates())));
         return sites.size() > quantity ? new ArrayList<>(sites.subList(0, quantity)) : sites;
     }
 
@@ -97,6 +103,7 @@ public class SiteServiceImpl implements SiteService{
             return;
         }
         siteRate.setValue(rate);
+        eventPublisher.publishEvent(new OnRateAddEvent(user, rateRepository.findByUser(user).size() + 1));
         rateRepository.save(siteRate);
     }
 
@@ -120,6 +127,7 @@ public class SiteServiceImpl implements SiteService{
         site.setLogo(DEFAULT_LOGO);
         site.setDescription("");
         site.setMenuOrientation(MenuOrientation.NONE);
+        eventPublisher.publishEvent(new OnSiteCreateEvent(user, siteRepository.findByUser(user).size() + 1));
         return siteRepository.save(site).getId();
     }
 

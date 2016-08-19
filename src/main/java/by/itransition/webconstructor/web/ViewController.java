@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ViewController {
     @Autowired
     PageService pageService;
 
-    @GetMapping("/{user}/{site}")
+    @GetMapping("/{user}/{site:.+}")
     public String view(@PathVariable String user, @PathVariable String site,
                        Model model) throws UnsupportedEncodingException {
         Set<Page> pages = siteService.getSite(userService.getUser(user), site).getPages();
@@ -47,9 +48,9 @@ public class ViewController {
 
     @GetMapping("/{owner}/{site}/{pageId}")
     public String viewPage(@PathVariable("owner") String username, @PathVariable String site,
-                       @PathVariable("pageId") Long page, Model model) {
+                       @PathVariable("pageId") Long page, Model model) throws UnsupportedEncodingException {
         User user;
-        Page requestedPage = pageService.getUserPage(page, username, site);
+        Page requestedPage = pageService.getUserPage(page, username, URLDecoder.decode(site, "UTF-8"));
         if (requestedPage.getElements().size() == 0) {
             throw new ResourceNotFoundException();
         }

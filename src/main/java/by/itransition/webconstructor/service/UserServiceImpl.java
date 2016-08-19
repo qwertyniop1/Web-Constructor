@@ -1,11 +1,10 @@
 package by.itransition.webconstructor.service;
 
-import by.itransition.webconstructor.domain.Role;
-import by.itransition.webconstructor.domain.User;
-import by.itransition.webconstructor.domain.VerificationToken;
+import by.itransition.webconstructor.domain.*;
 import by.itransition.webconstructor.dto.UserDto;
 import by.itransition.webconstructor.error.ResourceNotFoundException;
 import by.itransition.webconstructor.event.OnRegistrationCompleteEvent;
+import by.itransition.webconstructor.repository.RewardRepository;
 import by.itransition.webconstructor.repository.TokenRepository;
 import by.itransition.webconstructor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +28,21 @@ public class UserServiceImpl implements UserService{
     private static final int NAME_MAX_LENGHT = 60;
     private static final int PASSWORD_MAX_LENGHT = 60;
     private static final int PASSWORD_MIN_LENGHT = 8;
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private RewardRepository rewardRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    ApplicationEventPublisher eventPublisher;
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public User getUser(String username) {
@@ -146,7 +149,7 @@ public class UserServiceImpl implements UserService{
         try {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
                     String.format("%s://%s", request.getScheme(),
-                            request.getHeader("Host")), request.getLocale()));
+                            request.getServerName()), request.getLocale()));
         } catch (Exception ex) {
             return false;
         }
@@ -231,7 +234,15 @@ public class UserServiceImpl implements UserService{
         user.setEnabled(false);
         user.setRole(Role.ROLE_USER);
         user.setAvatar(DEFAULT_AVATAR);
+        createRewards(user);
         return user;
+    }
+
+    private void createRewards(User user) {
+        user.addReward(rewardRepository.findByTypeOrderByRequirementAsc(RewardType.SITE).get(1));
+        user.addReward(rewardRepository.findByTypeOrderByRequirementAsc(RewardType.COMMENT).get(1));
+        user.addReward(rewardRepository.findByTypeOrderByRequirementAsc(RewardType.RATE).get(1));
+        user.addReward(rewardRepository.findByTypeOrderByRequirementAsc(RewardType.LIKE).get(1));
     }
 
     private boolean userExist(UserDto user) {

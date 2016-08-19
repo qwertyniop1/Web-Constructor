@@ -5,10 +5,13 @@ import by.itransition.webconstructor.domain.Like;
 import by.itransition.webconstructor.domain.Page;
 import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.CommentDto;
+import by.itransition.webconstructor.event.OnCommentAddEvent;
+import by.itransition.webconstructor.event.OnLikeAddEvent;
 import by.itransition.webconstructor.repository.CommentRepository;
 import by.itransition.webconstructor.repository.LikeRepository;
 import by.itransition.webconstructor.repository.PageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,9 @@ public class CommentServiceImpl implements CommentService{
     @Autowired
     LikeRepository likeRepository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
     public void create(User user, CommentDto comment) {
         Page page = pageRepository.findOne(comment.getPage());
@@ -37,6 +43,7 @@ public class CommentServiceImpl implements CommentService{
         newComment.setContent(comment.getContent());
         newComment.setInternalId(comment.getId());
         newComment.setParent(comment.getParent());
+        eventPublisher.publishEvent(new OnCommentAddEvent(user, commentRepository.findByUser(user).size() + 1)); //FIXME lol bug LAZY
         commentRepository.save(newComment);
     }
 
@@ -73,6 +80,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void addLike(User user, CommentDto comment) {
+        eventPublisher.publishEvent(new OnLikeAddEvent(user, likeRepository.findByUser(user).size() + 1)); //FIXME lol bug LAZY
         likeRepository.save(new Like(user, commentRepository
                 .findByPageAndInternalId(pageRepository.findOne(comment.getPage()), comment.getId())));
     }
