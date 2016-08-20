@@ -59,4 +59,12 @@ public class UserController {
         return "user/profile";
     }
 
+    @PostMapping("/change-avatar")
+    public @ResponseBody
+    String changeAvatar(@RequestParam String photo, Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.changeAvatar(user, photo);
+        return "OK";
+    }
+
 }

@@ -4,7 +4,7 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="${user.username}"></title>
-    <th:block layout:fragment="bare-styles">
+    <th:block layout:fragment="styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
         <link rel="stylesheet" href="css/jquery.dynatable.css" th:href="@{/css/jquery.dynatable.css}"/>
         <link rel="stylesheet" href="css/custom/profile.css" th:href="@{/css/custom/profile.css}"/>
@@ -38,12 +38,15 @@
             .img-disabled {
                 -webkit-filter: grayscale(100%) blur(5px);
             }
+            .editable {
+                cursor: pointer;
+            }
         </style>
     </th:block>
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="row" style="margin-top: 30px">
+    <div class="row">
         <div class="col-sm-12">
             <div class="card hovercard">
                 <div class="card-background">
@@ -51,8 +54,8 @@
                          class="card-bkimg" />
                     <!-- http://lorempixel.com/850/280/people/9/ -->
                 </div>
-                <div class="useravatar">
-                    <img alt="" th:src="@{http://res.cloudinary.com/itraphotocloud/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/{avatar}.png(avatar=${user.avatar})}"/>
+                <div class="useravatar" th:classappend="${owner} ? editable">
+                        <img alt="" th:src="@{http://res.cloudinary.com/itraphotocloud/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/{avatar}.png(avatar=${user.avatar})}"/>
                 </div>
                 <div class="card-info">
                     <span class="card-title" th:text="${user.firstname} + ' ' + ${user.lastname}">John Smit</span>
@@ -155,7 +158,7 @@
                                 <label th:for="${#ids.next('matchingPassword')}" th:text="#{registration.passwordRepeat}">Password again</label>
                                 <input type="password" class="form-control" th:field="*{matchingPassword}" th:placeholder="#{registration.passwordRepeat}"/>
                             </div>
-                            <button type="submit" class="btn btn-primary" th:text="#{general.save}">Save</button>
+                            <button type="submit" class="btn btn-primary center-block" th:text="#{general.save}">Save</button>
                         </form>
                     </div>
                     <div th:unless="${owner}" class="tab-pane fade in" id="tab4">
@@ -185,6 +188,7 @@
     <script type="text/javascript" src="js/kartik/star-rating.min.js" th:src="@{/js/kartik/star-rating.min.js}"></script>
     <script type="text/javascript" src="js/jquery.dynatable.js" th:src="@{/js/jquery.dynatable.js}"></script>
     <script type="text/javascript" src="js/moment-with-locales.js" th:src="@{/js/moment-with-locales.js}"></script>
+    <script type="text/javascript" src="//widget.cloudinary.com/global/all.js"></script>
     <script type="text/javascript" src="js/custom/tables.js" th:src="@{/js/custom/tables.js}"></script>
     <!--<th:block th:replace="auth/validation :: scripts" />-->
     <script th:inline="javascript">
@@ -197,6 +201,24 @@
             $(".btn-pref .btn").click(function () {
                 $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
                 $(this).removeClass("btn-default").addClass("btn-primary");
+            });
+
+            $('.editable').on('click', function () {
+                cloudinary.openUploadWidget({
+                    cloud_name: 'itraphotocloud',
+                    upload_preset: 'lrwcwlyh'
+                }, function(error, result) {
+                    let photo = result[0].public_id;
+                    $.post('/user/change-avatar', {
+                        photo: photo,
+                        [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                    }, function (response, status) {
+                        $('.editable img').attr('src',
+                                'http://res.cloudinary.com/itraphotocloud/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/' + photo + '.png');
+                        $('.card-background img').attr('src', 'http://res.cloudinary.com/itraphotocloud/image/upload/w_400,h_400/' + photo + '.png');
+                    });
+                });
+
             });
 
         });

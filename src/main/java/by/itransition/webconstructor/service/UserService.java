@@ -17,6 +17,8 @@ public interface UserService {
 
     boolean updateUser(User user, UserDto profile);
 
+    void changeAvatar(User user, String photo);
+
     boolean registerUser(UserDto userDto, HttpServletRequest request);
 
     VerificationToken createVerificationToken(User/*String*/ user, String token);

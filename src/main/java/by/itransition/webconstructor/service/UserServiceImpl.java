@@ -92,6 +92,12 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
+    @Override
+    public void changeAvatar(User user, String photo) {
+        user.setAvatar(photo);
+        userRepository.save(user);
+    }
+
     private void updatePassword(User user, UserDto profile) {
         if (!isChangingPassword(profile)) {
             return;
