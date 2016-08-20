@@ -84,7 +84,16 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
                 $('#video-loop').prop('checked', false);
             }
             $('#modal-video').modal('show');
-        } else if (id.indexOf('my-comments') !== -1) {
+        } else if (id.indexOf('my-table') !== -1) {
+            $('#modal-table').attr('data-element-id', element.attr('id'));
+            $('#modal-table').data('elementId', element.attr('id'));
+            let table = element.find('table');
+            if (table.length) {
+                $('#chart-table').html(table.html());
+            } else {
+                $('#chart-table').html(DEFAULT_TABLE);
+            }
+            $('#modal-table').modal('show');
         } else if (id.indexOf('my-ratings') !== -1) {
         }
 //FIXME placing many blocks disable!!!!!
@@ -113,6 +122,13 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
         myRenderer.createMethods['text'](root.data('elementId'), {text: content});
         root.modal('hide');
     });
+
+     $('#modal-table').on('click', '.btn-primary', function () {
+         let root = $(this).closest('.modal');
+         let content = $('#chart-table').html();
+         myRenderer.createMethods['table'](root.data('elementId'), {text: content});
+         root.modal('hide');
+     });
 
     $('#modal-photo').on('click', '.btn-primary', function () {
         let root = $(this).closest('.modal');
@@ -157,6 +173,24 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
         recreateLayout($('.my-container'), currentLayout);
     });
 
+     var table = $('#chart-table');
+
+     table.editableTableWidget();
+
+     $('#modal-table').on('validate', 'table td:not(:first-child)', function (e, value) {
+         if(!$.isNumeric(value)) {
+             return false;
+         }
+     });
+
+     $('#add-row').on('click', function () {
+         $(table).find('tr:last').after('<tr><td tabindex="1">Item</td><td tabindex="1">5</td></tr>');
+     });
+
+     $('#delete-row').on('click', function () {
+         $(table).find('tr:last:has(td)').remove();
+     });
+
 });
 
 // config
@@ -177,6 +211,8 @@ var baseElement = '\
                     </a>\
                 </div>\
             </div>';
+
+var DEFAULT_TABLE = '<thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td tabindex="1">Item</td><td tabindex="1">5</td></tr></tbody>';
 
 function recreateLayout(container, layoutId) {
     container.html('');
@@ -257,6 +293,16 @@ processElement['video'] = function (element) {
         height: video.length !== 0 ? video.attr('height') : 0,
         url: video.length !== 0 ? video.data('mySrc') : '',
         text: ''
+    }
+};
+processElement['table'] = function (element) {
+    let data = element.find('table');
+    console.log(data);
+    return {
+        width: 0,
+        height: 0,
+        url: '',
+        text: data.length !== 0 ? data.html() : ''
     }
 };
 

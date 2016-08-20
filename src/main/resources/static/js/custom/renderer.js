@@ -38,7 +38,7 @@ var myRenderer = {
         let base = $('.my-content:eq(' + element.location + ')');
         let created = myRenderer.createElement('my-' + type, icon !== undefined, icon);
         base.append(created);
-        if ((element.url.length === 0 && type !== 'text') || (element.text.length === 0 && type === 'text')) return;
+        if ((element.url.length === 0 && type !== 'text' && type !== 'table') || (element.text.length === 0 && (type === 'text' || type === 'table'))) return;
         this.createMethods[type](created.attr('id'), {
             width: element.width,
             height: element.height,
@@ -85,6 +85,12 @@ var myRenderer = {
                 ' src="' + url + '" ' +
                 'frameborder="0" allowfullscreen="true">').attr('data-my-src', config.url)
                 .data('mySrc', config.url));
+        },
+        'table': function (id, config) {
+            let template = $('#' + id);
+            template.find('.my-icon').remove();
+            template.find('table').remove();
+            template.append($('<table class="table table-striped">' + config.text + '</table>'));
         }
     },
 
