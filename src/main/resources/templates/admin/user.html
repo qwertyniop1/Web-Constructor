@@ -11,8 +11,15 @@
     <div class="col-md-8">
         <form id="user-form" th:action="@{~/admin/user/{user}(user=${user.username})}" th:object="${user}" method="post">
             <div class="form-group" th:classappend="${#fields.hasErrors('username')}? has-error">
-                <label th:for="${#ids.next('username')}" th:text="#{login.username}">Username</label>
-                <input type="text" class="form-control" th:field="*{username}" th:placeholder="#{login.username}" disabled="disabled"/>
+                <!--<label th:for="${#ids.next('username')}" th:text="#{login.username}">Username</label>-->
+                <input type="text" class="form-control" th:field="*{username}" th:placeholder="#{login.username}" disabled="disabled"
+                       style="display: inline; width: 90%"/>
+                <th:block th:unless="${user.username == #authentication.getName()}">
+                    <button th:if="${user.admin}" th:title="#{admin.makeUser}"
+                            type="button" class="btn btn-danger pull-right"><i class="fa fa-user-times" aria-hidden="true"></i></button>
+                    <button th:unless="${user.admin}" th:title="#{admin.makeAdmin}"
+                            type="button" class="btn btn-info pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i></button>
+                </th:block>
                 <span class="help-block" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect input</span>
             </div>
             <div class="form-group" th:classappend="${#fields.hasErrors('firstname')}? has-error">
@@ -45,6 +52,24 @@
         //        <![CDATA[
 
         $(document).ready(function () {
+
+            $('.btn-info').on('click', function () {
+                $.post('/admin/make-admin', {
+                    username: [[${user.username}]],
+                    [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                }, function (response, status) {
+                    window.location.href = '/admin/users';
+                });
+            });
+
+            $('.btn-danger').on('click', function () {
+                $.post('/admin/make-user', {
+                    username: [[${user.username}]],
+                    [[${_csrf.parameterName}]]: [[${_csrf.token}]]
+                }, function (response, status) {
+                    window.location.href = '/admin/users';
+                });
+            });
 
         });
 

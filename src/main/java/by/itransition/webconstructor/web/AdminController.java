@@ -4,6 +4,7 @@ import by.itransition.webconstructor.domain.User;
 import by.itransition.webconstructor.dto.UserDto;
 import by.itransition.webconstructor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,6 +54,12 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    @GetMapping("/user")
+    public String currentUser(Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return "redirect:/admin/user/" + user.getUsername();
+    }
+
     @PostMapping("/ban")
     public @ResponseBody
     String banUser(@RequestParam String username) {
@@ -78,6 +85,13 @@ public class AdminController {
     public @ResponseBody
     String makeAdmin(@RequestParam String username) {
         userService.makeAdmin(username);
+        return "OK";
+    }
+
+    @PostMapping("/make-user")
+    public @ResponseBody
+    String makeUser(@RequestParam String username) {
+        userService.makeUser(username);
         return "OK";
     }
 

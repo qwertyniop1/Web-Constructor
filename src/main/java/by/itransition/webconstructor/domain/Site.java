@@ -72,6 +72,10 @@ public class Site implements Serializable{
     @Enumerated(EnumType.STRING)
     private MenuOrientation menuOrientation;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DesignTheme theme;
+
     @CreationTimestamp
     private Date creationDate;
 

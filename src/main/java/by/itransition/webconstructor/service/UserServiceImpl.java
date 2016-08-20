@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -179,11 +178,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void makeAdmin(String username) {
+        changeUserRole(username, Role.ROLE_ADMIN);
+    }
+
+    @Override
+    public void makeUser(String username) {
+        changeUserRole(username, Role.ROLE_USER);
+    }
+
+    private void changeUserRole(String username, Role role) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             return;
         }
-        user.setRole(Role.ROLE_ADMIN);
+        user.setRole(role);
         userRepository.save(user);
     }
 

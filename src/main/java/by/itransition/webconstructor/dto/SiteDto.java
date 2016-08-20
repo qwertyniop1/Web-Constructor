@@ -41,6 +41,7 @@ public class SiteDto {
         this.name = site.getName();
         this.description = site.getDescription();
         this.logo = site.getLogo();
+        this.theme = site.getTheme().name().toLowerCase();
         if (site.getMenuOrientation() == MenuOrientation.BOTH) {
             this.menus.add(VERTICAL);
             this.menus.add(HORIZONTAL);

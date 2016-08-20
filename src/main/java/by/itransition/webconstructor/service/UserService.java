@@ -25,6 +25,8 @@ public interface UserService {
 
     void makeAdmin(String username);
 
+    void makeUser(String username);
+
     void banUser(String username);
 
     void unbanUser(String username);
@@ -32,5 +34,5 @@ public interface UserService {
     void deleteUser(String username);
 
     void resendConfirmationMessage(String email);
-
 }
+

@@ -4,11 +4,25 @@
       xmlns:layout="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <th:block layout:fragment="bare-styles">
+        <link th:if="${page.site.theme == T(by.itransition.webconstructor.domain.DesignTheme).FAIR}"
+              rel="stylesheet" href="css/themes/simplex.min.css" th:href="@{/css/themes/simplex.min.css}"/>
+        <link th:if="${page.site.theme == T(by.itransition.webconstructor.domain.DesignTheme).DARK}"
+              rel="stylesheet" href="css/themes/cosmo.min.css" th:href="@{/css/themes/cosmo.min.css}"/>
+        <link th:if="${page.site.theme == T(by.itransition.webconstructor.domain.DesignTheme).RED}"
+              rel="stylesheet" href="css/themes/united.min.css" th:href="@{/css/themes/united.min.css}"/>
+
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
         <link rel="stylesheet" href="css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"/>
         <link rel="stylesheet" href="css/jquery-comments.css" th:href="@{/css/jquery-comments.css}"/>
         <link rel="stylesheet" href="css/custom/view.css" th:href="@{/css/custom/view.css}"/>
         <style>
+            .theme-fair {
+                background: #fff !important;
+            }
+            .theme-red {
+                background: #e95420 !important;
+            }
+
             .my-element {
                 text-align: center;
             }
@@ -126,6 +140,8 @@
             or ${page.site.menuOrientation == T(by.itransition.webconstructor.domain.MenuOrientation).NONE}]]) {
             $("#wrap").toggleClass("toggled");
         }
+
+        $('#sidebar-wrapper').addClass('theme-' + [[${#strings.toLowerCase(#strings.toString(page.site.theme))}]]);
 
         $(document).ready(function () {
 

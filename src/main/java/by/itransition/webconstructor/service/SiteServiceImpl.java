@@ -159,6 +159,7 @@ public class SiteServiceImpl implements SiteService{
         site.setName(siteDto.getName());
         site.setLogo(createLogo(siteDto));
         site.setDescription(siteDto.getDescription());
+        site.setTheme(DesignTheme.valueOf(siteDto.getTheme().toUpperCase()));
         site.setMenuOrientation(getMenuOrientation(siteDto));
         addTags(site, siteDto.getTags());
         siteRepository.save(site);
