@@ -17,5 +17,10 @@ public class ElementDto {
 
     private String text;
 
+    private boolean autoplay;
+
+    private boolean loop;
+
+    private boolean chart;
 }
 

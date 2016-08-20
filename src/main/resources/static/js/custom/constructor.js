@@ -65,7 +65,7 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
             $('#photo-url').closest('.form-group').removeClass('has-error')
             $('.help-block').addClass('hidden');
             Dropzone.instances[0].removeAllFiles();
-            $('#modal-photo').modal('show'); //TODO lol
+            $('#modal-photo').modal('show');
         } else if (id.indexOf('my-video') !== -1) {
             $('#modal-video').attr('data-element-id', element.attr('id'));
             $('#modal-video').data('elementId', element.attr('id'));
@@ -74,8 +74,8 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
                 $('#video-width').val(frame.attr('width'));
                 $('#video-height').val(frame.attr('height'));
                 $('#video-url').val(frame.data('mySrc'));
-                $('#video-auto').prop('checked', false); //TODO fix
-                $('#video-loop').prop('checked', false);
+                $('#video-auto').prop('checked', frame.data('auto'));
+                $('#video-loop').prop('checked', frame.data('loop'));
             } else {
                 $('#video-width').val(VIDEO_WIDTH);
                 $('#video-height').val(VIDEO_HEIGHT);
@@ -90,8 +90,10 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
             let table = element.find('table');
             if (table.length) {
                 $('#chart-table').html(table.html());
+                $('#show-chart').prop('checked', table.data('chart'));
             } else {
                 $('#chart-table').html(DEFAULT_TABLE);
+                $('#show-chart').prop('checked', false);
             }
             $('#modal-table').modal('show');
         } else if (id.indexOf('my-ratings') !== -1) {
@@ -126,7 +128,10 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
      $('#modal-table').on('click', '.btn-primary', function () {
          let root = $(this).closest('.modal');
          let content = $('#chart-table').html();
-         myRenderer.createMethods['table'](root.data('elementId'), {text: content});
+         myRenderer.createMethods['table'](root.data('elementId'), {
+             text: content,
+             chart: $('#show-chart').prop('checked')
+         });
          root.modal('hide');
      });
 
@@ -272,17 +277,13 @@ processElement['image'] = function (element) {
     return {
         width: data !== null ? data.width : 0,
         height: data !== null ? data.height : 0,
-        url: data !== null ? data.url : '',
-        text: ''
+        url: data !== null ? data.url : ''
     }
 };
 processElement['text'] = function (element) {
     let data = element.find('.my-text-content');
     console.log(data);
     return {
-        width: 0,
-        height: 0,
-        url: '',
         text: data.length !== 0 ? data.html() : ''
     }
 };
@@ -292,17 +293,16 @@ processElement['video'] = function (element) {
         width: video.length !== 0 ? video.attr('width') : 0,
         height: video.length !== 0 ? video.attr('height') : 0,
         url: video.length !== 0 ? video.data('mySrc') : '',
-        text: ''
+        autoplay: video.length !== 0 ? video.data('auto') : false,
+        loop: video.length !== 0 ? video.data('loop') : false
     }
 };
 processElement['table'] = function (element) {
     let data = element.find('table');
     console.log(data);
     return {
-        width: 0,
-        height: 0,
-        url: '',
-        text: data.length !== 0 ? data.html() : ''
+        text: data.length !== 0 ? data.html() : '',
+        chart: data.length !== 0 ? data.data('chart') : false
     }
 };
 
@@ -319,10 +319,13 @@ function saveElement(element) {
     return {
         type: type,
         location:  $('.my-content').index(element.closest('.my-content')),
-        width: data.width,
-        height: data.height,
-        url: data.url,
-        text: data.text
+        width: data.width || 0,
+        height: data.height || 0,
+        url: data.url || '',
+        text: data.text || '',
+        autoplay: data.autoplay || false,
+        loop: data.loop || false,
+        chart: data.chart || false
     };
 }
 

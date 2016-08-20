@@ -75,6 +75,9 @@ public class PageServiceImpl implements PageService{
             element.setHeight(dto.getHeight());
             element.setUrl(dto.getUrl());
             element.setText(dto.getText());
+            element.setAutoplay(dto.isAutoplay());
+            element.setVideoLoop(dto.isLoop());
+            element.setChart(dto.isChart());
             page.addElement(element);
         }
         pageRepository.save(page);

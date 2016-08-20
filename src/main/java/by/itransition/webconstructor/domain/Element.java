@@ -37,4 +37,10 @@ public class Element {
     @Lob
     private String text;
 
+    private boolean autoplay;
+
+    private boolean videoLoop;
+
+    private boolean chart;
+
 }

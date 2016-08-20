@@ -44,8 +44,9 @@ var myRenderer = {
             height: element.height,
             url: element.url,
             text: element.text,
-            autoplay: false, //FIXME lol
-            loop: false
+            autoplay: element.autoplay,
+            loop: element.videoLoop,
+            chart: element.chart
         });
     },
     createMethods: {
@@ -83,14 +84,23 @@ var myRenderer = {
             template.find('iframe').remove();
             template.append($('<iframe width="' + config.width + '" height="' + config.height + '" ' +
                 ' src="' + url + '" ' +
-                'frameborder="0" allowfullscreen="true">').attr('data-my-src', config.url)
-                .data('mySrc', config.url));
+                'frameborder="0" allowfullscreen="true">')
+                .attr('data-my-src', config.url).data('mySrc', config.url)
+                .attr('data-auto', config.autoplay).data('auto', config.autoplay)
+                .attr('data-loop', config.loop).data('loop', config.loop));
         },
         'table': function (id, config) {
             let template = $('#' + id);
+            let table = $('<table class="table table-striped">' + config.text + '</table>').attr('data-chart', config.chart).data('chart', config.chart);
+            let canvas = $('<div class="my-chart"></div>');
             template.find('.my-icon').remove();
             template.find('table').remove();
-            template.append($('<table class="table table-striped">' + config.text + '</table>'));
+            template.find('.my-chart').remove();
+            template.append(table);
+            if (config.chart) {
+                template.append(canvas);
+                myRenderer.charts.createChart(table, canvas);
+            }
         }
     },
 
@@ -111,6 +121,63 @@ var myRenderer = {
     },
     setLocaleMessage: function (message) {
         INVALID_URL = message;
+    },
+    charts: {
+        createChart: function(table, context) {
+            this._createChart(this.createCanvas(context), this.getLabels(table), this.getData(table), this.generateColors(table));
+        },
+        createCanvas: function (container) {
+            container.html('');
+            let canvas = $('<canvas width="400" height="400"></canvas>');
+            container.append(canvas);
+            return canvas;
+        },
+        _createChart: function (context, labels, dataset, colors) {
+            let data = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: dataset,
+                        backgroundColor: colors,
+                        hoverBackgroundColor: colors
+                    }]
+            };
+
+            let myPieChart = new Chart(context, {
+                type: 'pie',
+                data: data,
+                // options: options
+            });
+        },
+        getLabels: function (table) {
+            let result = [];
+            table.find('td:first-child').each(function (index, label) {
+                result.push($(label).text());
+            });
+            return result;
+        },
+        getData: function (table) {
+            let result = [];
+            table.find('td:last-child').each(function (index, label) {
+                result.push(parseFloat($(label).text()));
+            });
+            return result;
+        },
+        generateColors: function (table) {
+            let result = [];
+            table.find('td:first-child').each(function (index, label) {
+                result.push(myRenderer.charts.getRandomColor());
+            });
+            return result;
+        },
+        getRandomColor: function () {
+            let letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
     }
 };
 

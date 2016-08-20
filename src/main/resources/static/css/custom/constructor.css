@@ -96,3 +96,8 @@ input.error {
 th {
     text-align: center !important;
 }
+
+.my-chart {
+    max-height: 555px;
+    max-width: 555px;
+}
