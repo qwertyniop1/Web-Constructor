@@ -139,7 +139,7 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
         let root = $(this).closest('.modal');
         let url = $('#photo-url').val();
         if (url.indexOf('res.cloudinary.com/itraphotocloud/image/upload') === -1) {
-            $('.glyphicon-refresh-animate').show();
+            $('.glyphicon-refresh-animate').removeClass('load-off');
             $.post('https://api.cloudinary.com/v1_1/cloud9/image/upload', {
                 api_key: 891695265656755,
                 timestamp: (Date.now() / 1000 | 0),
@@ -154,7 +154,7 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
                     $('.help-block').removeClass('hidden');
                 })
                 .always(function () {
-                    $('.glyphicon-refresh-animate').hide();
+                    $('.glyphicon-refresh-animate').addClass('load-off');
                 });
             return;
         }

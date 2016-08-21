@@ -4,7 +4,8 @@
 <head>
     <th:block layout:fragment="bare-styles">
         <link rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
-        <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
+        <link rel="stylesheet" href="css/custom/ajax.css" th:href="@{/css/custom/ajax.css}"/>
+        <link rel="stylesheet" href="css/custom/style.css" th:href="@{/css/custom/style.css}"/>
         <th:block layout:fragment="styles">
 
         </th:block>
@@ -34,9 +35,18 @@
 
     </div>
 <th:block layout:fragment="bare-scripts">
+    <div class="ajax-loading"><!-- Ajax loading animation --></div>
     <th:block layout:fragment="scripts">
 
     </th:block>
+    <script type="text/javascript">
+        $body = $("body");
+
+        $(document).on({
+            ajaxStart: function() { $body.addClass("loading");    },
+            ajaxStop: function() { $body.removeClass("loading"); }
+        });
+    </script>
 </th:block>
 
 
