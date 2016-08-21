@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService{
     }
 
     private boolean checkData(User user, UserDto profile) {
-        if (!checkString(user, profile.getFirstname()) || !checkString(user, profile.getLastname())) {
+        if (!checkString(profile.getFirstname()) || !checkString(profile.getLastname())) {
             return false;
         }
         user.setFirstname(profile.getFirstname());
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
-    private boolean checkString(User user, String string) {
+    private boolean checkString(String string) {
         return string.length() >= NAME_MIN_LENGHT && string.length() <= NAME_MAX_LENGHT;
     }
 

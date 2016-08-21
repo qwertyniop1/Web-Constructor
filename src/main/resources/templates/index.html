@@ -68,7 +68,7 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">The most active users</h3>
+                        <h3 class="panel-title" th:text="#{main.topUsers}">The most active users</h3>
                     </div>
                     <div class="panel-body">
                         <div class="user-top" th:each="user : ${topUsers}">
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </div>
-        <h1>Top sites</h1>
+        <h1 th:text="#{main.topSites}">Top sites</h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="carousel slide multi-item-carousel" id="theCarousel">
@@ -166,8 +166,6 @@
                     interval: false
                 });
 
-// for every slide in carousel, copy the next slide's item in the slide.
-// Do the same for the next, next item.
                 $('.multi-item-carousel .item').each(function(){
                     var next = $(this).next();
                     if (!next.length) {

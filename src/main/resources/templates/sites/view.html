@@ -225,7 +225,7 @@
                     return moment(time).fromNow();
                 },*/
                 refresh: function() {
-                    console.log('lol');
+
                 },
                 getComments: function(success, error) {
                     $.get('/comments/list.json', {page: [[${page.id}]]}, function (response, status) {

@@ -36,69 +36,10 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
         }
     };
 
-    $(document.body).on('click', '.edit-element', function () {
-        let element = $(this).closest('.my-element');
-        let id = element.attr('class');
-        if (id.indexOf('my-text') !== -1) {
-            $('#modal-text').attr('data-element-id', element.attr('id'))
-                .data('elementId', element.attr('id'));
-            let text = element.find('.my-text-content');
-            if (text.length) {
-                tinyMCE.get('text-area').setContent(text.html());
-            } else {
-                tinyMCE.get('text-area').setContent('');
-            }
-            $('#modal-text').modal('show');
-        } else if (id.indexOf('my-image') !== -1) {
-            $('#modal-photo').attr('data-element-id', element.attr('id'))
-                .data('elementId', element.attr('id'));
-            let img = element.find('img:not(.my-icon)');
-            if (img.length) {
-                $('#photo-width').val(img.data('mySrc').width);
-                $('#photo-height').val(img.data('mySrc').height);
-                $('#photo-url').val(img.data('mySrc').url);
-            } else {
-                $('#photo-width').val(VIDEO_WIDTH);
-                $('#photo-height').val(VIDEO_HEIGHT);
-                $('#photo-url').val('');
-            }
-            $('#photo-url').closest('.form-group').removeClass('has-error')
-            $('.help-block').addClass('hidden');
-            Dropzone.instances[0].removeAllFiles();
-            $('#modal-photo').modal('show');
-        } else if (id.indexOf('my-video') !== -1) {
-            $('#modal-video').attr('data-element-id', element.attr('id'));
-            $('#modal-video').data('elementId', element.attr('id'));
-            let frame = element.find('iframe');
-            if (frame.length) {
-                $('#video-width').val(frame.attr('width'));
-                $('#video-height').val(frame.attr('height'));
-                $('#video-url').val(frame.data('mySrc'));
-                $('#video-auto').prop('checked', frame.data('auto'));
-                $('#video-loop').prop('checked', frame.data('loop'));
-            } else {
-                $('#video-width').val(VIDEO_WIDTH);
-                $('#video-height').val(VIDEO_HEIGHT);
-                $('#video-url').val('');
-                $('#video-auto').prop('checked', false);
-                $('#video-loop').prop('checked', false);
-            }
-            $('#modal-video').modal('show');
-        } else if (id.indexOf('my-table') !== -1) {
-            $('#modal-table').attr('data-element-id', element.attr('id'));
-            $('#modal-table').data('elementId', element.attr('id'));
-            let table = element.find('table');
-            if (table.length) {
-                $('#chart-table').html(table.html());
-                $('#show-chart').prop('checked', table.data('chart'));
-            } else {
-                $('#chart-table').html(DEFAULT_TABLE);
-                $('#show-chart').prop('checked', false);
-            }
-            $('#modal-table').modal('show');
-        } else if (id.indexOf('my-ratings') !== -1) {
-        }
-//FIXME placing many blocks disable!!!!!
+     //FIXME placing many blocks disable!!!!!
+
+    $(document.body).on('click', '.edit-element, .my-icon', function () {
+        editElement($(this));
     });
 
     $(document.body).on('click', '.del-element', function () {
@@ -150,7 +91,7 @@ var MANY_ELEMENT_IN_BLOCK = 'Too many elements';
                     _createPhoto('http://res.cloudinary.com/itraphotocloud/image/upload/' + response.public_id + '.jpg');
                 })
                 .fail(function (xhr, status, error) {
-                    $('#photo-url').closest('.form-group').addClass('has-error')
+                    $('#photo-url').closest('.form-group').addClass('has-error');
                     $('.help-block').removeClass('hidden');
                 })
                 .always(function () {
@@ -208,10 +149,10 @@ var currentLayout = 0;
 var baseElement = '\
             <div class="my-element">\
                 <div class="toolbar">\
-                    <a href="#" class="btn btn-info btn-xs edit-element" rel="tooltip" title="Settings">\
+                    <a href="#" class="btn btn-info btn-sm edit-element" rel="tooltip" title="Settings">\
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>\
                     </a>\
-                    <a href="#" class="btn btn-danger btn-xs del-element" rel="tooltip" title="Remove">\
+                    <a href="#" class="btn btn-danger btn-sm del-element" rel="tooltip" title="Remove">\
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>\
                     </a>\
                 </div>\
@@ -247,7 +188,7 @@ function generateGrid(container, rows) {
         containment: 'body',
         tolerance: 'pointer',
         // helper: function () {
-        //     return helper;
+        //     return '<div style="width: 100px; border: solid 5px #2b5a05">Helper</div>';
         // },
         over: function () {
             shouldDelete = false;
@@ -379,3 +320,66 @@ function getLayoutFromId(id) {
     return id.match(regex)[1] - 1;
 }
 
+function editElement(e) {
+    let element = e.closest('.my-element');
+    let id = element.attr('class');
+    if (id.indexOf('my-text') !== -1) {
+        $('#modal-text').attr('data-element-id', element.attr('id'))
+            .data('elementId', element.attr('id'));
+        let text = element.find('.my-text-content');
+        if (text.length) {
+            tinyMCE.get('text-area').setContent(text.html());
+        } else {
+            tinyMCE.get('text-area').setContent('');
+        }
+        $('#modal-text').modal('show');
+    } else if (id.indexOf('my-image') !== -1) {
+        $('#modal-photo').attr('data-element-id', element.attr('id'))
+            .data('elementId', element.attr('id'));
+        let img = element.find('img:not(.my-icon)');
+        if (img.length) {
+            $('#photo-width').val(img.data('mySrc').width);
+            $('#photo-height').val(img.data('mySrc').height);
+            $('#photo-url').val(img.data('mySrc').url);
+        } else {
+            $('#photo-width').val(VIDEO_WIDTH);
+            $('#photo-height').val(VIDEO_HEIGHT);
+            $('#photo-url').val('');
+        }
+        $('#photo-url').closest('.form-group').removeClass('has-error');
+        $('.help-block').addClass('hidden');
+        Dropzone.instances[0].removeAllFiles();
+        $('#modal-photo').modal('show');
+    } else if (id.indexOf('my-video') !== -1) {
+        $('#modal-video').attr('data-element-id', element.attr('id'));
+        $('#modal-video').data('elementId', element.attr('id'));
+        let frame = element.find('iframe');
+        if (frame.length) {
+            $('#video-width').val(frame.attr('width'));
+            $('#video-height').val(frame.attr('height'));
+            $('#video-url').val(frame.data('mySrc'));
+            $('#video-auto').prop('checked', frame.data('auto'));
+            $('#video-loop').prop('checked', frame.data('loop'));
+        } else {
+            $('#video-width').val(VIDEO_WIDTH);
+            $('#video-height').val(VIDEO_HEIGHT);
+            $('#video-url').val('');
+            $('#video-auto').prop('checked', false);
+            $('#video-loop').prop('checked', false);
+        }
+        $('#modal-video').modal('show');
+    } else if (id.indexOf('my-table') !== -1) {
+        $('#modal-table').attr('data-element-id', element.attr('id'));
+        $('#modal-table').data('elementId', element.attr('id'));
+        let table = element.find('table');
+        if (table.length) {
+            $('#chart-table').html(table.html());
+            $('#show-chart').prop('checked', table.data('chart'));
+        } else {
+            $('#chart-table').html(DEFAULT_TABLE);
+            $('#show-chart').prop('checked', false);
+        }
+        $('#modal-table').modal('show');
+    } else if (id.indexOf('my-ratings') !== -1) {
+    }
+}

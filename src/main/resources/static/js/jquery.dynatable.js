@@ -281,9 +281,8 @@
     }
 
     return '<tr>' + tr + '</tr>';
-  };
-
-  function defaultCellWriter(column, record) {
+  }
+    function defaultCellWriter(column, record) {
     var html = column.attributeWriter(record),
         td = '<td';
 
@@ -304,19 +303,16 @@
     }
 
     return td + '>' + html + '</td>';
-  };
-
-  function defaultAttributeWriter(record) {
+  }
+    function defaultAttributeWriter(record) {
     // `this` is the column object in settings.columns
     // TODO: automatically convert common types, such as arrays and objects, to string
     return record[this.id];
-  };
-
-  function defaultAttributeReader(cell, record) {
+  }
+    function defaultAttributeReader(cell, record) {
     return $(cell).html();
-  };
-
-  //-----------------------------------------------------------------
+  }
+    //-----------------------------------------------------------------
   // Dynatable object model prototype
   // (all object models get these default functions)
   //-----------------------------------------------------------------
@@ -410,9 +406,8 @@
 
       obj.$element.trigger('dynatable:afterUpdate', rows);
     };
-  };
-
-  function DomColumns(obj, settings) {
+  }
+    function DomColumns(obj, settings) {
     var _this = this;
 
     this.initOnLoad = function() {
@@ -550,9 +545,8 @@
         .attr('data-dynatable-no-sort', 'true')
         .attr('data-dynatable-generated', increment);
     };
-  };
-
-  function Records(obj, settings) {
+  }
+    function Records(obj, settings) {
     var _this = this;
 
     this.initOnLoad = function() {
@@ -624,7 +618,7 @@
           }
         }
         return comparison;
-      }
+      };
 
       return sort.call(settings.dataset.records, sortFunction);
     };
@@ -693,9 +687,8 @@
     this.count = function() {
       return settings.dataset.records.length;
     };
-  };
-
-  function RecordsCount(obj, settings) {
+  }
+    function RecordsCount(obj, settings) {
     this.initOnLoad = function() {
       return settings.features.recordCount;
     };
@@ -733,9 +726,8 @@
       var $target = settings.inputs.recordCountTarget ? $(settings.inputs.recordCountTarget) : obj.$element;
       $target[settings.inputs.recordCountPlacement](this.create());
     };
-  };
-
-  function ProcessingIndicator(obj, settings) {
+  }
+    function ProcessingIndicator(obj, settings) {
     this.init = function() {
       this.attach();
     };
@@ -763,7 +755,7 @@
       $processing
         .offset({left: offset.left, top: offset.top})
         .width(width)
-        .height(height)
+        .height(height);
       $span
         .offset({left: offset.left + ( (width - spanWidth) / 2 ), top: offset.top + ( (height - spanHeight) / 2 )});
 
@@ -782,9 +774,8 @@
     this.hide = function() {
       $('#dynatable-processing-' + obj.element.id).hide();
     };
-  };
-
-  function State(obj, settings) {
+  }
+    function State(obj, settings) {
     this.initOnLoad = function() {
       // Check if pushState option is true, and if browser supports it
       return settings.features.pushState && history.pushState;
@@ -861,9 +852,8 @@
         obj.process(true);
       }
     };
-  };
-
-  function Sorts(obj, settings) {
+  }
+    function Sorts(obj, settings) {
     this.initOnLoad = function() {
       return settings.features.sort;
     };
@@ -930,9 +920,8 @@
         return a['dynatable-original-index'] - b['dynatable-original-index'];
       }
     };
-  };
-
-  // turn table headers into links which add sort to sorts array
+  }
+    // turn table headers into links which add sort to sorts array
   function SortsHeaders(obj, settings) {
     var _this = this;
 
@@ -1061,9 +1050,8 @@
     this.sortedByColumnValue = function(column) {
       return settings.dataset.sorts[column.sorts[0]];
     };
-  };
-
-  function Queries(obj, settings) {
+  }
+    function Queries(obj, settings) {
     var _this = this;
 
     this.initOnLoad = function() {
@@ -1179,16 +1167,15 @@
               // Don't need to keep searching attributes once found
               break;
             } else {
-              continue;
+
             }
           }
         }
         return contains;
       }
     };
-  };
-
-  function InputsSearch(obj, settings) {
+  }
+    function InputsSearch(obj, settings) {
     var _this = this;
 
     this.initOnLoad = function() {
@@ -1229,9 +1216,8 @@
       var $target = settings.inputs.searchTarget ? $(settings.inputs.searchTarget) : obj.$element;
       $target[settings.inputs.searchPlacement](this.create());
     };
-  };
-
-  // provide a public function for selecting page
+  }
+    // provide a public function for selecting page
   function PaginationPage(obj, settings) {
     this.initOnLoad = function() {
       return settings.features.paginate;
@@ -1252,9 +1238,8 @@
     this.set = function(page) {
       settings.dataset.page = parseInt(page, 10);
     }
-  };
-
-  function PaginationPerPage(obj, settings) {
+  }
+    function PaginationPerPage(obj, settings) {
     var _this = this;
 
     this.initOnLoad = function() {
@@ -1311,9 +1296,8 @@
       if (!skipResetPage) { obj.paginationPage.set(1); }
       settings.dataset.perPage = parseInt(number);
     };
-  };
-
-  // pagination links which update dataset.page attribute
+  }
+    // pagination links which update dataset.page attribute
   function PaginationLinks(obj, settings) {
     var _this = this;
 
@@ -1344,7 +1328,7 @@
       for (var i = 1; i <= pages; i++) {
         if ( (i > breaks[0] && i < breaks[1]) || (i > breaks[2] && i < breaks[3])) {
           // skip to next iteration in loop
-          continue;
+
         } else {
           var li = obj.paginationLinks.buildLink(i, i, pageLinkClass, page == i, activePageClass),
               breakIndex,
@@ -1415,9 +1399,8 @@
       var $target = settings.inputs.paginationLinkTarget ? $(settings.inputs.paginationLinkTarget) : obj.$element;
       $target[settings.inputs.paginationLinkPlacement](obj.paginationLinks.create());
     };
-  };
-
-  utility = dt.utility = {
+  }
+    utility = dt.utility = {
     normalizeText: function(text, style) {
       text = this.textTransform[style](text);
       return text;
@@ -1460,8 +1443,10 @@
             k = decodeURIComponent(pair[0]),
             v, m;
 
-        if (!pair[1]) { continue };
-        v = decodeURIComponent(pair[1].replace(/\+/g, ' '));
+        if (!pair[1]) {
+              continue
+          }
+          v = decodeURIComponent(pair[1].replace(/\+/g, ' '));
 
         // modified to parse multi-level parameters (e.g. "hi[there][dude]=whatsup" => hi: {there: {dude: "whatsup"}})
         while (m = k.match(/([^&=]+)\[([^&=]+)\]$/)) {
