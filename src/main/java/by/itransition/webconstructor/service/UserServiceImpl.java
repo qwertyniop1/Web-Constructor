@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService{
         try {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
                     String.format("%s://%s", request.getScheme(),
-                            request.getServerName()), request.getLocale()));
+                            request.getHeader("X-Forwarded-Host")), request.getLocale()));
         } catch (Exception ex) {
             return false;
         }

@@ -65,7 +65,10 @@ public class SiteServiceImpl implements SiteService{
             quantity = DEFAULT_TOP_SIZE;
         }
         List<Site> sites = siteRepository.findAll();
-        sites.sort((o1, o2) -> Double.compare(average(o2.getRates()), average(o1.getRates())));
+        sites.sort((o1, o2) -> {
+            int res = Double.compare(average(o2.getRates()), average(o1.getRates()));
+            return res != 0 ? res : o2.getRates().size() - o1.getRates().size();
+        });
         return sites.size() > quantity ? new ArrayList<>(sites.subList(0, quantity)) : sites;
     }
 
@@ -127,6 +130,7 @@ public class SiteServiceImpl implements SiteService{
         site.setLogo(DEFAULT_LOGO);
         site.setDescription("");
         site.setMenuOrientation(MenuOrientation.NONE);
+        site.setTheme(DesignTheme.FAIR);
         eventPublisher.publishEvent(new OnSiteCreateEvent(user, siteRepository.findByUser(user).size() + 1));
         return siteRepository.save(site).getId();
     }

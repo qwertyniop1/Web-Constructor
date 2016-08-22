@@ -7,9 +7,10 @@
     <th:block layout:fragment="styles">
         <link rel="stylesheet" href="css/star-rating.min.css" th:href="@{/css/star-rating.min.css}"/>
         <link rel="stylesheet" href="css/jquery.dynatable.css" th:href="@{/css/jquery.dynatable.css}"/>
+        <link rel="stylesheet" href="css/tooltipster.bundle.min.css" th:href="@{/css/tooltipster.bundle.min.css}" />
+        <link rel="stylesheet" href="css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css" th:href="@{/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css}" />
         <link rel="stylesheet" href="css/custom/profile.css" th:href="@{/css/custom/profile.css}"/>
         <link rel="stylesheet" href="css/custom/thumbnails.css" th:href="@{/css/custom/thumbnails.css}"/>
-        <th:block th:replace="auth/validation :: styles"/>
         <style>
             #settings {
                 width: 300px;;
@@ -115,7 +116,8 @@
                         <h3 th:text="#{profile.rewards}">Rewards</h3>
                         <div class="row">
                             <div class="col-md-2" th:each="reward : ${#lists.sort(user.rewards)}">
-                                <div class="panel panel-default" th:with="type=${#strings.toLowerCase(reward.type) + 's'}">
+                                <div class="panel panel-default description" th:with="type=${#strings.toLowerCase(reward.type) + 's'}"
+                                     th:title="#{${'profile.rewards.' + #strings.toLowerCase(reward.type)}}">
                                     <div class="panel-body">
                                         <img th:src="@{/images/{icon}.png(icon=${reward.icon})}" width="128" height="128" alt=""
                                              th:class="${reward.id % 4 == 1} ? img-disabled"/>
@@ -189,12 +191,17 @@
     <script type="text/javascript" src="js/jquery.dynatable.js" th:src="@{/js/jquery.dynatable.js}"></script>
     <script type="text/javascript" src="js/moment-with-locales.js" th:src="@{/js/moment-with-locales.js}"></script>
     <script type="text/javascript" src="//widget.cloudinary.com/global/all.js"></script>
+    <script type="text/javascript" src="js/tooltipster.bundle.min.js" th:src="@{/js/tooltipster.bundle.min.js}"></script>
     <script type="text/javascript" src="js/custom/tables.js" th:src="@{/js/custom/tables.js}"></script>
-    <!--<th:block th:replace="auth/validation :: scripts" />-->
     <script th:inline="javascript">
         //        <![CDATA[
 
         $(document).ready(function () {
+
+            $('.description').tooltipster({
+                theme: 'tooltipster-shadow',
+                side: 'bottom'
+            });
 
             initTables($('#site-list'), [[${user.username}]], [[${#locale.language}]], true);
 
