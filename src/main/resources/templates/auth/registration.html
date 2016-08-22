@@ -6,11 +6,15 @@
     <title th:text="#{registration.registration}">Registration</title>
     <th:block layout:fragment="styles">
         <th:block th:replace="auth/validation :: styles">
-
         </th:block>
+        <link rel="stylesheet" href="css/custom/form.css" th:href="@{/css/custom/form.css}"/>
         <style>
+            .my-form {
+                margin-top: 0 !important;
+                padding-bottom: 20px;
+            }
             #registration-form {
-                margin-top: 50px;
+                margin-top: 30px;
             }
         </style>
     </th:block>
@@ -20,7 +24,7 @@
         <div class="row">
             <label class="control-label" th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</label>
             <div class="col-md-4"></div>
-            <div class="col-md-4">
+            <div class="col-md-4 my-form">
                 <form id="registration-form" th:action="@{~/register}" th:object="${user}" method="post">
                     <div class="form-group" th:classappend="${#fields.hasErrors('firstname')}? has-error">
                         <label th:for="${#ids.next('firstname')}" th:text="#{registration.firstname}">First name</label>
@@ -52,7 +56,7 @@
                         <input type="password" class="form-control" th:field="*{matchingPassword}" th:placeholder="#{registration.passwordRepeat}"/>
                         <span class="help-block" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Incorrect input</span>
                     </div>
-                    <button type="submit" class="btn btn-default center-block" th:text="#{registration.register}">Submit</button>
+                    <button type="submit" class="btn btn-success center-block" th:text="#{registration.register}">Submit</button>
                 </form>
             </div>
             <div class="col-md-4"></div>

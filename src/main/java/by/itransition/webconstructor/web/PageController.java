@@ -27,7 +27,7 @@ public class PageController {
     @GetMapping("/{page}")
     public String edit(@PathVariable("page") Long id, Model model) {
         Page page = pageService.getPage(id);
-        Set<Element> elements = page.getElements(); // TODO COSTYLI
+        Set<Element> elements = page.getElements();
         for (Element element : elements) {
             element.setPage(null);
         }

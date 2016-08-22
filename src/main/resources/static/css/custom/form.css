@@ -1,0 +1,16 @@
+body {
+    background-image: url("https://pp.vk.me/c637527/v637527734/6e4a/XZ0oHpwxTIc.jpg");
+}
+.my-form {
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 30px;
+    color: #f0f0f0;
+    margin-top: 50px;
+}
+.my-link {
+    color: #f0f0f0;
+    font-size: 16px;
+}
+.my-link:hover {
+    color: #2c8d3a;
+}

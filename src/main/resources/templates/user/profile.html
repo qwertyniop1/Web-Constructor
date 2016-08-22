@@ -203,7 +203,7 @@
                 side: 'bottom'
             });
 
-            initTables($('#site-list'), [[${user.username}]], [[${#locale.language}]], true);
+            initTables($('#site-list'), [[${user.username}]], [[${#locale.language}]], true, [[#{navbar.search}]]);
 
             $(".btn-pref .btn").click(function () {
                 $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");

@@ -5,9 +5,11 @@ var height = 130;
 var itemsInPage = 6;
 var edit = true;
 var currentUser = '';
+var searchText = 'Search';
 
-function initTables(siteList, user, locale, small) {
+function initTables(siteList, user, locale, small, search) {
     moment.locale(locale);
+    searchText = search;
 
     if (small) {
         layout = 3;
@@ -55,7 +57,7 @@ function loadContent(siteList, rates, user) {
             }
         });
 
-        $('#dynatable-query-search-site-list').addClass('form-control').attr('placeholder', 'Search');
+        $('#dynatable-query-search-site-list').addClass('form-control').attr('placeholder', searchText);
         $('#dynatable-search-site-list')
             .contents().filter(function () {
             return this.nodeType === 3;

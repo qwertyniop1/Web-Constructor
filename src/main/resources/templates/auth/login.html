@@ -6,8 +6,8 @@
     <title th:text="#{login.authorization}">Authorization</title>
     <th:block layout:fragment="styles">
         <th:block th:replace="auth/validation :: styles">
-
         </th:block>
+        <link rel="stylesheet" href="css/custom/form.css" th:href="@{/css/custom/form.css}"/>
         <style>
             #login-form {
                 margin-top: 50px;
@@ -31,7 +31,7 @@
     </div>
     <div class="row">
         <div class="col-md-4"></div>
-        <div class="col-md-4">
+        <div class="col-md-4 my-form">
             <form th:action="@{/login}" id="login-form" method="post">
                 <div class="form-group">
                     <label for="username" th:text="#{login.username}">Username</label>
@@ -41,19 +41,19 @@
                     <label for="password" th:text="#{login.password}">Password</label>
                     <input type="password" class="form-control" id="password" name="password" th:placeholder="#{login.password}"/>
                 </div>
-                <a th:href="@{/register}" th:text="#{login.register}"></a>
+                <span th:text="#{login.noAccount}">No account?</span> <a th:href="@{/register}" class="my-link" th:text="#{login.register}"></a>
                 <br/>
                 <div class="btn-group" style="display: table; margin: 20px auto">
-                    <button type="submit" class="btn btn-default" th:text="#{navbar.signin}">Submit</button>
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" th:onclick="'signInFacebook()'">Facebook</a></li>
-                        <li><a href="#" th:onclick="'signInTwitter()'">Twitter</a></li>
-                        <li><a href="#" th:onclick="'signInVkontakte()'">Vkontakte</a></li>
-                    </ul>
+                    <button type="submit" class="btn btn-primary" th:text="#{navbar.signin}">Submit</button>
+                    <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+                        <!--<span class="caret"></span>-->
+                        <!--<span class="sr-only">Toggle Dropdown</span>-->
+                    <!--</button>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li><a href="#" th:onclick="'signInFacebook()'">Facebook</a></li>-->
+                        <!--<li><a href="#" th:onclick="'signInTwitter()'">Twitter</a></li>-->
+                        <!--<li><a href="#" th:onclick="'signInVkontakte()'">Vkontakte</a></li>-->
+                    <!--</ul>-->
                 </div>
             </form>
         </div>
